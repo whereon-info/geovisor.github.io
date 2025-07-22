@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Geovisor Web con Leaflet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS y JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Leaflet Draw -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+    <!-- Turf.js -->
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
+    <style>
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        #map { position: absolute; top: 0; left: 0; right: 300px; bottom: 0; }
+        #sidebar {
+            position: absolute; top: 0; right: 0; bottom: 0; width: 300px;
+            background: #f8f9fa; padding: 15px; overflow-y: auto;
+            border-left: 1px solid #ccc;
+        }
+        #login {
+            position: absolute; top:0; left:0; right:0; bottom:0;
+            background:#333; color:white; display:flex; flex-direction:column;
+            align-items:center; justify-content:center;
+        }
+        #login input { padding:10px; margin:5px; width:200px; }
+        #login button { padding:10px 20px; }
+    </style>
+</head>
+<body>
+
+<div id="login">
+    <h2>Acceso al Geovisor</h2>
+    <input type="password" id="password" placeholder="Contraseña"/>
+    <button onclick="checkPassword()">Entrar</button>
+    <p id="error" style="color:red;"></p>
+</div>
+
+<div id="map"></div>
+
+<div id="sidebar">
+    <h3>Estadísticas</h3>
+    <div id="stats">
+        <p>Carga un archivo GeoJSON para ver estadísticas.</p>
+    </div>
+
+    <h3>Cargar GeoJSON</h3>
+    <input type="file" id="geojsonInput" accept=".geojson,.json" />
+
+    <h3>Buffer</h3>
+    <input type="number" id="bufferDistance" placeholder="Distancia en km" style="width:100%; margin-bottom:5px;" />
+    <button onclick="createBuffer()">Generar Buffer</button>
+</div>
+
+<script>
+// Control de acceso simple
+function checkPassword() {
+    const pass = document.getElementById("password").value;
+    if(pass === "geovisor2025"){
+        document.getElementById("login").style.display = "none";
+    } else {
+        document.getElementById("error").innerText = "Contraseña incorrecta.";
+    }
+}
+
+// Crear mapa
+var map = L.map('map').setView([23.6345, -102.5528], 5); // México centrado
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+var geojsonLayer;
+var bufferLayer;
+
+// Herramienta de medición
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+var drawControl = new L.Control.Draw({
+    draw: { polygon: false, rectangle: false, circle: false, marker: false, circlemarker: false },
+    edit: { featureGroup: drawnItems }
+});
+map.addControl(drawControl);
+
+map.on(L.Draw.Event.CREATED, function (e) {
+    var layer = e.layer;
+    drawnItems.addLayer(layer);
+    if(e.layerType === 'polyline'){
+        var latlngs = layer.getLatLngs();
+        var distance = 0;
+        for(var i=1; i<latlngs.length; i++){
+            distance += latlngs[i-1].distanceTo(latlngs[i]);
+        }
+        alert("Distancia: " + (distance/1000).toFixed(2) + " km");
+    }
+});
+
+// Cargar GeoJSON
+document.getElementById('geojsonInput').addEventListener('change', function(){
+    var file = this.files[0];
+    var reader = new FileReader();
+    reader.onload = function(e){
+        var geojsonData = JSON.parse(e.target.result);
+        if(geojsonLayer) { map.removeLayer(geojsonLayer); }
+        geojsonLayer = L.geoJSON(geojsonData).addTo(map);
+        map.fitBounds(geojsonLayer.getBounds());
+        updateStats(geojsonData);
+    };
+    reader.readAsText(file);
+});
+
+// Generar estadísticas
+function updateStats(geojson){
+    var numFeatures = geojson.features.length;
+    var totalArea = 0;
+    geojson.features.forEach(function(feat){
+        if(feat.geometry.type === 'Polygon' || feat.geometry.type === 'MultiPolygon'){
+            totalArea += turf.area(feat);
+        }
+    });
+    document.getElementById("stats").innerHTML = `
+        <p>Número de elementos: <b>${numFeatures}</b></p>
+        <p>Área total: <b>${(totalArea/1000000).toFixed(2)} km²</b></p>
+    `;
+}
+
+// Crear buffer con Turf.js
+function createBuffer(){
+    if(!geojsonLayer){
+        alert("Primero carga un GeoJSON.");
+        return;
+    }
+    var distance = parseFloat(document.getElementById("bufferDistance").value);
+    if(isNaN(distance)){
+        alert("Introduce una distancia válida.");
+        return;
+    }
+    var geojsonData = geojsonLayer.toGeoJSON();
+    var buffered = turf.buffer(geojsonData, distance, {units: 'kilometers'});
+
+    if(bufferLayer){ map.removeLayer(bufferLayer); }
+    bufferLayer = L.geoJSON(buffered, {style:{color:'red',fillOpacity:0.3}}).addTo(map);
+}
+</script>
+
+</body>
+</html>
