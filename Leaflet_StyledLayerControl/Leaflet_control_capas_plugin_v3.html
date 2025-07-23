@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Control de capas personalizado</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+		
+	<link rel="stylesheet" href="styledLayerControl.css" />
+	<script src="styledLayerControl.js"></script>
+	<link rel="stylesheet" href="L.Control.MousePosition.css" />
+	<script src="L.Control.MousePosition.js"></script>
+				
+	<style>
+	body {
+	    	padding: 0;
+	    	margin: 0;
+		}
+		html, body, #map {
+    		height: 100%;
+		}
+
+			
+        </style>		
+</head>
+    <body>
+	
+	<div id="map"></div>
+	<!-- Plugin para llamar a PNOA  -->
+	<script src="Leaflet.Spain.WMS.js"></script>
+	 <script>
+	var map = L.map('map', 	{center: [40.965, -5.664],zoom: 16});
+	// Mapbox layers
+	
+	var mapboxStreets   = 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibmFkaXJpbmciLCJhIjoiY2swMjZvdTFpMGtsNDNkbGM1a3oxaG1kbiJ9.ohNlg8QJGlUKecD7ExycjQ', {
+			maxZoom: 20,
+			id: 'mapbox.streets'
+		}).addTo(map);
+		
+	var mapboxDark   = 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibmFkaXJpbmciLCJhIjoiY2swMjZvdTFpMGtsNDNkbGM1a3oxaG1kbiJ9.ohNlg8QJGlUKecD7ExycjQ', {
+			maxZoom: 20,
+			id: 'mapbox.dark'
+		});
+	var mapboxPirates   = 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibmFkaXJpbmciLCJhIjoiY2swMjZvdTFpMGtsNDNkbGM1a3oxaG1kbiJ9.ohNlg8QJGlUKecD7ExycjQ', {
+			maxZoom: 20,
+			id: 'mapbox.pirates'
+		});
+	
+	// OSM layers
+	var osmUrl='http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+	var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
+					
+	// Monumentos de Salamanca
+	var salamancaMonumental = new L.LayerGroup();
+	L.marker([40.965, -5.664]).addTo(salamancaMonumental).bindPopup("Plaza Mayor");
+	L.marker([40.9614, -5.6672]).addTo(salamancaMonumental).bindPopup("Universidad");
+							
+	// Cultura en Salamanca
+	var salamancaCultural = new L.LayerGroup();
+	L.marker([40.96618, -5.66237]).addTo(salamancaCultural).bindPopup("Teatro Liceo");
+	L.marker([40.96187, -5.66814]).addTo(salamancaCultural).bindPopup("Museo de Salamanca");	
+		    	
+			
+	var baseMaps = [
+		{ 
+			groupName : "Mapbox",
+			expanded : true,
+			layers    : {
+				"Streets" :mapboxStreets,
+				"Dark"  :mapboxDark ,
+				"Pirates" :mapboxPirates
+					}
+		}, {
+				groupName : "OSM Base Maps",
+				layers    : {
+				"OpenStreetMaps" : osm
+					}
+                }, {
+				groupName : "IGN Base",
+				layers    : {
+				"Ortoimagen" : Spain_PNOA_Ortoimagen,
+				"Base": Spain_IGNBase
+					}
+                            }											
+			];
+					
+	var overlays = [
+		{
+			groupName : "Salamanca Monumental",
+			expanded : true,
+			layers    : { 
+				"Historia" : salamancaMonumental,
+									
+					}	
+                 }, {
+			groupName : "Salamanca Cultural",
+			expanded : true,
+			layers    : { 
+				"Cultura"     : salamancaCultural,											
+					}	
+                             }						 
+			];
+					
+	var options = {
+			container_width	: "300px",
+			group_maxHeight : "80px",
+			exclusive     	: false,
+			collapsed : false, 
+			position: 'topright'
+			};
+	L.control.mousePosition().addTo(map);	
+	var control = L.Control.styledLayerControl(baseMaps, overlays, options).addTo(map);;
+	
+	
+		 
+
+	</script>  	    
+    </body>	
+</html>
