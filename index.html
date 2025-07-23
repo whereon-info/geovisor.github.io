@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximumscale=1, user-scalable=no">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+	<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 	<link rel="stylesheet" href="leaflet-sidebar.css" />
 		<style>
 			 body {
@@ -79,6 +80,18 @@
                 </ul>
             </div>
 
+		<h3>Estadísticas</h3>
+	    <div id="stats">
+	        <p>Carga un archivo GeoJSON para ver estadísticas.</p>
+	    </div>
+	
+	    <h3>Cargar GeoJSON</h3>
+	    <input type="file" id="geojsonInput" accept=".geojson,.json" />
+	
+	    <h3>Buffer</h3>
+	    <input type="number" id="bufferDistance" placeholder="Distancia en km" style="width:100%; margin-bottom:5px;" />
+	    <button onclick="createBuffer()">Generar Buffer</button>
+		
             <div id="mitexto"></div>
         </div>
     </div>
@@ -170,6 +183,23 @@
 				});
 
 				 var sidebar = L.control.sidebar('sidebar').addTo(map);
+				 
+				 function createBuffer(){
+				    if(!geojsonLayer){
+				        alert("Primero carga un GeoJSON.");
+				        return;
+				    }
+				    var distance = parseFloat(document.getElementById("bufferDistance").value);
+				    if(isNaN(distance)){
+				        alert("Introduce una distancia válida.");
+				        return;
+				    }
+				    var geojsonData = geojsonLayer.toGeoJSON();
+				    var buffered = turf.buffer(geojsonData, distance, {units: 'kilometers'});
+				
+				    if(bufferLayer){ map.removeLayer(bufferLayer); }
+				    bufferLayer = L.geoJSON(buffered, {style:{color:'red',fillOpacity:0.3}}).addTo(map);
+				}
 
 			</script>
 		</body>
