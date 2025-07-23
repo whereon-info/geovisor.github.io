@@ -1,153 +1,177 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Geovisor Web con Leaflet</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Miguel de Cervantes</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximumscale=1, user-scalable=no">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
 
-    <!-- Leaflet CSS y JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+	<link rel="stylesheet" href="leaflet-sidebar.css" />
+		<style>
+			 body {
+				 padding: 0;
+				 margin: 0;
+			 }
+			 html, body, #map {
+				 height: 100%;
+				 font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+			}
+			 .lorem {
+				 font-style: italic;
+				 color: #666666;
+			 }
+			 #mitexto {
+				 font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+				 color: #1a1a1a;
+				 position: absolute;
+				 right: 20px;
+				 width: 350px;
+				 border: 3px solid #AAA;
+				 padding: 10px;
+				 background-color:#e6e6e6;
+			 }
+		</style>
+	</head>
+    <div id="sidebar" class="sidebar collapsed">
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+                <li><a href="#retrato" role="tab"><i class="fa fa-user"></i></a></li>
+                <li><a href="#libros" role="tab"><i class="fa fa-file-text-o"></i></a></li>
+                <li><a href="https://www.youtube.com/watch?v=HAxjVeqKH_8" role="tab" target="_blank"><i class="fa fa-youtube"></i></a></li>
+            </ul>
 
-    <!-- Leaflet Draw -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+            <ul role="tablist">
+                <li><a href="https://es.wikipedia.org/wiki/Miguel_de_Cervantes" role="tab"><i class="fa fa-wikipedia-w"></i></a></li>
+            </ul>
+        </div>
 
-    <!-- Turf.js -->
-    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+        <!-- Tab panes -->
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="home">
+                <h1 class="sidebar-header">
+                    Miguel de Cervantes
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
 
-    <style>
-        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        #map { position: absolute; top: 0; left: 0; right: 300px; bottom: 0; }
-        #sidebar {
-            position: absolute; top: 0; right: 0; bottom: 0; width: 300px;
-            background: #f8f9fa; padding: 15px; overflow-y: auto;
-            border-left: 1px solid #ccc;
-        }
-        #login {
-            position: absolute; top:0; left:0; right:0; bottom:0;
-            background:#333; color:white; display:flex; flex-direction:column;
-            align-items:center; justify-content:center;
-        }
-        #login input { padding:10px; margin:5px; width:200px; }
-        #login button { padding:10px 20px; }
-    </style>
-</head>
-<body>
+                <p>Un mapa sobre los lugares más importantes en la vida de <a href="https://es.wikipedia.org/wiki/Miguel_de_Cervantes">Cervantes</a> autor de <a href="https://es.wikipedia.org/wiki/Don_Quijote_de_la_Mancha">Don Quijote de la Mancha</a>.</p>
 
-<div id="login">
-    <h2>Acceso al Geovisor</h2>
-    <input type="password" id="password" placeholder="Contraseña"/>
-    <button onclick="checkPassword()">Entrar</button>
-    <p id="error" style="color:red;"></p>
-</div>
+                <p class="lorem">Miguel de Cervantes Saavedra (Alcalá de Henares, 29 de septiembre de 1547-Madrid, 22 de abril de 1616) fue un soldado, novelista, poeta y dramaturgo español.</p>
 
-<div id="map"></div>
+                <p class="lorem">Está considerado la máxima figura de la literatura española y es universalmente conocido por haber escrito El ingenioso Hidalgo don Quijote de la Mancha (conocida habitualmente como el Quijote), que muchos críticos han descrito como la primera novela moderna y una de las mejores obras de la literatura universal, además de ser el libro más editado y traducido de la historia, solo superado por la Biblia. Se le ha dado el sobrenombre de «Príncipe de los Ingenios».</p>
 
-<div id="sidebar">
-    <h3>Estadísticas</h3>
-    <div id="stats">
-        <p>Carga un archivo GeoJSON para ver estadísticas.</p>
+            </div>
+
+            <div class="sidebar-pane" id="retrato">
+                <h1 class="sidebar-header">Retrato de Cervantes<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <p><a href="https://commons.wikimedia.org/wiki/File:Cervantes_J%C3%A1uregui.jpg#/media/File:Cervantes_J%C3%A1uregui.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Cervantes_J%C3%A1uregui.jpg/1200px-Cervantes_J%C3%A1uregui.jpg" alt="Cervantes Jáuregui.jpg" width="360" height="560"></a>
+
+            </div>
+
+            <div class="sidebar-pane" id="libros">
+                <h1 class="sidebar-header">Obras publicadas<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <ul><li>La Galatea (1585)</li>
+                <li>El ingenioso hidalgo don Quijote de la Mancha (1605)</li>
+                <li>Novelas ejemplares (1613)</li>
+                <li>El ingenioso caballero don Quijote de la Mancha (1615)</li>
+                <li>Los trabajos de Persiles y Sigismunda (1617)</li>
+                </ul>
+            </div>
+
+            <div id="mitexto"></div>
+        </div>
     </div>
+		
+			<div id="map" class="sidebar-map"></div>
+			 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+			 <script src="leaflet-sidebar.js"></script>
+			 <script>
+				 var map = L.map('map');
+					 map.setView([41.9027,3.4964], 5);
+					 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					 maxZoom: 18,
+					 attribution: 'Map data &copy; OpenStreetMap contributors'
+				 }).addTo(map);
+				var alcala = L.marker([40.4819, -3.3635]).bindPopup("Alcala de Henares.").addTo(map).on('click', 
+				function(){
+				document.getElementById("mitexto").innerHTML = "Desde el siglo XVIII está admitido"+
+				"que el lugar de nacimiento de Miguel de Cervantes fue Alcalá de Henares, dado que allí"+
+				"fue bautizado, según su acta bautismal, y que de allí aclaró ser natural en la llamada"+
+				"Información de Argel (1580). El día exacto de su nacimiento es menos seguro, aunque lo"+
+				"normal es que naciera el 29 de septiembre, fecha en que se celebra la fiesta del"+
+				"arcángel San Miguel, dada la tradición de recibir el nombre del santoral del día del"+
+				"nacimiento. Miguel de Cervantes fue bautizado el 9 de octubre de 1547 en la parroquia de"+
+				"Santa María la Mayor.";
+				});
+				
+				
+				
+				var roma = L.marker([41.9027, 12.4964]).bindPopup("Roma.").addTo(map).on('click',
+				function() {
+				 document.getElementById("mitexto").innerHTML = "Se ha conservado una providencia de"+
+				"Felipe II que data de 1569, donde manda prender a Miguel de Cervantes, acusado de herir"+
+				"en un duelo a un tal Antonio Sigura, maestro de obras. Si se tratara realmente de"+
+				"Cervantes y no de un homónimo, podría ser este el motivo que le hizo pasar a Italia."+
+				"Llegó a Roma en diciembre del mismo año. Allí leyó los poemas caballerescos de Ludovico"+
+				"Ariosto, que tanto influirán en el Don Quijote según Marcelino Menéndez Pelayo, y los"+
+				"Diálogos de amor del judío sefardita León Hebreo (Yehuda Abrabanel), de inspiración"+
+				"neoplatónica, que determinarán su idea del amor. Cervantes se imbuye del estilo y del"+
+				"arte de Italia, y guardará siempre tan gratísimo recuerdo de aquellos estados.";
 
-    <h3>Cargar GeoJSON</h3>
-    <input type="file" id="geojsonInput" accept=".geojson,.json" />
+				});
+				 var lepanto = L.marker([38.2, 21.3]).bindPopup("Batalla de"+
+				"Lepanto.").addTo(map).on('click', function() {
+				 document.getElementById("mitexto").innerHTML =" Miguel de Cervantes se incopora como"+
+				"soldado en la compañía del capitán Diego de Urbina, del tercio de Miguel de Moncada."+
+				"Embarcó en la galera Marquesa. El 7 de octubre de 1571 participó en la batalla de"+
+				"Lepanto, «la más alta ocasión que vieron los siglos pasados, los presentes, ni esperan"+
+				"ver los venideros», formando parte de la armada cristiana, dirigida por don Juan de"+
+				"Austria, y donde participaba uno de los más famosos marinos de la época, el marqués de"+
+				"Santa Cruz. En una información legal elaborada ocho años más tarde se"+
+				"dice:&#32;&#32;&quot;Cuando se reconosció el armada del Turco, en la dicha batalla"+
+				"naval, el dicho Miguel de Cervantes estaba malo y con calentura, y el dicho capitán... y"+
+				"otros muchos amigos suyos le dijeron que, pues estaba enfermo y con calentura, que"+
+				"estuviese quedo abajo en la cámara de la galera; y el dicho Miguel de Cervantes"+
+				"respondió que qué dirían de él, y que no hacía lo que debía, y que más quería morir"+
+				"peleando por Dios y por su rey, que no meterse so cubierta, y que con su salud... Y"+
+				"peleó como valente soldado con los dichos turcos en la dicha batalla en el lugar del"+
+				"esquife, como su capitán lo mandó y le dio orden, con otros soldados. Y acabada la"+
+				"batalla, como el señor don Juan supo y entendió cuán bien lo había hecho y peleado el"+
+				"dicho Miguel de Cervantes, le acrescentó y le dio cuatro ducados más de su paga... De la"+
+				"dicha batalla naval salió herido de dos arcabuzazos en el pecho y en una mano, de que"+
+				"quedó estropeado de la dicha mano.&quot;"
+				});
+				 var argel = L.marker([36.73, 3.0874]).bindPopup("Cautiverio en"+
+				"Argel.").addTo(map).on('click', function() {
+				 document.getElementById("mitexto").innerHTML ="Durante su regreso desde Nápoles a"+
+				"España a bordo de la galera Sol, una flotilla turca comandada por Mami Arnaute hizo"+
+				"presos a Miguel y a su hermano Rodrigo, el 26 de septiembre de 1575. Fueron capturados a"+
+				"la altura de Cadaqués de Rosas o Palamós, en una zona que actualmente recibe el nombre"+
+				"de Costa Brava, y llevados a Argel. Cervantes es adjudicado como esclavo al renegado"+
+				"griego Dali Mamí. El hecho de habérsele encontrado en su poder las cartas de"+
+				"recomendación que llevaba de don Juan de Austria y del duque de Sessa hizo pensar a sus"+
+				"captores que Cervantes era una persona muy importante y por quien podrían conseguir un"+
+				"buen rescate. Pidieron quinientos escudos de oro por su libertad.En los cinco años de"+
+				"aprisionamiento, Cervantes, hombre nada acomodaticio y con un fuerte espíritu y"+
+				"motivación, trató de escapar en cuatro ocasiones organizando él mismo los cuatro"+
+				"intentos. Para evitar represalias en sus compañeros de cautiverio, se hizo responsable"+
+				"de todo ante sus enemigos y prefirió la tortura a la delación."
+				});
+				 var madrid = L.marker([40.41379, -3.69893]).bindPopup("Madrid.").addTo(map).on('click',
+				function() {
+				 document.getElementById("mitexto").innerHTML ="Cervantes falleció en Madrid a la edad"+
+				"de 68 años de diabetes, en la conocida Casa de Cervantes, situada en en el barrio de"+
+				"las Letras o barrio de las Musas, en el entorno del conocido Madrid de los Austrias."+
+				"Cervantes deseó ser enterrado en la iglesia del convento de las Trinitarias Descalzas,"+
+				"en el mismo barrio, ya que cuando fue llevado preso en Argel, la congregación de los"+
+				"trinitarios ayudó, hicieron de intermediarios y recogieron fondos para que él y su"+
+				"hermano Rodrigo fueran liberados"
+				});
 
-    <h3>Buffer</h3>
-    <input type="number" id="bufferDistance" placeholder="Distancia en km" style="width:100%; margin-bottom:5px;" />
-    <button onclick="createBuffer()">Generar Buffer</button>
-</div>
+				 var sidebar = L.control.sidebar('sidebar').addTo(map);
 
-<script>
-// Control de acceso simple
-function checkPassword() {
-    const pass = document.getElementById("password").value;
-    if(pass === "geovisor2025"){
-        document.getElementById("login").style.display = "none";
-    } else {
-        document.getElementById("error").innerText = "Contraseña incorrecta.";
-    }
-}
-
-// Crear mapa
-var map = L.map('map').setView([23.6345, -102.5528], 5); // México centrado
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-
-var geojsonLayer;
-var bufferLayer;
-
-// Herramienta de medición
-var drawnItems = new L.FeatureGroup();
-map.addLayer(drawnItems);
-var drawControl = new L.Control.Draw({
-    draw: { polygon: false, rectangle: false, circle: false, marker: false, circlemarker: false },
-    edit: { featureGroup: drawnItems }
-});
-map.addControl(drawControl);
-
-map.on(L.Draw.Event.CREATED, function (e) {
-    var layer = e.layer;
-    drawnItems.addLayer(layer);
-    if(e.layerType === 'polyline'){
-        var latlngs = layer.getLatLngs();
-        var distance = 0;
-        for(var i=1; i<latlngs.length; i++){
-            distance += latlngs[i-1].distanceTo(latlngs[i]);
-        }
-        alert("Distancia: " + (distance/1000).toFixed(2) + " km");
-    }
-});
-
-// Cargar GeoJSON
-document.getElementById('geojsonInput').addEventListener('change', function(){
-    var file = this.files[0];
-    var reader = new FileReader();
-    reader.onload = function(e){
-        var geojsonData = JSON.parse(e.target.result);
-        if(geojsonLayer) { map.removeLayer(geojsonLayer); }
-        geojsonLayer = L.geoJSON(geojsonData).addTo(map);
-        map.fitBounds(geojsonLayer.getBounds());
-        updateStats(geojsonData);
-    };
-    reader.readAsText(file);
-});
-
-// Generar estadísticas
-function updateStats(geojson){
-    var numFeatures = geojson.features.length;
-    var totalArea = 0;
-    geojson.features.forEach(function(feat){
-        if(feat.geometry.type === 'Polygon' || feat.geometry.type === 'MultiPolygon'){
-            totalArea += turf.area(feat);
-        }
-    });
-    document.getElementById("stats").innerHTML = `
-        <p>Número de elementos: <b>${numFeatures}</b></p>
-        <p>Área total: <b>${(totalArea/1000000).toFixed(2)} km²</b></p>
-    `;
-}
-
-// Crear buffer con Turf.js
-function createBuffer(){
-    if(!geojsonLayer){
-        alert("Primero carga un GeoJSON.");
-        return;
-    }
-    var distance = parseFloat(document.getElementById("bufferDistance").value);
-    if(isNaN(distance)){
-        alert("Introduce una distancia válida.");
-        return;
-    }
-    var geojsonData = geojsonLayer.toGeoJSON();
-    var buffered = turf.buffer(geojsonData, distance, {units: 'kilometers'});
-
-    if(bufferLayer){ map.removeLayer(bufferLayer); }
-    bufferLayer = L.geoJSON(buffered, {style:{color:'red',fillOpacity:0.3}}).addTo(map);
-}
-</script>
-
-</body>
+			</script>
+		</body>
 </html>
