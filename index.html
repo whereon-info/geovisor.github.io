@@ -79,22 +79,25 @@
                 <li>Los trabajos de Persiles y Sigismunda (1617)</li>
                 </ul>
             </div>
-
-		<h3>Estadísticas</h3>
-	    <div id="stats">
-	        <p>Carga un archivo GeoJSON para ver estadísticas.</p>
-	    </div>
-	
-	    <h3>Cargar GeoJSON</h3>
-	    <input type="file" id="geojsonInput" accept=".geojson,.json" />
-	
-	    <h3>Buffer</h3>
-	    <input type="number" id="bufferDistance" placeholder="Distancia en km" style="width:100%; margin-bottom:5px;" />
-	    <button onclick="createBuffer()">Generar Buffer</button>
 		
             <div id="mitexto"></div>
         </div>
     </div>
+			<div id="sidebar">
+		    <button id="toggleSidebar" onclick="toggleSidebar()">Ocultar Panel</button>
+		
+		    <h3>Estadísticas</h3>
+		    <div id="stats">
+		        <p>Carga un archivo GeoJSON para ver estadísticas.</p>
+		    </div>
+		
+		    <h3>Cargar GeoJSON</h3>
+		    <input type="file" id="geojsonInput" accept=".geojson,.json" />
+		
+		    <h3>Buffer</h3>
+		    <input type="number" id="bufferDistance" placeholder="Distancia en km" style="width:100%; margin-bottom:5px;" />
+		    <button onclick="createBuffer()">Generar Buffer</button>
+		</div>
 		
 			<div id="map" class="sidebar-map"></div>
 			 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
@@ -183,6 +186,23 @@
 				});
 
 				 var sidebar = L.control.sidebar('sidebar').addTo(map);
+
+				var geojsonLayer;
+				var bufferLayer;
+				 
+				// Cargar GeoJSON
+					document.getElementById('geojsonInput').addEventListener('change', function(){
+					    var file = this.files[0];
+					    var reader = new FileReader();
+					    reader.onload = function(e){
+					        var geojsonData = JSON.parse(e.target.result);
+					        if(geojsonLayer) { map.removeLayer(geojsonLayer); }
+					        geojsonLayer = L.geoJSON(geojsonData).addTo(map);
+					        map.fitBounds(geojsonLayer.getBounds());
+					        updateStats(geojsonData);
+					    };
+					    reader.readAsText(file);
+					});
 				 
 				 function createBuffer(){
 				    if(!geojsonLayer){
