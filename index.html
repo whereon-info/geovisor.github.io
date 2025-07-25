@@ -40,6 +40,7 @@
                 <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
                 <li><a href="#retrato" role="tab"><i class="fa fa-user"></i></a></li>
                 <li><a href="#libros" role="tab"><i class="fa fa-file-text-o"></i></a></li>
+		<li><a href="#geojson" role="tab"><i class="fa fa-file-text-o"></i></a></li>
                 <li><a href="https://www.youtube.com/watch?v=HAxjVeqKH_8" role="tab" target="_blank"><i class="fa fa-youtube"></i></a></li>
             </ul>
 
@@ -75,6 +76,16 @@
                 <ul><li>La Galatea (1585)</li>
                 <li>El ingenioso hidalgo don Quijote de la Mancha (1605)</li>
                 <li>Novelas ejemplares (1613)</li>
+                <li>El ingenioso caballero don Quijote de la Mancha (1615)</li>
+                <li>Los trabajos de Persiles y Sigismunda (1617)</li>
+                </ul>
+            </div>
+
+		<div class="sidebar-pane" id="geojson">
+                <h1 class="sidebar-header">Cargar Geojson<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <ul><li>Cargar</li>
+                <li>Cargar</li>
+                <li>Cargar</li>
                 <li>El ingenioso caballero don Quijote de la Mancha (1615)</li>
                 <li>Los trabajos de Persiles y Sigismunda (1617)</li>
                 </ul>
@@ -186,40 +197,6 @@
 				});
 
 				 var sidebar = L.control.sidebar('sidebar').addTo(map);
-
-				var geojsonLayer;
-				var bufferLayer;
-				 
-				// Cargar GeoJSON
-					document.getElementById('geojsonInput').addEventListener('change', function(){
-					    var file = this.files[0];
-					    var reader = new FileReader();
-					    reader.onload = function(e){
-					        var geojsonData = JSON.parse(e.target.result);
-					        if(geojsonLayer) { map.removeLayer(geojsonLayer); }
-					        geojsonLayer = L.geoJSON(geojsonData).addTo(map);
-					        map.fitBounds(geojsonLayer.getBounds());
-					        updateStats(geojsonData);
-					    };
-					    reader.readAsText(file);
-					});
-				 
-				 function createBuffer(){
-				    if(!geojsonLayer){
-				        alert("Primero carga un GeoJSON.");
-				        return;
-				    }
-				    var distance = parseFloat(document.getElementById("bufferDistance").value);
-				    if(isNaN(distance)){
-				        alert("Introduce una distancia válida.");
-				        return;
-				    }
-				    var geojsonData = geojsonLayer.toGeoJSON();
-				    var buffered = turf.buffer(geojsonData, distance, {units: 'kilometers'});
-				
-				    if(bufferLayer){ map.removeLayer(bufferLayer); }
-				    bufferLayer = L.geoJSON(buffered, {style:{color:'red',fillOpacity:0.3}}).addTo(map);
-				}
 
 			</script>
 		</body>
