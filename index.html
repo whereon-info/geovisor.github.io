@@ -63,15 +63,13 @@
         <div class="sidebar-content">
             <div class="sidebar-pane" id="home">
                 <h1 class="sidebar-header">
-                    Miguel de Cervantes
+                    Geovisor
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
 
-                <p>Un mapa sobre los lugares más importantes en la vida de <a href="https://es.wikipedia.org/wiki/Miguel_de_Cervantes">Cervantes</a> autor de <a href="https://es.wikipedia.org/wiki/Don_Quijote_de_la_Mancha">Don Quijote de la Mancha</a>.</p>
+                <p>Realice un estudio de mercado  <a href="https://es.wikipedia.org/wiki/Miguel_de_Cervantes">Cervantes</a> autor de <a href="https://es.wikipedia.org/wiki/Don_Quijote_de_la_Mancha">Don Quijote de la Mancha</a>.</p>
 
-                <p class="lorem">Miguel de Cervantes Saavedra (Alcalá de Henares, 29 de septiembre de 1547-Madrid, 22 de abril de 1616) fue un soldado, novelista, poeta y dramaturgo español.</p>
-
-                <p class="lorem">Está considerado la máxima figura de la literatura española y es universalmente conocido por haber escrito El ingenioso Hidalgo don Quijote de la Mancha (conocida habitualmente como el Quijote), que muchos críticos han descrito como la primera novela moderna y una de las mejores obras de la literatura universal, además de ser el libro más editado y traducido de la historia, solo superado por la Biblia. Se le ha dado el sobrenombre de «Príncipe de los Ingenios».</p>
+                <p class="lorem"> Explore y analice la zona donde le gustaría instalar su franquicia.</p>
 
             </div>
 
@@ -82,12 +80,12 @@
             </div>
 
             <div class="sidebar-pane" id="libros">
-                <h1 class="sidebar-header">Obras publicadas<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-                <ul><li>La Galatea (1585)</li>
-                <li>El ingenioso hidalgo don Quijote de la Mancha (1605)</li>
-                <li>Novelas ejemplares (1613)</li>
-                <li>El ingenioso caballero don Quijote de la Mancha (1615)</li>
-                <li>Los trabajos de Persiles y Sigismunda (1617)</li>
+                <h1 class="sidebar-header">Conozca su zona<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <ul><li>Población</li>
+                <li>Nivel socioeconómico</li>
+                <li>Poder adquisitivo</li>
+                <li>Generadores de tráfico</li>
+                <li>Entorno social</li>
                 </ul>
             </div>
 
@@ -100,12 +98,13 @@
 			 <script src="js/leaflet-sidebar.js"></script>
 			 <script>
 				 var map = L.map('map');
-					 map.setView([41.9027,3.4964], 5);
+					 map.setView([17.9027,-93.4964], 5);
 					 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 					 maxZoom: 18,
 					 attribution: 'Map data &copy; OpenStreetMap contributors'
 				 }).addTo(map);
-				var alcala = L.marker([40.4819, -3.3635]).bindPopup("Alcala de Henares.").addTo(map).on('click', 
+				
+				 var alcala = L.marker([40.4819, -3.3635]).bindPopup("Alcala de Henares.").addTo(map).on('click', 
 				function(){
 				document.getElementById("mitexto").innerHTML = "Desde el siglo XVIII está admitido"+
 				"que el lugar de nacimiento de Miguel de Cervantes fue Alcalá de Henares, dado que allí"+
