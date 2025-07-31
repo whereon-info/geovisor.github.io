@@ -94,7 +94,22 @@
 					 maxZoom: 18,
 					 attribution: 'Map data &copy; OpenStreetMap contributors'
 				 }).addTo(map);
-				
+				<script>
+
+		function buscarLocalizacion(e) {
+		var mydate = new Date(e.timestamp);
+		L.marker(e.latlng).addTo(map).bindPopup(mydate.toString());
+		}
+
+		function errorLocalizacion(e) {
+    		alert("No es posible encontrar su ubicación. Es posible que tenga que activar la Geolocation.");
+		}
+
+		map.on('locationerror', errorLocalizacion);
+		map.on('locationfound', buscarLocalizacion);
+		map.locate({setView: true, maxZoom:10});
+
+	</script>	
 				 var alcala = L.marker([40.4819, -3.3635]).bindPopup("Alcala de Henares.").addTo(map).on('click', 
 				function(){
 				document.getElementById("mitexto").innerHTML = "Desde el siglo XVIII está admitido"+
