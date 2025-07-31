@@ -106,7 +106,7 @@
 
 		map.on('locationerror', errorLocalizacion);
 		map.on('locationfound', buscarLocalizacion);
-		map.locate({setView: true, maxZoom:10});
+		map.locate({setView: true, maxZoom:6});
 
 				 var alcala = L.marker([40.4819, -3.3635]).bindPopup("Alcala de Henares.").addTo(map).on('click', 
 				function(){
