@@ -191,20 +191,7 @@
 	
 				 var escala = L.control.scale({position: 'bottomleft', maxWidth: 500, metric: true, imperial: true}).addTo(map);
 				 
-				L.control.mousePosition().addTo(map);
-
-			fetch('https://mi-api.com/ubicaciones')
-   			 .then(response => response.json())
-   		 .then(data => {
-   		   // Mostrar marcadores en el mapa
-    		  data.forEach(punto => {
-       		 L.marker([punto.lat, punto.lng])
-          		.addTo(map)
-          		.bindPopup(punto.nombre);
-     		 });
-			 
-			 
-		 
+				L.control.mousePosition().addTo(map);	 
 	</script>
 
 	
