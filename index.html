@@ -7,15 +7,15 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
 	<link rel="stylesheet" href="css/L.Control.MousePosition.css">
-	    <link> href="/estilos/sitio/con_sitio.min.css" rel="stylesheet" </link>
-		  <link> rel="stylesheet" href="/estilos/sitio/plantillas.min.css"  </link>
-		  <link> href="/componentes/espacio/v2/estilos/ol.css" rel="stylesheet"  </link>
-		  <link> href="/componentes/espacio/v2/estilos/ol.popup.css" rel="stylesheet"  </link>
-		  <link> href="/componentes/espacio/v2/estilos/ol3-contextmenu.min.css" rel="stylesheet" </link>
- 		 <link> href="/componentes/espacio/v2/estilos/style.css" rel="stylesheet" </link>
-		 <script> src="/componentes/espacio/v2/scripts/jquery.js">     </script>
-		 <script>  src="/componentes/encabezado/js/recursos.min.js">  </script>
-		 <script>  src="/componentes/espacio/v2/scripts/Loadjs.js"> </script>
+	    <link href="/estilos/sitio/con_sitio.min.css" rel="stylesheet">
+		  <link rel="stylesheet" href="/estilos/sitio/plantillas.min.css">
+		  <link href="/componentes/espacio/v2/estilos/ol.css" rel="stylesheet">
+		  <link href="/componentes/espacio/v2/estilos/ol.popup.css" rel="stylesheet">
+		  <link href="/componentes/espacio/v2/estilos/ol3-contextmenu.min.css" rel="stylesheet">
+ 		 <link href="/componentes/espacio/v2/estilos/style.css" rel="stylesheet">
+		 <script src="/componentes/espacio/v2/scripts/jquery.js"> </script>
+		 <script  src="/componentes/encabezado/js/recursos.min.js"> </script>
+		 <script  src="/componentes/espacio/v2/scripts/Loadjs.js"> </script>
 	 <script src="js/apiDenue.js"> </script>  
 
 	<link rel="stylesheet" href="css/leaflet-sidebar.css" />
@@ -45,6 +45,7 @@
 		</style>
 	
 	</head>
+<body>
     <div id="sidebar" class="sidebar collapsed">
         <!-- Nav tabs -->
         <div class="sidebar-tabs">
@@ -76,7 +77,7 @@
 
             <div class="sidebar-pane" id="retrato">
                 <h1 class="sidebar-header">Retrato de Cervantes<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-                <p><a href="https://commons.wikimedia.org/wiki/File:Cervantes_J%C3%A1uregui.jpg#/media/File:Cervantes_J%C3%A1uregui.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Cervantes_J%C3%A1uregui.jpg/1200px-Cervantes_J%C3%A1uregui.jpg" alt="Cervantes Jáuregui.jpg" width="360" height="560"></a>
+                <p><a href="https://commons.wikimedia.org/wiki/File:Cervantes_J%C3%A1uregui.jpg#/media/File:Cervantes_J%C3%A1uregui.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Cervantes_J%C3%A1uregui.jpg/1200px-Cervantes_J%C3%A1uregui.jpg" alt="Cervantes Jáuregui.jpg" width="360" height="560"/></a>
 
             </div>
 
@@ -102,7 +103,7 @@
 		<script>
 				 var map = L.map('map');
 					 map.setView([17.9027,-93.4964], 5);
-					 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 					 maxZoom: 18,
 					 attribution: 'Map data &copy; OpenStreetMap contributors'
 				 }).addTo(map);
@@ -166,17 +167,17 @@
 				L.control.mousePosition().addTo(map);	 
 	</script>
      
-     <div> id="disabledScreen" style="display: none;"></div>
+     <div id="disabledScreen" style="display: none;"></div>
       <div> class="container con_principal" id="contM">
          <div> class="row">
             <div> class="col-md-12" id="columna-1">
                <div> class="row">
                <div>  class="col-xs-12">
                          <div> class="row con_desf_inf">
-                            <div> id="pestana" style="display:none;">
-                                <script> src="/componentes/pestana/js/pestana.min.js?v=1.0"> </script>
+                            <div id="pestana" style="display:none;">
+                                <script src="/componentes/pestana/js/pestana.min.js?v=1.0"> </script>
                            </div>
-                                  <div> id="popup" class="ol-popup"> </div>
+                                  <div id="popup" class="ol-popup"> </div>
                        </div>
                     </div>
                </div>
