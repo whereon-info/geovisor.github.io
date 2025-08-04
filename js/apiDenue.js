@@ -1,7 +1,7 @@
 
 			
 
-var urlApiBusqueda = "https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/#condicion/#latitud,#longitud/#metros/#token";
+var urlApiBusqueda = "https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/#condicion/#latitud,#longitud/#metros/33602899-98fd-4db7-8ce9-41c0330f1d7e";
 var token = '33602899-98fd-4db7-8ce9-41c0330f1d7e';
 var vecNombres = [
 'id de establecimiento',
