@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.get("/api/denue/:condi/:lonlat/:mts", async (req, res) => {
     try {
         const { condi, lonlat, mts } = req.params;
-        const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lonlat}/${mts}/${TOKEN_DENUE}`;
+        const apiUrl = "https://denue-backend-start.up.railway.app";
 
         console.log(`🔍 Consultando: ${url}`);
         const response = await fetch(url);
@@ -44,3 +44,4 @@ app.get("/api/denue/:condi/:lonlat/:mts", async (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
+
