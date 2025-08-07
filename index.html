@@ -34,7 +34,7 @@
       const lon = parseFloat(document.getElementById("lon").value);
       const mts = parseInt(document.getElementById("mts").value);
 
-      fetch(`https://geovisorgithubio-production.up.railway.app/api/denue?lat=${lat}&lon=${lon}&mts=${mts}&condicion=${encodeURIComponent(condicion)}`)
+     fetch("https://geovisorgithubio-production.up.railway.app/api/denue?lat=21.85&lon=-102.28&radio=500")
         .then(resp => resp.json())
         .then(data => {
           markersLayer.clearLayers();
@@ -49,3 +49,4 @@
   </script>
 </body>
 </html>
+
