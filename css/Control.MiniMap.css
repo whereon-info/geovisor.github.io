@@ -45,7 +45,7 @@
 }
 
 .leaflet-oldie .leaflet-control-minimap-toggle-display{
-	background-image: url("images/toggle.png");
+	background-image: url("../images/toggle.png");
 }
 
 .leaflet-control-minimap-toggle-display-bottomright {
