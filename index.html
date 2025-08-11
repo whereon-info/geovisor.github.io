@@ -91,6 +91,21 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
+		function buscarLocalizacion(e) {
+		var mydate = new Date(e.timestamp);
+		L.marker(e.latlng).addTo(map).bindPopup(mydate.toString());
+        //L.marker(e.latlng).addTo(map).bindPopup(e.timestamp.toString()); 
+		}
+
+		function errorLocalizacion(e) {
+    		alert("No es posible encontrar su ubicación. Es posible que tenga que activar la Geolocation.");
+		}
+
+		map.on('locationerror', errorLocalizacion);
+		map.on('locationfound', buscarLocalizacion);
+		map.locate({setView: true, maxZoom:12});
+
+        
         let markersLayer = L.layerGroup().addTo(map);
         let markerRefs = [];
 
@@ -191,3 +206,4 @@
     </script>
 </body>
 </html>
+
