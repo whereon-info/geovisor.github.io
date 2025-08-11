@@ -83,7 +83,9 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script type="text/javascript" src="js/hive_cdmx.js"></script>
 
+	
     <script>
         const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
         let map = L.map('map').setView([21.85717833, -102.28487238], 16);
@@ -105,7 +107,8 @@
 		map.on('locationfound', buscarLocalizacion);
 		map.locate({setView: true, maxZoom:12});
 
-        
+        L.geoJson(countries).addTo(map);
+
         let markersLayer = L.layerGroup().addTo(map);
         let markerRefs = [];
 
@@ -206,6 +209,7 @@
     </script>
 </body>
 </html>
+
 
 
 
