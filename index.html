@@ -2,12 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>¿Qué ponemos?</title>
+    <title>Mapa DENUE con Leaflet + Tabla + Exportar PDF</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Estilos Leaflet -->
+    <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -55,12 +54,13 @@
         <label>Condición:</label>
         <input type="text" id="condi" value="restaurantes" />
         <label>Latitud:</label>
-        <input type="text" id="lat" value="19.432686894504627" />
+        <input type="text" id="lat" value="21.85717833" />
         <label>Longitud:</label>
-        <input type="text" id="lon" value="-99.1331249767789" />
+        <input type="text" id="lon" value="-102.28487238" />
         <label>Metros:</label>
-        <input type="number" id="mts" value="500" />
-        <button id="btnBuscar">Buscar</button>
+        <input type="number" id="mts" value="300" />
+        <button id="btnBuscar">Ver listado</button>
+        <button id="btnExportar">Exportar a PDF</button>
     </div>
 
     <div id="container">
@@ -79,13 +79,14 @@
         <div id="map"></div>
     </div>
 
-    <!-- Leaflet JS -->
+    <!-- JS Librerías -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-
-        let map = L.map('map').setView([19.43268085832087, -99.13322686589028], 16);
+        let map = L.map('map').setView([21.85717833, -102.28487238], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
@@ -124,7 +125,6 @@
 
                 data.forEach((item, index) => {
                     if (item.Latitud && item.Longitud) {
-                        // Crear marcador
                         let marker = L.marker([item.Latitud, item.Longitud])
                             .bindPopup(`
                                 <b>${item.Nombre || ''}</b><br>
@@ -137,7 +137,6 @@
 
                         markerRefs.push(marker);
 
-                        // Agregar fila a la tabla
                         let row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${item.Nombre || ''}</td>
@@ -153,7 +152,6 @@
                     }
                 });
 
-                // Ajustar vista
                 let bounds = markersLayer.getBounds();
                 if (bounds.isValid()) {
                     map.fitBounds(bounds);
@@ -165,12 +163,31 @@
             }
         }
 
-        document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+        // Exportar a PDF
+        async function exportarPDF() {
+            const { jsPDF } = window.jspdf;
+            let pdf = new jsPDF('l', 'pt', 'a4');
 
-        // Búsqueda inicial
+            // Captura de pantalla de todo el contenedor
+            const container = document.querySelector("#container");
+            let canvas = await html2canvas(container, { useCORS: true });
+
+            let imgData = canvas.toDataURL('image/png');
+            let imgProps = pdf.getImageProperties(imgData);
+
+            // Ajustar la imagen al ancho del PDF
+            let pdfWidth = pdf.internal.pageSize.getWidth();
+            let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save("mapa_denue.pdf");
+        }
+
+        document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+        document.getElementById('btnExportar').addEventListener('click', exportarPDF);
+
+        // Carga inicial
         buscarDENUE();
     </script>
 </body>
 </html>
-
-
