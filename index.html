@@ -123,6 +123,15 @@
 		map.on('locationfound', buscarLocalizacion);
 		map.locate({setView: true, maxZoom:12});
 
+		var hiveStyle = {
+		 'color': "#858585",
+		 'weight': 5,
+		 'opacity': 0.6
+		};
+			L.geoJson(hive_cdmx, {
+		style: hiveStyle
+		}).addTo(map);
+
         L.geoJson(hive_cdmx).addTo(map);
 			function getColor(d) {
     		return d > 100000000 ? '#800026' :
@@ -247,6 +256,7 @@
     </script>
 </body>
 </html>
+
 
 
 
