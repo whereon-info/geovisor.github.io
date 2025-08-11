@@ -108,7 +108,8 @@
 		map.locate({setView: true, maxZoom:12});
 
         L.geoJson(countries).addTo(map);
-
+		L.control.scale({imperial: true}).addTo(map);
+		
         let markersLayer = L.layerGroup().addTo(map);
         let markerRefs = [];
 
@@ -209,6 +210,7 @@
     </script>
 </body>
 </html>
+
 
 
 
