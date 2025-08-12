@@ -13,6 +13,7 @@
 	<script src="js/Control.MiniMap.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="css/styledLayerControl.css" />
 	<script src="js/styledLayerControl.js"></script>
+	<script type="text/javascript" src="js/hive_cdmx.js"></script>
     
 	<style>
 	 #map {
@@ -105,8 +106,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.min.js"></script>
-	<script type="text/javascript" src="js/hive_cdmx.js"></script>
-
 	
     <script>
         const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
@@ -297,9 +296,32 @@
 
         // Carga inicial
         buscarDENUE();
+
+			var legend = L.control({position: 'bottomright'}); 
+
+			legend.onAdd = function (map) { 
+
+   			 var div = L.DomUtil.create('div', 'info legend'), 
+      		  grades = [0, 1000000, 2000000, 5000000, 10000000, 20000000, 50000000, 100000000], 
+      		  labels = []; 
+
+  		  // Intervalos de poblacion 
+   		 for (var i = 0; i < grades.length; i++) { 
+       	 div.innerHTML += 
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + 
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'); 
+   		 } 
+
+    	return div; 
+		}; 
+
+		legend.addTo(map); 
+
+		
     </script>
 </body>
 </html>
+
 
 
 
