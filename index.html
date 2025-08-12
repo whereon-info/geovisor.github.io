@@ -2,19 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Estudio de Mercado</title>
+    <title>Estudio de Mercado </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-    <!-- Plugins -->
-    <link rel="stylesheet" href="css/Control.MiniMap.css" />
-    <script src="js/Control.MiniMap.js"></script>
-
-    <!-- Estilos -->
-    <style>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+	<link rel="stylesheet" href="css/Control.MiniMap.css" />
+	<script src="js/Control.MiniMap.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="css/styledLayerControl.css" />
+	<script src="js/styledLayerControl.js"></script>
+    
+	<style>
+	 #map {
+	 width: 700px;
+	 height: 600px; }
+	</style>
+	
+	<style>
         body {
             font-family: Arial, Helvetica, sans-serif;
             margin: 0;
@@ -22,19 +28,6 @@
         #controls {
             padding: 10px;
             background: #f4f4f4;
-            border-bottom: 1px solid #ddd;
-        }
-        #controls label {
-            margin-right: 5px;
-        }
-        #controls input {
-            margin-right: 10px;
-            padding: 4px;
-        }
-        #controls button {
-            padding: 5px 10px;
-            margin-right: 5px;
-            cursor: pointer;
         }
         #container {
             display: flex;
@@ -70,16 +63,15 @@
     </style>
 </head>
 <body>
-
     <div id="controls">
         <label>Condición:</label>
-        <input type="text" id="condi" placeholder="Ej. restaurantes" value="restaurantes">
+        <input type="text" id="condi" value="restaurantes" />
         <label>Latitud:</label>
-        <input type="text" id="lat" value="19.43270">
+        <input type="text" id="lat" value="19.43270" />
         <label>Longitud:</label>
-        <input type="text" id="lon" value="-99.13331">
+        <input type="text" id="lon" value="-99.13331" />
         <label>Metros:</label>
-        <input type="number" id="mts" value="500" min="50" step="50">
+        <input type="number" id="mts" value="500" />
         <button id="btnBuscar">Ver listado</button>
         <button id="btnExportar">Exportar a PDF</button>
     </div>
@@ -100,77 +92,111 @@
         <div id="map"></div>
     </div>
 
-    <!-- Librerías para exportar PDF -->
+    <!-- JS Librerías -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.min.js"></script>
+	<script type="text/javascript" src="js/hive_cdmx.js"></script>
 
-    <!-- Datos locales -->
-    <script src="js/hive_cdmx.js"></script>
-
+	
     <script>
         const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-
-        // Inicializar mapa
-        const map = L.map('map').setView([19.43270, -99.13331], 13);
-        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        let map = L.map('map').setView([19.85717833, -99.28487238], 3);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // MiniMapa
-        const miniMap = new L.Control.MiniMap(osmLayer, { toggleDisplay: true }).addTo(map);
+		var osm2 = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+		{minZoom: 0, maxZoom: 13});
+		var osm3 = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+		{minZoom: 0, maxZoom: 13});
+		var osm4 = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+		{minZoom: 0, maxZoom: 13});
+		
+		var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true }).addTo(map); 
 
-        // Capa de marcadores
-        const markersLayer = L.layerGroup().addTo(map);
-        let markerRefs = [];
+		var myMarker = L.marker([19.965, -98.664]);
+		var myMarker1 = L.marker([19.9614, -99.6672]);
+		map.addLayer(myMarker);
+		map.addLayer(myMarker1); 
 
-        // Cargar datos locales
+		var baseLayers = {
+		"Base:": map,
+		"Ortoimagen": osm3,
+		"IGN": osm4
+		};
+		var overlays = {
+		"Plaza Mayor": myMarker,
+		"Universidad": myMarker1,
+		}; 
+		
+		L.control.layers(baseLayers, overlays,{collapsed:true}).addTo(map);
+
+		
+		function buscarLocalizacion(e) {
+		var mydate = new Date(e.timestamp);
+		L.marker(e.latlng).addTo(map).bindPopup(mydate.toString());
+        //L.marker(e.latlng).addTo(map).bindPopup(e.timestamp.toString()); 
+		}
+
+		function errorLocalizacion(e) {
+    		alert("No es posible encontrar su ubicación. Es posible que tenga que activar la Geolocation.");
+		}
+
+		map.on('locationerror', errorLocalizacion);
+		map.on('locationfound', buscarLocalizacion);
+		map.locate({setView: true, maxZoom:12});
+
         L.geoJson(hive_cdmx).addTo(map);
 
-        // Título
-        const title = L.control({ position: 'topright' });
-        title.onAdd = () => {
-            const div = L.DomUtil.create('div', 'info');
-            div.innerHTML = "<h2>ESTUDIO DE MERCADO</h2><p>Análisis de entornos</p>";
-            return div;
-        };
-        title.addTo(map);
+		var title = L.control();
+		title.onAdd = function (map) {
+		var div = L.DomUtil.create('div', 'info');
+		 div.innerHTML +=
+		 '<h2>ESTUDIO DE MERCADO</h2>Análisis de entornos';
+		 return div;
+		};
+		title.addTo(map);
 
-        L.control.scale().addTo(map);
 
-        // Buscar en DENUE
+		L.control.scale({imperial: true}).addTo(map);
+		
+        let markersLayer = L.layerGroup().addTo(map);
+        let markerRefs = [];
+
         async function buscarDENUE() {
             markersLayer.clearLayers();
             markerRefs = [];
             document.querySelector("#resultados tbody").innerHTML = "";
 
-            const condi = document.getElementById('condi').value.trim();
-            const lat = document.getElementById('lat').value.trim();
-            const lon = document.getElementById('lon').value.trim();
-            const mts = document.getElementById('mts').value.trim();
+            let condi = document.getElementById('condi').value.trim();
+            let lat = document.getElementById('lat').value.trim();
+            let lon = document.getElementById('lon').value.trim();
+            let mts = document.getElementById('mts').value.trim();
 
-            if (!condi || !lat || !lon || !mts) {
-                alert("Por favor completa todos los campos.");
-                return;
-            }
-
-            const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+            let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
             try {
-                const resp = await fetch(url);
-                const data = await resp.json();
+                let resp = await fetch(url);
+                let data = await resp.json();
 
-                if (!Array.isArray(data)) throw new Error("Formato inesperado de la API");
+                if (!Array.isArray(data)) {
+                    console.error("Respuesta inesperada:", data);
+                    alert("Error: La API devolvió un formato inesperado.");
+                    return;
+                }
 
                 if (data.length === 0) {
                     alert("No se encontraron resultados.");
                     return;
                 }
 
-                const tbody = document.querySelector("#resultados tbody");
+                let tbody = document.querySelector("#resultados tbody");
 
-                data.forEach(item => {
+                data.forEach((item, index) => {
                     if (item.Latitud && item.Longitud) {
-                        const marker = L.marker([item.Latitud, item.Longitud])
+                        let marker = L.marker([item.Latitud, item.Longitud])
                             .bindPopup(`
                                 <b>${item.Nombre || ''}</b><br>
                                 ${item.Razon_social || ''}<br>
@@ -182,7 +208,7 @@
 
                         markerRefs.push(marker);
 
-                        const row = document.createElement("tr");
+                        let row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${item.Nombre || ''}</td>
                             <td>${item.Calle || ''} ${item.Num_Exterior || ''}, ${item.Colonia || ''}</td>
@@ -197,27 +223,32 @@
                     }
                 });
 
-                const bounds = markersLayer.getBounds();
-                if (bounds.isValid()) map.fitBounds(bounds);
+                let bounds = markersLayer.getBounds();
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds);
+                }
 
             } catch (error) {
                 console.error("Error consultando DENUE:", error);
-                alert("Error al consultar la API.");
+                alert("Error al consultar la API. Revisa la consola.");
             }
         }
 
-        // Exportar PDF
+        // Exportar a PDF
         async function exportarPDF() {
             const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('l', 'pt', 'a4');
+            let pdf = new jsPDF('l', 'pt', 'a4');
 
+            // Captura de pantalla de todo el contenedor
             const container = document.querySelector("#container");
-            const canvas = await html2canvas(container, { useCORS: true });
-            const imgData = canvas.toDataURL('image/png');
-            const imgProps = pdf.getImageProperties(imgData);
+            let canvas = await html2canvas(container, { useCORS: true });
 
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            let imgData = canvas.toDataURL('image/png');
+            let imgProps = pdf.getImageProperties(imgData);
+
+            // Ajustar la imagen al ancho del PDF
+            let pdfWidth = pdf.internal.pageSize.getWidth();
+            let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
             pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
             pdf.save("mapa_denue.pdf");
