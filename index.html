@@ -107,6 +107,15 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
+		var title = L.control();
+		title.onAdd = function (map) {
+		var div = L.DomUtil.create('div', 'info');
+		 div.innerHTML +=
+		 '<h2>ESTUDIO DE MERCADO</h2>Análisis de entornos';
+		 return div;
+		};
+		title.addTo(map);
+
 		var osm2 = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 		{minZoom: 0, maxZoom: 13});
 		var osm3 = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -131,7 +140,7 @@
 		"Universidad": myMarker1,
 		}; 
 		
-		L.control.layers(baseLayers, overlays,{collapsed:true}).addTo(map);
+		L.control.layers(overlays, baseLayers, {collapsed:true}).addTo(map);
 
 		
 		function buscarLocalizacion(e) {
@@ -150,14 +159,7 @@
 
         L.geoJson(hive_cdmx).addTo(map);
 
-		var title = L.control();
-		title.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info');
-		 div.innerHTML +=
-		 '<h2>ESTUDIO DE MERCADO</h2>Análisis de entornos';
-		 return div;
-		};
-		title.addTo(map);
+
 
 
 		L.control.scale({imperial: true}).addTo(map);
@@ -262,3 +264,4 @@
     </script>
 </body>
 </html>
+
