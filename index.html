@@ -194,10 +194,7 @@
 					}
 				}
 			
-				geojson = L.geoJson(hive_cdmx, {
-					style: style,
-					onEachFeature: popup
-				}).addTo(map);
+				geojson = L.geoJson(hive_cdmx).addTo(map);
 		
         let markersLayer = L.layerGroup().addTo(map);
         let markerRefs = [];
@@ -321,6 +318,7 @@
     </script>
 </body>
 </html>
+
 
 
 
