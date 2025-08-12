@@ -123,28 +123,7 @@
 		map.on('locationfound', buscarLocalizacion);
 		map.locate({setView: true, maxZoom:12});
 
-			function getColor(d) {
-    return d > 10000000 ? '#800026' :
-           d > 5000000  ? '#BD0026' :
-           d > 2000000  ? '#E31A1C' :
-           d > 1000000  ? '#FC4E2A' :
-           d > 5000000  ? '#FD8D3C' :
-           d > 200000   ? '#FEB24C' :
-           d > 100000   ? '#FED976' :
-                     	   '#FFEDA0';
-		}
-
-	function style(feature) {
-		return {
-			fillColor: getColor(feature.properties.POPADUL),
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7
-		};
-	}
-		
+		L.geoJson(hive_cdmx).addTo(map);
 		L.control.scale({imperial: true}).addTo(map);
 		
         let markersLayer = L.layerGroup().addTo(map);
@@ -247,6 +226,7 @@
     </script>
 </body>
 </html>
+
 
 
 
