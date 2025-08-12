@@ -102,14 +102,37 @@
 	
     <script>
         const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-        let map = L.map('map').setView([21.85717833, -102.28487238], 16);
+        let map = L.map('map').setView([19.85717833, -99.28487238], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
 		var osm2 = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 		{minZoom: 0, maxZoom: 13});
+		var osm3 = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+		{minZoom: 0, maxZoom: 13});
+		var osm4 = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+		{minZoom: 0, maxZoom: 13});
+		
 		var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true }).addTo(map); 
+
+		var myMarker = L.marker([19.965, -98.664]);
+		var myMarker1 = L.marker([19.9614, -99.6672]);
+		map.addLayer(myMarker);
+		map.addLayer(myMarker1); 
+
+		var baseLayers = {
+		"Base:": osm,
+		"Ortoimagen": oms3,
+		"IGN": oms4
+		};
+		var overlays = {
+		"Plaza Mayor": myMarker,
+		"Universidad": myMarker1,
+		}; 
+		
+		L.control.layers(baseLayers, overlays,{collapsed:true}).addTo(map);
+
 		
 		function buscarLocalizacion(e) {
 		var mydate = new Date(e.timestamp);
@@ -125,16 +148,8 @@
 		map.on('locationfound', buscarLocalizacion);
 		map.locate({setView: true, maxZoom:12});
 
-		fetch('js/hive_cdmx.js')
-      .then(response => response.json())
-      .then(data => {
-        const hive_cdmx = data;
         L.geoJson(hive_cdmx).addTo(map);
-      })
-      .catch(error => {
-        console.error('Error loading GeoJSON:', error);
-      });
-		
+
 		L.control.scale({imperial: true}).addTo(map);
 		
         let markersLayer = L.layerGroup().addTo(map);
@@ -237,6 +252,7 @@
     </script>
 </body>
 </html>
+
 
 
 
