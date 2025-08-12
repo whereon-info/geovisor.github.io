@@ -102,7 +102,7 @@
 	
     <script>
         const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-        let map = L.map('map').setView([19.85717833, -99.28487238], 16);
+        let map = L.map('map').setView([19.85717833, -99.28487238], 3);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
@@ -123,8 +123,8 @@
 
 		var baseLayers = {
 		"Base:": map,
-		"Ortoimagen": oms3,
-		"IGN": oms4
+		"Ortoimagen": osm3,
+		"IGN": osm4
 		};
 		var overlays = {
 		"Plaza Mayor": myMarker,
@@ -262,6 +262,7 @@
     </script>
 </body>
 </html>
+
 
 
 
