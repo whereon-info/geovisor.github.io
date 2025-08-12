@@ -125,27 +125,6 @@
 
         L.geoJson(hive_cdmx).addTo(map);
 		
-			function getColor(d) {
-    		return d > 100000000 ? '#800026' :
-           d > 5000000  ? '#BD0026' :
-           d > 2000000  ? '#E31A1C' :
-           d > 1000000  ? '#FC4E2A' :
-           d > 500000   ? '#FD8D3C' :
-           d > 200000   ? '#FEB24C' :
-           d > 100000   ? '#FED976' :
-                     	   '#FFEDA0';
-		}
-	function style(feature) {
-		return {
-			fillColor: getColor(feature.properties.POBADUL),
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7
-		};
-	}
-
 		L.control.scale({imperial: true}).addTo(map);
 		
         let markersLayer = L.layerGroup().addTo(map);
@@ -248,6 +227,7 @@
     </script>
 </body>
 </html>
+
 
 
 
