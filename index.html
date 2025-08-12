@@ -165,6 +165,7 @@
 		map.locate({setView: true, maxZoom:12});
 
 		L.control.scale({imperial: true}).addTo(map);
+		L.geoJson(hive_cdmx).addTo(map);
 
 						function getColor(d) {
 			    return d > 1000000 ? '#800026' :
@@ -194,7 +195,7 @@
 					}
 				}
 			
-				geojson = L.geoJson(hive_cdmx).addTo(map);
+		
 		
         let markersLayer = L.layerGroup().addTo(map);
         let markerRefs = [];
@@ -318,6 +319,7 @@
     </script>
 </body>
 </html>
+
 
 
 
