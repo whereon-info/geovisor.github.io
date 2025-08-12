@@ -114,6 +114,8 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
+		L.geoJson(hive_cdmx).addTo(map);
+		
 		var title = L.control();
 		title.onAdd = function (map) {
 		var div = L.DomUtil.create('div', 'info');
@@ -165,7 +167,7 @@
 		map.locate({setView: true, maxZoom:12});
 
 		L.control.scale({imperial: true}).addTo(map);
-		L.geoJson(hive_cdmx).addTo(map);
+
 
 						function getColor(d) {
 			    return d > 1000000 ? '#800026' :
@@ -319,6 +321,7 @@
     </script>
 </body>
 </html>
+
 
 
 
