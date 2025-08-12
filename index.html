@@ -123,7 +123,16 @@
 		map.on('locationfound', buscarLocalizacion);
 		map.locate({setView: true, maxZoom:12});
 
-		L.geoJson(hive_cdmx).addTo(map);
+		fetch('js/hive_cdmx.js')
+      .then(response => response.json())
+      .then(data => {
+        const hive_cdmx = data;
+        L.geoJson(hive_cdmx).addTo(map);
+      })
+      .catch(error => {
+        console.error('Error loading GeoJSON:', error);
+      });
+		
 		L.control.scale({imperial: true}).addTo(map);
 		
         let markersLayer = L.layerGroup().addTo(map);
@@ -226,6 +235,7 @@
     </script>
 </body>
 </html>
+
 
 
 
