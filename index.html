@@ -150,6 +150,16 @@
 
         L.geoJson(hive_cdmx).addTo(map);
 
+		var title = L.control();
+		title.onAdd = function (map) {
+		var div = L.DomUtil.create('div', 'info');
+		 div.innerHTML +=
+		 '<h2>ESTUDIO DE MERCADO</h2>Análisis de entornos';
+		 return div;
+		};
+		title.addTo(map);
+
+
 		L.control.scale({imperial: true}).addTo(map);
 		
         let markersLayer = L.layerGroup().addTo(map);
@@ -252,6 +262,7 @@
     </script>
 </body>
 </html>
+
 
 
 
