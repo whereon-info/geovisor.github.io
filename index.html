@@ -173,7 +173,7 @@
                     map.fitBounds(bounds.pad(0.1));
                 }
 
-            } ;
+            }
             catch (error) {
             console.error("Error consultando DENUE:", error);
                 // Check if the error has a status property and it's 0
@@ -182,13 +182,14 @@
                 } else {
                     alert("Error al consultar la API. Ver consola para detalles.");
                 }
-             };
+             }
         
         // Solo buscar cuando el usuario haga clic
         document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
     </script>
 </body>
 </html>
+
 
 
 
