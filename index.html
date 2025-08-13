@@ -116,15 +116,29 @@
   }).addTo(map);
 
   let markers = L.markerClusterGroup();
+  let markerList = []; // Guardamos {marker, originalIcon}
+
+  // Ícono resaltado
+  let highlightIcon = L.icon({
+    iconUrl: 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32]
+  });
 
   function buscarDENUE() {
     markers.clearLayers();
+    markerList = [];
     $("#resultTable tbody").empty();
 
     const condi = $("#condi").val().trim();
     const lat = $("#lat").val().trim();
     const lon = $("#lon").val().trim();
     const mts = $("#mts").val().trim();
+
+    if (!lat || !lon) {
+      alert("No se ha detectado ubicación.");
+      return;
+    }
 
     const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
@@ -134,13 +148,15 @@
           alert("No se recibieron resultados.");
           return;
         }
-        data.forEach(item => {
+        data.forEach((item, index) => {
           let marker = L.marker([item.latitud, item.longitud]);
+          let originalIcon = marker.options.icon;
           marker.bindPopup(`<b>${item.nombre}</b><br>${item.ubicacion}<br>${item.clase_actividad}`);
           markers.addLayer(marker);
+          markerList.push({ marker, originalIcon });
 
           $("#resultTable tbody").append(`
-            <tr>
+            <tr data-index="${index}">
               <td>${item.nombre}</td>
               <td>${item.ubicacion}</td>
               <td>${item.clase_actividad}</td>
@@ -155,26 +171,55 @@
       });
   }
 
+  // Clic en fila → centrar y abrir popup
+  $(document).on("click", "#resultTable tbody tr", function() {
+    const index = $(this).data("index");
+    const { marker } = markerList[index];
+    if (marker) {
+      map.setView(marker.getLatLng(), 18);
+      marker.openPopup();
+    }
+  });
+
+  // Hover en fila → resaltar y abrir popup temporal
+  $(document).on("mouseenter", "#resultTable tbody tr", function() {
+    const index = $(this).data("index");
+    const { marker } = markerList[index];
+    if (marker) {
+      marker.setIcon(highlightIcon);
+      marker.openPopup();
+    }
+  });
+
+  // Salir de fila → restaurar icono y cerrar popup
+  $(document).on("mouseleave", "#resultTable tbody tr", function() {
+    const index = $(this).data("index");
+    const { marker, originalIcon } = markerList[index];
+    if (marker) {
+      marker.setIcon(originalIcon);
+      marker.closePopup();
+    }
+  });
+
   $("#btnBuscar").on("click", buscarDENUE);
 
-  // Exportar mapa a PDF
-  $("#btnPDF").on("click", function() {
-    leafletImage(map, function(err, canvas) {
-      const imgData = canvas.toDataURL("image/png");
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, 'PNG', 10, 10, 180, 160);
-      pdf.save("mapa.pdf");
+  // Geolocalización automática
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      $("#lat").val(lat);
+      $("#lon").val(lon);
+      map.setView([lat, lon], 16);
+      buscarDENUE();
+    }, function() {
+      alert("No se pudo obtener tu ubicación. Ingresa coordenadas manualmente.");
     });
-  });
-
-  // Exportar tabla a Excel
-  $("#btnExcel").on("click", function() {
-    let wb = XLSX.utils.table_to_book(document.getElementById('resultTable'), {sheet:"Resultados"});
-    XLSX.writeFile(wb, "resultados.xlsx");
-  });
-
+  } else {
+    alert("Tu navegador no soporta geolocalización.");
+  }
 </script>
 
 </body>
 </html>
+
