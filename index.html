@@ -121,75 +121,56 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
     }).addTo(map);
 
-    const markers = L.markerClusterGroup();
-    map.addLayer(markers);
 
-    function getIcon(tipo) {
-        let color = tipo.toLowerCase().includes("restaurante") ? "ff0000" : "00aaff";
-        return L.icon({
-            iconUrl: `https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${color}`,
-            iconSize: [21, 34],
-            iconAnchor: [10, 34]
-        });
-    }
+let markersLayer = L.layerGroup().addTo(map);
 
-function buscarDENUE() {
-    let condi = $("#condi").val().trim();
-    let lat = $("#lat").val().trim();
-    let lon = $("#lon").val().trim();
-    let mts = $("#mts").val().trim();
+        // Función para buscar en API DENUE
+        async function buscarDENUE() {
+            markersLayer.clearLayers();
 
-    if (!condi || !lat || !lon || !mts) {
-        alert("Por favor completa todos los campos.");
-        return;
-    }
+            let condi = document.getElementById('condi').value;
+            let lat = document.getElementById('lat').value;
+            let lon = document.getElementById('lon').value;
+            let mts = document.getElementById('mts').value;
 
-    let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+            // URL API DENUE (token de ejemplo)
+            let token = "pruebas";
+            let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
-    $("#btnBuscar").prop("disabled", true).text("Buscando...");
+            try {
+                let resp = await fetch(url);
+                let data = await resp.json();
 
-    $.getJSON(url)
-        .done(function(data) {
-            if (!Array.isArray(data)) {
-                alert("Error: respuesta inesperada de la API");
-                console.error("Respuesta API:", data);
-                return;
+                if (!data.length) {
+                    alert("No se encontraron resultados");
+                    return;
+                }
+
+                // Añadir marcadores
+                data.forEach(item => {
+                    if (item.Latitud && item.Longitud) {
+                        L.marker([item.Latitud, item.Longitud])
+                            .bindPopup(`<b>${item.Nombre}</b><br>${item.Razon_social || ''}<br>${item.Calle || ''}`)
+                            .addTo(markersLayer);
+                    }
+                });
+
+                // Ajustar vista
+                let bounds = markersLayer.getBounds();
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds);
+                }
+
+            } catch (error) {
+                console.error("Error consultando DENUE:", error);
+                alert("Error en la consulta");
             }
+        }
 
-            markers.clearLayers();
-            $("#resultados tbody").empty();
-
-            data.forEach(item => {
-                let marker = L.marker([item.Latitud, item.Longitud], { icon: getIcon(item.Clase_actividad || '') })
-                    .bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}<br>${item.Calle} ${item.Num_Exterior || ''}<br>${item.Telefono || 'Sin teléfono'}`);
-                markers.addLayer(marker);
-
-                $("#resultados tbody").append(`
-                    <tr>
-                        <td>${item.Nombre}</td>
-                        <td>${item.Clase_actividad}</td>
-                        <td>${item.Calle} ${item.Num_Exterior || ''}</td>
-                        <td>${item.Telefono || ''}</td>
-                    </tr>
-                `);
-            });
-            if (markers.getLayers().length > 0) {
-                map.fitBounds(markers.getBounds());
-            } else {
-                alert("No se encontraron resultados.");
-            }
-        })
-        .fail(function(jqxhr, textStatus, error) {
-            console.error("Error en la consulta:", textStatus, error);
-            alert("Error consultando la API. Revisa consola para más detalles.");
-        })
-        .always(function() {
-            $("#btnBuscar").prop("disabled", false).text("Buscar");
-        });
-}
+        document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 
-    $("#btnBuscar").click(buscarDENUE);
+
 
     $("#filtroTabla").on("input", function() {
         let filtro = $(this).val().toLowerCase();
@@ -219,6 +200,7 @@ function buscarDENUE() {
 
 </body>
 </html>
+
 
 
 
