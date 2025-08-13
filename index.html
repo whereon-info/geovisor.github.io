@@ -193,36 +193,12 @@
 
         document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
-
-
-    $("#filtroTabla").on("input", function() {
-        let filtro = $(this).val().toLowerCase();
-        $("#resultados tbody tr").each(function() {
-            $(this).toggle($(this).text().toLowerCase().includes(filtro));
-        });
-    });
-
-    $("#btnExcel").click(function() {
-        let wb = XLSX.utils.table_to_book(document.getElementById('resultados'));
-        XLSX.writeFile(wb, "resultados_denue.xlsx");
-    });
-
-    $("#btnPDF").click(function() {
-        leafletImage(map, function(err, canvas) {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            pdf.text("Mapa DENUE", 10, 10);
-            let imgData = canvas.toDataURL("image/png");
-            pdf.addImage(imgData, 'PNG', 10, 20, 180, 100);
-            pdf.save("mapa_denue.pdf");
-        });
-    });
-
     buscarDENUE();
 </script>
 
 </body>
 </html>
+
 
 
 
