@@ -133,19 +133,29 @@
         });
     }
 
-    function buscarDENUE() {
-        let condi = $("#condi").val();
-        let lat = $("#lat").val();
-        let lon = $("#lon").val();
-        let mts = $("#mts").val();
-        let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${condi}/${lat},${lon}/${mts}/${token}`;
+function buscarDENUE() {
+    let condi = $("#condi").val().trim();
+    let lat = $("#lat").val().trim();
+    let lon = $("#lon").val().trim();
+    let mts = $("#mts").val().trim();
 
+    if (!condi || !lat || !lon || !mts) {
+        alert("Por favor completa todos los campos.");
+        return;
+    }
 
-        $.getJSON(url, function(data) {
+    let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+
+    $("#btnBuscar").prop("disabled", true).text("Buscando...");
+
+    $.getJSON(url)
+        .done(function(data) {
             if (!Array.isArray(data)) {
-                alert("Error en la respuesta de la API");
+                alert("Error: respuesta inesperada de la API");
+                console.error("Respuesta API:", data);
                 return;
             }
+
             markers.clearLayers();
             $("#resultados tbody").empty();
 
@@ -163,9 +173,21 @@
                     </tr>
                 `);
             });
-            map.fitBounds(markers.getBounds());
+            if (markers.getLayers().length > 0) {
+                map.fitBounds(markers.getBounds());
+            } else {
+                alert("No se encontraron resultados.");
+            }
+        })
+        .fail(function(jqxhr, textStatus, error) {
+            console.error("Error en la consulta:", textStatus, error);
+            alert("Error consultando la API. Revisa consola para más detalles.");
+        })
+        .always(function() {
+            $("#btnBuscar").prop("disabled", false).text("Buscar");
         });
-    }
+}
+
 
     $("#btnBuscar").click(buscarDENUE);
 
@@ -197,5 +219,6 @@
 
 </body>
 </html>
+
 
 
