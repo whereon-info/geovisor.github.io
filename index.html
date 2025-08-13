@@ -5,130 +5,117 @@
     <title>Mapa DENUE - Modo Oscuro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Leaflet CSS y JS -->
+    <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-    <!-- Leaflet MarkerCluster -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Exportar a Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-    <!-- Exportar a PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>
 
     <style>
         body {
+            font-family: Arial, Helvetica, sans-serif;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #f5f5f5;
+            background: #121212;
+            color: #e0e0e0;
+        }
+        #controls {
+            padding: 10px;
+            background: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+        label { margin-right: 5px; }
+        input, button {
+            margin: 3px;
+            padding: 5px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #e0e0e0;
+        }
+        button {
+            cursor: pointer;
+        }
+        button:hover {
+            background: #444;
         }
         #map {
             height: 60vh;
             width: 100%;
         }
-        .controls {
-            padding: 10px;
-            background-color: #1e1e1e;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .controls input, .controls button {
-            padding: 5px;
-            border: none;
-            border-radius: 4px;
-        }
-        .controls input {
-            background-color: #2a2a2a;
-            color: white;
-        }
-        .controls button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        .controls button:hover {
-            background-color: #0056b3;
+        #listado {
+            height: 40vh;
+            overflow-y: auto;
+            background: #181818;
+            border-top: 1px solid #333;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #1e1e1e;
-            color: #f5f5f5;
+            color: #e0e0e0;
         }
         th, td {
-            border: 1px solid #333;
-            padding: 5px;
-            text-align: left;
-        }
-        th {
-            background-color: #2a2a2a;
+            padding: 8px;
+            border-bottom: 1px solid #333;
         }
         tr:hover {
-            background-color: #333;
+            background: #333;
+            cursor: pointer;
         }
-        #filtroTabla {
-            width: 200px;
+        th {
+            background: #222;
+            position: sticky;
+            top: 0;
         }
     </style>
 </head>
 <body>
+    <div id="controls">
+        <label>Condición:</label>
+        <input type="text" id="condi" value="restaurantes" />
+        <label>Latitud:</label>
+        <input type="text" id="lat" value="21.85717833" />
+        <label>Longitud:</label>
+        <input type="text" id="lon" value="-102.28487238" />
+        <label>Metros:</label>
+        <input type="number" id="mts" value="300" />
+        <button id="btnBuscar">Buscar</button>
+    </div>
 
-<div class="controls">
-    <label>Condición:</label>
-    <input type="text" id="condi" value="restaurantes">
-    <label>Lat:</label>
-    <input type="text" id="lat" value="19.43265622287394">
-    <label>Lon:</label>
-    <input type="text" id="lon" value="-99.13330761551946">
-    <label>Metros:</label>
-    <input type="text" id="mts" value="500">
-    <button id="btnBuscar">Buscar</button>
-    <input type="text" id="filtroTabla" placeholder="Filtrar resultados...">
-    <button id="btnExcel">Exportar Excel</button>
-    <button id="btnPDF">Exportar PDF</button>
-</div>
+    <div id="map"></div>
+    <div id="listado">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                </tr>
+            </thead>
+            <tbody id="tablaResultados"></tbody>
+        </table>
+    </div>
 
-<div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
-<table id="resultados">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Clase Actividad</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+        // Inicializar mapa en modo oscuro
+        const map = L.map('map').setView([21.85717833, -102.28487238], 16);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
 
-<script>
-    const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-
-    // Inicializar mapa en modo oscuro
-    const map = L.map('map').setView([19.43265622287394, -99.13330761551946], 10);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-    }).addTo(map);
-
-
-        // Capa de marcadores (FeatureGroup para usar getBounds)
+        // Capa de marcadores
         let markersLayer = L.featureGroup().addTo(map);
 
         async function buscarDENUE() {
             markersLayer.clearLayers();
+            document.getElementById("tablaResultados").innerHTML = "";
 
-            const condi = document.getElementById('condi').value.trim();
+            // Normalizar condición y forzar plural si no termina en "s"
+            let condi = document.getElementById('condi').value.trim().toLowerCase();
+            if (!condi.endsWith("s")) {
+                condi += "s";
+            }
+
             const lat = parseFloat(document.getElementById('lat').value.trim());
             const lon = parseFloat(document.getElementById('lon').value.trim());
             const mts = parseInt(document.getElementById('mts').value.trim());
@@ -150,54 +137,39 @@
                     return;
                 }
 
-                let addedCount = 0;
-                data.forEach(item => {
+                data.forEach((item) => {
                     const latNum = parseFloat(item.Latitud);
                     const lonNum = parseFloat(item.Longitud);
-
-                    // Filtrar coordenadas inválidas
                     if (isNaN(latNum) || isNaN(lonNum)) return;
 
-                    const marker = L.marker([latNum, lonNum]).bindPopup(`
+                    const popupContent = `
                         <b>${item.Nombre || ''}</b><br>
                         ${item.Razon_social || ''}<br>
                         ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
                         ${item.Colonia || ''}, ${item.CP || ''}<br>
-                        ${item.Telefono || ''}<br>
-                    `);
+                        ${item.Telefono || ''}
+                    `;
 
+                    const marker = L.marker([latNum, lonNum]).bindPopup(popupContent);
                     markersLayer.addLayer(marker);
-                    addedCount++;
+
+                    // Agregar fila en tabla
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${item.Nombre || ''}</td>
+                        <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
+                        <td>${item.Telefono || ''}</td>
+                    `;
+                    row.addEventListener("click", () => {
+                        map.setView([latNum, lonNum], 18);
+                        marker.openPopup();
+                    });
+                    document.getElementById("tablaResultados").appendChild(row);
                 });
 
-                    let row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${item.Nombre || ''}</td>
-                            <td>${item.Calle || ''} ${item.Num_Exterior || ''}, ${item.Colonia || ''}</td>
-                            <td>${item.Telefono || ''}</td>
-                        `;
-                        row.addEventListener("click", () => {
-                            map.setView([item.Latitud, item.Longitud], 18);
-                            marker.openPopup();
-                        });
-
-                        tbody.appendChild(row);
-                    }
-                });
-
-                if (addedCount === 0) {
-                    alert("No se encontraron puntos con coordenadas válidas.");
-                    return;
-                }
-
-                // Centrar mapa en marcadores
                 const bounds = markersLayer.getBounds();
                 if (bounds.isValid()) {
-                    map.fitBounds(bounds.pad(0.1)); // pad para margen
-                } else {
-                    // Si solo hay un punto
-                    const center = markersLayer.getLayers()[0].getLatLng();
-                    map.setView(center, 17);
+                    map.fitBounds(bounds.pad(0.1));
                 }
 
             } catch (error) {
@@ -206,22 +178,8 @@
             }
         }
 
+        // Solo buscar cuando el usuario haga clic
         document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-
-</script>
-
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
