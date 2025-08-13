@@ -1,200 +1,180 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Mapa DENUE - Modo Oscuro</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Mapa DENUE - Modo Oscuro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Leaflet CSS y JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Leaflet MarkerCluster -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Leaflet MarkerCluster -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
-    <!-- Exportar a Excel -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- jsPDF y leaflet-image -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>
 
-    <!-- Exportar a PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>
+  <!-- Table Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #f5f5f5;
-        }
-        #map {
-            height: 60vh;
-            width: 100%;
-        }
-        .controls {
-            padding: 10px;
-            background-color: #1e1e1e;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .controls input, .controls button {
-            padding: 5px;
-            border: none;
-            border-radius: 4px;
-        }
-        .controls input {
-            background-color: #2a2a2a;
-            color: white;
-        }
-        .controls button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        .controls button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #1e1e1e;
-            color: #f5f5f5;
-        }
-        th, td {
-            border: 1px solid #333;
-            padding: 5px;
-            text-align: left;
-        }
-        th {
-            background-color: #2a2a2a;
-        }
-        tr:hover {
-            background-color: #333;
-        }
-        #filtroTabla {
-            width: 200px;
-        }
-    </style>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+    }
+    header {
+      padding: 10px;
+      background: #1f1f1f;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    input, button {
+      padding: 5px;
+      border: none;
+      border-radius: 4px;
+    }
+    input {
+      background: #2c2c2c;
+      color: white;
+    }
+    button {
+      background: #3a3a3a;
+      color: white;
+      cursor: pointer;
+    }
+    #map {
+      height: 60vh;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1f1f1f;
+      color: white;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 5px;
+      text-align: left;
+    }
+    th {
+      background: #2c2c2c;
+    }
+    #table-container {
+      max-height: 40vh;
+      overflow-y: auto;
+    }
+  </style>
 </head>
 <body>
 
-<div class="controls">
-    <label>Condición:</label>
-    <input type="text" id="condi" value="restaurantes">
-    <label>Lat:</label>
-    <input type="text" id="lat" value="21.85717833">
-    <label>Lon:</label>
-    <input type="text" id="lon" value="-102.28487238">
-    <label>Metros:</label>
-    <input type="text" id="mts" value="300">
-    <button id="btnBuscar">Buscar</button>
-    <input type="text" id="filtroTabla" placeholder="Filtrar resultados...">
-    <button id="btnExcel">Exportar Excel</button>
-    <button id="btnPDF">Exportar PDF</button>
-</div>
+<header>
+  <label>Condición:</label>
+  <input type="text" id="condi" value="restaurantes">
+  <label>Lat:</label>
+  <input type="text" id="lat" value="21.85717833">
+  <label>Lon:</label>
+  <input type="text" id="lon" value="-102.28487238">
+  <label>Metros:</label>
+  <input type="number" id="mts" value="300">
+  <button id="btnBuscar">Buscar</button>
+  <button id="btnPDF">Exportar Mapa a PDF</button>
+  <button id="btnExcel">Exportar Tabla a Excel</button>
+</header>
 
 <div id="map"></div>
 
-<table id="resultados">
+<div id="table-container">
+  <table id="resultTable">
     <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Clase Actividad</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-        </tr>
+      <tr>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Actividad</th>
+      </tr>
     </thead>
     <tbody></tbody>
-</table>
+  </table>
+</div>
 
 <script>
-    const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
-    // Inicializar mapa en modo oscuro
-    const map = L.map('map').setView([21.85717833, -102.28487238], 16);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-    }).addTo(map);
+  let map = L.map('map').setView([21.85717833, -102.28487238], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
 
-    const markers = L.markerClusterGroup();
-    map.addLayer(markers);
+  let markers = L.markerClusterGroup();
 
-    function getIcon(tipo) {
-        let color = tipo.toLowerCase().includes("restaurante") ? "ff0000" : "00aaff";
-        return L.icon({
-            iconUrl: `https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${color}`,
-            iconSize: [21, 34],
-            iconAnchor: [10, 34]
+  function buscarDENUE() {
+    markers.clearLayers();
+    $("#resultTable tbody").empty();
+
+    const condi = $("#condi").val().trim();
+    const lat = $("#lat").val().trim();
+    const lon = $("#lon").val().trim();
+    const mts = $("#mts").val().trim();
+
+    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+
+    $.getJSON(url)
+      .done(function(data) {
+        if (!Array.isArray(data)) {
+          alert("No se recibieron resultados.");
+          return;
+        }
+        data.forEach(item => {
+          let marker = L.marker([item.latitud, item.longitud]);
+          marker.bindPopup(`<b>${item.nombre}</b><br>${item.ubicacion}<br>${item.clase_actividad}`);
+          markers.addLayer(marker);
+
+          $("#resultTable tbody").append(`
+            <tr>
+              <td>${item.nombre}</td>
+              <td>${item.ubicacion}</td>
+              <td>${item.clase_actividad}</td>
+            </tr>
+          `);
         });
-    }
+        map.addLayer(markers);
+        map.fitBounds(markers.getBounds());
+      })
+      .fail(() => {
+        alert("Error consultando el DENUE.");
+      });
+  }
 
-        const condi = $("#condi").val().trim();
-        const lat = $("#lat").val().trim();
-        const lon = $("#lon").val().trim();
-        const mts = $("#mts").val().trim();
-        
-        const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+  $("#btnBuscar").on("click", buscarDENUE);
 
-
-        $.getJSON(url, function(data) {
-            if (!Array.isArray(data)) {
-                alert("Error en la respuesta de la API");
-                return;
-            }
-            markers.clearLayers();
-            $("#resultados tbody").empty();
-
-            data.forEach(item => {
-                let marker = L.marker([item.Latitud, item.Longitud], { icon: getIcon(item.Clase_actividad || '') })
-                    .bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}<br>${item.Calle} ${item.Num_Exterior || ''}<br>${item.Telefono || 'Sin teléfono'}`);
-                markers.addLayer(marker);
-
-                $("#resultados tbody").append(`
-                    <tr>
-                        <td>${item.Nombre}</td>
-                        <td>${item.Clase_actividad}</td>
-                        <td>${item.Calle} ${item.Num_Exterior || ''}</td>
-                        <td>${item.Telefono || ''}</td>
-                    </tr>
-                `);
-            });
-            map.fitBounds(markers.getBounds());
-        });
-
-    $("#btnBuscar").on("click", buscarDENUE);
-
-    $("#filtroTabla").on("input", function() {
-        let filtro = $(this).val().toLowerCase();
-        $("#resultados tbody tr").each(function() {
-            $(this).toggle($(this).text().toLowerCase().includes(filtro));
-        });
+  // Exportar mapa a PDF
+  $("#btnPDF").on("click", function() {
+    leafletImage(map, function(err, canvas) {
+      const imgData = canvas.toDataURL("image/png");
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, 'PNG', 10, 10, 180, 160);
+      pdf.save("mapa.pdf");
     });
+  });
 
-    $("#btnExcel").click(function() {
-        let wb = XLSX.utils.table_to_book(document.getElementById('resultados'));
-        XLSX.writeFile(wb, "resultados_denue.xlsx");
-    });
+  // Exportar tabla a Excel
+  $("#btnExcel").on("click", function() {
+    let wb = XLSX.utils.table_to_book(document.getElementById('resultTable'), {sheet:"Resultados"});
+    XLSX.writeFile(wb, "resultados.xlsx");
+  });
 
-    $("#btnPDF").click(function() {
-        leafletImage(map, function(err, canvas) {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            pdf.text("Mapa DENUE", 10, 10);
-            let imgData = canvas.toDataURL("image/png");
-            pdf.addImage(imgData, 'PNG', 10, 20, 180, 100);
-            pdf.save("mapa_denue.pdf");
-        });
-    });
-
-    buscarDENUE();
 </script>
 
 </body>
 </html>
-
-
