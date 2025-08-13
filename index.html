@@ -70,12 +70,12 @@
 </head>
 <body>
     <div id="controls">
-        <label>Condición:</label>
+        <label>Establecimiento:</label>
         <input type="text" id="condi" value="restaurantes" />
         <label>Latitud:</label>
-        <input type="text" id="lat" value="21.85717833" />
+        <input type="text" id="lat" value="19.33333333333" />
         <label>Longitud:</label>
-        <input type="text" id="lon" value="-102.28487238" />
+        <input type="text" id="lon" value="-99.22222222222" />
         <label>Metros:</label>
         <input type="number" id="mts" value="300" />
         <button id="btnBuscar">Buscar</button>
@@ -101,7 +101,7 @@
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
 // Inicializar mapa en modo oscuro
-const map = L.map('map').setView([21.85717833, -102.28487238], 16);
+const map = L.map('map').setView([19.123254512, -99.321212544], 10);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     subdomains: 'abcd',
@@ -188,4 +188,5 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
