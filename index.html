@@ -138,7 +138,8 @@
         let lat = $("#lat").val();
         let lon = $("#lon").val();
         let mts = $("#mts").val();
-        let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/Buscar/${condi}/${lat},${lon}/${mts}/${token}`;
+        let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${condi}/${lat},${lon}/${mts}/${token}`;
+
 
         $.getJSON(url, function(data) {
             if (!Array.isArray(data)) {
@@ -196,4 +197,5 @@
 
 </body>
 </html>
+
 
