@@ -133,12 +133,13 @@
         });
     }
 
-    function buscarDENUE() {
-        let condi = $("#condi").val();
-        let lat = $("#lat").val();
-        let lon = $("#lon").val();
-        let mts = $("#mts").val();
-        let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/Buscar/${condi}/${lat},${lon}/${mts}/${token}`;
+        const condi = $("#condi").val().trim();
+        const lat = $("#lat").val().trim();
+        const lon = $("#lon").val().trim();
+        const mts = $("#mts").val().trim();
+        
+        const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+
 
         $.getJSON(url, function(data) {
             if (!Array.isArray(data)) {
@@ -166,7 +167,7 @@
         });
     }
 
-    $("#btnBuscar").click(busc arDENUE);
+    $("#btnBuscar").on("click", buscarDENUE);
 
     $("#filtroTabla").on("input", function() {
         let filtro = $(this).val().toLowerCase();
@@ -196,3 +197,4 @@
 
 </body>
 </html>
+
