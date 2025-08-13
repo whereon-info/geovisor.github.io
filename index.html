@@ -13,7 +13,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <!-- Include Leaflet.MousePosition plugin script -->
-    <script src="https://cdn.jsdelivr.net/npm/@sakram/leaflet-mouse-position@1.1.2/src/L.Control.MousePosition.min.js"></script>
+    <script src="https:js/L.Control.MousePosition.min.js"></script>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -117,7 +117,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19
 }).addTo(map);
 
-
+L.control.scale({imperial: false}).addTo(map);
 L.control.mousePosition().addTo(map)
 
     
@@ -197,6 +197,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
