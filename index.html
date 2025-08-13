@@ -8,6 +8,10 @@
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
+    <link rel="stylesheet" href="css/L.Control.MousePosition.css" />
+    <script src="js/L.Control.MousePosition.js"></script> 
+   
+    
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -104,6 +108,10 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19
 }).addTo(map);
 
+
+L.control.mousePosition().addTo(map)
+
+    
 // Capa de marcadores
 let markersLayer = L.featureGroup().addTo(map);
 
@@ -180,3 +188,4 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
