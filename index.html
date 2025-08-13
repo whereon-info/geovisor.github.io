@@ -122,53 +122,76 @@
     }).addTo(map);
 
 
-let markersLayer = L.layerGroup().addTo(map);
+        // Capa de marcadores (FeatureGroup para usar getBounds)
+        let markersLayer = L.featureGroup().addTo(map);
 
-        // Función para buscar en API DENUE
         async function buscarDENUE() {
             markersLayer.clearLayers();
 
-            let condi = document.getElementById('condi').value;
-            let lat = document.getElementById('lat').value;
-            let lon = document.getElementById('lon').value;
-            let mts = document.getElementById('mts').value;
+            const condi = document.getElementById('condi').value.trim();
+            const lat = parseFloat(document.getElementById('lat').value.trim());
+            const lon = parseFloat(document.getElementById('lon').value.trim());
+            const mts = parseInt(document.getElementById('mts').value.trim());
 
-            // URL API DENUE (token de ejemplo)
-            let token = "pruebas";
-            let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+            if (isNaN(lat) || isNaN(lon) || isNaN(mts) || !condi) {
+                alert("Por favor ingresa datos válidos.");
+                return;
+            }
+
+            const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
             try {
-                let resp = await fetch(url);
-                let data = await resp.json();
+                const resp = await fetch(url);
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const data = await resp.json();
 
-                if (!data.length) {
-                    alert("No se encontraron resultados");
+                if (!Array.isArray(data) || data.length === 0) {
+                    alert("No se encontraron resultados.");
                     return;
                 }
 
-                // Añadir marcadores
+                let addedCount = 0;
                 data.forEach(item => {
-                    if (item.Latitud && item.Longitud) {
-                        L.marker([item.Latitud, item.Longitud])
-                            .bindPopup(`<b>${item.Nombre}</b><br>${item.Razon_social || ''}<br>${item.Calle || ''}`)
-                            .addTo(markersLayer);
-                    }
+                    const latNum = parseFloat(item.Latitud);
+                    const lonNum = parseFloat(item.Longitud);
+
+                    // Filtrar coordenadas inválidas
+                    if (isNaN(latNum) || isNaN(lonNum)) return;
+
+                    const marker = L.marker([latNum, lonNum]).bindPopup(`
+                        <b>${item.Nombre || ''}</b><br>
+                        ${item.Razon_social || ''}<br>
+                        ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
+                        ${item.Colonia || ''}, ${item.CP || ''}<br>
+                        ${item.Telefono || ''}
+                    `);
+
+                    markersLayer.addLayer(marker);
+                    addedCount++;
                 });
 
-                // Ajustar vista
-                let bounds = markersLayer.getBounds();
+                if (addedCount === 0) {
+                    alert("No se encontraron puntos con coordenadas válidas.");
+                    return;
+                }
+
+                // Centrar mapa en marcadores
+                const bounds = markersLayer.getBounds();
                 if (bounds.isValid()) {
-                    map.fitBounds(bounds);
+                    map.fitBounds(bounds.pad(0.1)); // pad para margen
+                } else {
+                    // Si solo hay un punto
+                    const center = markersLayer.getLayers()[0].getLatLng();
+                    map.setView(center, 17);
                 }
 
             } catch (error) {
                 console.error("Error consultando DENUE:", error);
-                alert("Error en la consulta");
+                alert("Error al consultar la API. Ver consola para detalles.");
             }
         }
 
         document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-
 
 
 
@@ -200,6 +223,7 @@ let markersLayer = L.layerGroup().addTo(map);
 
 </body>
 </html>
+
 
 
 
