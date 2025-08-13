@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mapa DENUE - Modo Oscuro</title>
+    <title>Estudio de mercado a un clic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Leaflet -->
@@ -10,15 +10,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
  
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
-    <!-- Include Leaflet.MousePosition plugin script -->
-    <script src="js/L.Control.MousePosition.min.js"></script>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <!-- Include the mouse position plugin script -->
-  <script src="https://cdn.jsdelivr.net/gh/Leaflet/Leaflet.MousePosition@v1.2.0/src/L.Control.MousePosition.min.js"></script>
    
     
     <style>
@@ -118,7 +110,6 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 }).addTo(map);
 
 L.control.scale({imperial: true}).addTo(map);
-L.control.mousePosition().addTo(map)
 
     
 // Capa de marcadores
@@ -197,6 +188,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
