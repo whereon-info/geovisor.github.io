@@ -117,8 +117,8 @@ var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo
         map.addLayer(myMarker1);
         //Control de visualización de capas
         var baseLayers = {
-        "Base": map,
-        "Ortoimagen": osm
+        "Base": osm,
+        "Ortoimagen": map
         };
         var overlays = {
         "Ubicación 1": myMarker,
@@ -207,6 +207,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
