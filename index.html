@@ -109,6 +109,25 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19
 }).addTo(map);
 
+var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);    
+
+    var myMarker = L.marker([90.965, -95.664]);     
+    var myMarker1 = L.marker([90.9614, -95.6672]);
+        map.addLayer(myMarker);
+        map.addLayer(myMarker1);
+        //Control de visualización de capas
+        var baseLayers = {
+        "Base:": map,
+        "Ortoimagen": osm
+        };
+        var overlays = {
+        "Ubicación 1": myMarker,
+        "Ubicación 2": myMarker1,
+        };
+        var control = new L.control.layers(baseLayers, overlays,
+        {collapsed:false});
+        control.addTo(map);     
+
 L.control.scale({imperial: true}).addTo(map);
 
     
@@ -188,6 +207,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
