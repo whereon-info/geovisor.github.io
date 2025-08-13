@@ -111,13 +111,13 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 
 var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);    
 
-    var myMarker = L.marker([90.965, -95.664]);     
-    var myMarker1 = L.marker([90.9614, -95.6672]);
+    var myMarker = L.marker([19.965, -99.664]);     
+    var myMarker1 = L.marker([19.9614, -99.6672]);
         map.addLayer(myMarker);
         map.addLayer(myMarker1);
         //Control de visualización de capas
         var baseLayers = {
-        "Base:": map,
+        "Base": map,
         "Ortoimagen": osm
         };
         var overlays = {
@@ -207,6 +207,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
