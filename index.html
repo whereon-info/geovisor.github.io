@@ -170,6 +170,21 @@
                     addedCount++;
                 });
 
+                    let row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${item.Nombre || ''}</td>
+                            <td>${item.Calle || ''} ${item.Num_Exterior || ''}, ${item.Colonia || ''}</td>
+                            <td>${item.Telefono || ''}</td>
+                        `;
+                        row.addEventListener("click", () => {
+                            map.setView([item.Latitud, item.Longitud], 18);
+                            marker.openPopup();
+                        });
+
+                        tbody.appendChild(row);
+                    }
+                });
+
                 if (addedCount === 0) {
                     alert("No se encontraron puntos con coordenadas válidas.");
                     return;
@@ -198,6 +213,7 @@
 
 </body>
 </html>
+
 
 
 
