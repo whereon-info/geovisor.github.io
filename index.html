@@ -173,13 +173,17 @@
                 }
 
             } catch (error) {
-                console.error("Error consultando DENUE:", error);
-                alert("Error al consultar la API. Ver consola para detalles.");
-            }
-        }
+            console.error("Error consultando DENUE:", error);
+                // Check if the error has a status property and it's 0
+                if (error && error.message === 'HTTP 0') {
+                    alert("Error al consultar la API. Puede haber un problema de red o el servidor no está disponible. Ver consola para detalles.");
+                } else {
+                    alert("Error al consultar la API. Ver consola para detalles.");
+                }
 
         // Solo buscar cuando el usuario haga clic
         document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
     </script>
 </body>
 </html>
+
