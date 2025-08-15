@@ -114,6 +114,8 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19
 }).addTo(map);
 
+ L.geoJson(hive_cdmx).addTo(map); 
+    
 // Grupo para los marcadores
 let markersLayer = L.featureGroup().addTo(map);
 
@@ -145,9 +147,7 @@ function getBootstrapIconFromActividad(clase) {
         iconAnchor: [13, 26],
         popupAnchor: [0, -26]
     });
-}
-
- L.geoJson(hive_cdmx).addTo(map);  
+} 
     
 // Buscar datos DENUE
 async function buscarDENUE() {
@@ -227,6 +227,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
