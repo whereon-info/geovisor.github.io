@@ -117,17 +117,26 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 L.geoJson(hive_cdmx).addTo(map);
 
 	var title = L.control();
-	 
 	title.onAdd = function (map) {
 		var div = L.DomUtil.create('div', 'info');
 		    div.innerHTML +=
 		    '<h1>Estudio de mercado</h1>Análisis de entornos';
 		 return div;
 	};
-	 
 	title.addTo(map);
 
-    	var legend = L.control({position: 'bottomright'}); 
+    function getColor(d) {
+        return d > 1000000 ? '#800026' :
+               d > 500000  ? '#BD0026' :
+               d > 200000  ? '#E31A1C' :
+               d > 100000  ? '#FC4E2A' :
+               d > 50000   ? '#FD8D3C' :
+               d > 200000  ? '#FEB24C' :
+               d > 10000   ? '#FED976' :
+                          '#FFEDA0';
+    }
+
+    var legend = L.control({position: 'bottomright'}); 
 
 	legend.onAdd = function (map) { 
 
@@ -258,6 +267,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
