@@ -102,6 +102,8 @@
         </table>
     </div>
 <script type="text/javascript" src="js/hive_cdmx.js"></script>
+ L.geoJson(hive_cdmx).addTo(map);   
+
 <script>
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
@@ -221,12 +223,11 @@ async function buscarDENUE() {
 }
 
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-
-L.geoJson(hive_cdmx).addTo(map);
     
 </script>
 </body>
 </html>
+
 
 
 
