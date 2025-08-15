@@ -156,6 +156,23 @@ L.geoJson(hive_cdmx).addTo(map);
                           	'#2b83ba';
     }
 
+	function style(feature) {
+		return {
+			fillColor: getColor(feature.properties.POPADUL),
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7
+		};
+	}
+
+	function popup(feature, layer) {
+		if (feature.properties && feature.properties.POPADUL) {
+			layer.bindPopup(feature.properties.POPADUL);
+		}
+	}
+
     var legend = L.control({position: 'bottomright'}); 
 
 	legend.onAdd = function (map) { 
@@ -287,6 +304,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
