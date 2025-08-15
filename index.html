@@ -103,7 +103,7 @@
     </div>
 
 <script>
-L.geoJson(hive_cdmx).addTo(map);  
+
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
 // Inicializar mapa en modo oscuro
@@ -147,6 +147,8 @@ function getBootstrapIconFromActividad(clase) {
     });
 }
 
+ L.geoJson(hive_cdmx).addTo(map);  
+    
 // Buscar datos DENUE
 async function buscarDENUE() {
     markersLayer.clearLayers();
@@ -225,6 +227,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
