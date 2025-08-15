@@ -173,7 +173,7 @@ L.geoJson(hive_cdmx).addTo(map);
 			function onEachFeature(feature, layer) {
 			    if (feature.properties && feature.properties.POBADUL) {
 			        layer.bindPopup(
-			            `<b>${feature.properties.NOMBRE || 'Zona'}</b><br>Población: ${feature.properties.POBADUL}`
+			            `<b>${feature.properties.nomgeo || 'Zona'}</b><br>Población adulta: ${feature.properties.POBADUL}`
 			        );
 			    }
 			}
@@ -316,6 +316,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
