@@ -81,7 +81,7 @@
 	}
 	.info h2 {
 		margin: 0 0 5px;
-		color: #777;
+		color: #404040;
 	}
 	.legend {
 	    line-height: 18px;
@@ -143,7 +143,7 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 map.addLayer(osm);
 	
-L.geoJson(hive_cdmx).addTo(map);
+var hive L.geoJson(hive_cdmx).addTo(map);
 
 	var title = L.control();
 	title.onAdd = function (map) {
@@ -182,20 +182,21 @@ function onEachFeature(feature, layer) {
         const props = feature.properties;
         const popupContent = `
             <b>${props.nomgeo || 'Zona'}</b><br>
+			<b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
+			<b>Rezago:</b> ${props.REZAGO || 'N/A'}<br>
             <b>Población total:</b> ${props.pobtot || 0}<br>
             <b>Población adulta:</b> ${props.POBADUL || 0}<br>
             <b>Extorsión:</b> ${props["extorsión"] || 0}<br>
             <b>Narcomenudeo:</b> ${props.narcomenud || 0}<br>
             <b>Robo a negocio:</b> ${props["robo a neg"] || 0}<br>
             <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
-            <b>Rezago:</b> ${props.REZAGO || 'N/A'}<br>
             <b>Tarjetas de crédito (personales):</b> ${props.CRED_PERS || 0}<br>
             <b>Tarjetas de crédito (nómina):</b> ${props.CRED_NOMI || 0}<br>
             <b>Crédito hipotecario:</b> ${props.CRED_HIPOT || 0}<br>
             <b>Crédito automotriz:</b> ${props.CRED_AUTOM || 0}<br>
-            <b>Tasa crédito hipotecario:</b> ${props.T_C_HIP || 0}%<br>
-            <b>Tasa crédito automotriz:</b> ${props.T_C_AUTO || 0}%<br>
-            <b>Tasa tarjetas de crédito:</b> ${props.T_TC || 0}%
+            <b>Tasa crédito hipotecario:</b> ${props.T_C_HIP || 0}<br>
+            <b>Tasa crédito automotriz:</b> ${props.T_C_AUTO || 0}<br>
+            <b>Tasa tarjetas de crédito:</b> ${props.T_TC || 0}
         `;
 
         // Asignar popup al polígono
@@ -241,6 +242,7 @@ function onEachFeature(feature, layer) {
 		var overlays = {
 		"Casa": myMarker,
 		"Otro": myMarker1,
+		"Hive": hive,
 		};
 		var control = new L.control.layers(baseLayers, overlays,
 		{collapsed:true});
@@ -359,6 +361,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
