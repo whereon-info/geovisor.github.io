@@ -198,6 +198,9 @@ async function buscarDENUE() {
                 <td>${item.Nombre || ''}</td>
                 <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
                 <td>${item.Telefono || ''}</td>
+                <td>${item.Telefono || ''}</td>
+                <td>${item.Telefono || ''}</td>
+                <td>${item.Telefono || ''}</td>
             `;
             row.addEventListener("click", () => {
                 map.setView([latNum, lonNum], 18);
@@ -221,5 +224,6 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
