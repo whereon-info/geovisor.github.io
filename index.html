@@ -137,7 +137,11 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19
 }).addTo(map);
 
-var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
+var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+});
+
+map.addLayer(osm);
 	
 L.geoJson(hive_cdmx).addTo(map);
 
@@ -212,8 +216,8 @@ L.geoJson(hive_cdmx).addTo(map);
 
 	
 		var baseLayers = {
-		"Base": map,
-		"Ortoimagen": osm
+		"Base": osm,
+		"Ortoimagen": map
 		};
 		var overlays = {
 		"Casa": myMarker,
@@ -336,6 +340,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
