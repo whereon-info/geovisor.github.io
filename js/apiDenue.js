@@ -5,26 +5,26 @@ var urlApiBusqueda = "https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/
 var token = '33602899-98fd-4db7-8ce9-41c0330f1d7e';
 var vecNombres = [
 'id de establecimiento',
-'Nombre de la unidad econ&oacute;mica:',
-'Raz&oacute;n social:',
+'Nombre de la unidad económica:',
+'Razón social:',
 'Nombre de la clase de actividad:',
 'Personal ocupado (estrato):',
 'Tipo de vialidad:',
 'Nombre de la vialidad:',
-'N&uacute;mero exterior o km:',
-'N&uacute;mero o letra interior:',
+'Número exterior o km:',
+'Número o letra interior:',
 'Nombre del asentamiento humano:',
-'C&oacute;digo postal:',
+'Código postal:',
 'Entidad,Municipio,Localidad:',
-'N&uacute;mero de tel&eacute;fono:',
-'Correo electr&oacute;nico:',
+'Número de teléfono:',
+'Correo electrónico:',
 'Sitio en Internet:',
-'Tipo de unidad econ&oacute;mica:',
+'Tipo de unidad económica:',
 'Latitud:',
 'Longitud:',
 'Centro comercial:',
 'Tipo de centro comercial:',
-'N&uacute;mero de local:'];
+'Número de local:'];
 
 function llamarApiDenueBus(){
 	var condicion = $('#condi').val();
@@ -73,3 +73,4 @@ function llamarApiDenueBus(){
 	});	
 	}
 }
+
