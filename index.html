@@ -137,6 +137,8 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19
 }).addTo(map);
 
+var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
+	
 L.geoJson(hive_cdmx).addTo(map);
 
 	var title = L.control();
@@ -203,7 +205,26 @@ L.geoJson(hive_cdmx).addTo(map);
 	}; 
 	legend.addTo(map); 
 
+	var myMarker = L.marker([19.28581583157899, -99.40670897151347])	
+	var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]);
+		map.addLayer(myMarker);
+		map.addLayer(myMarker1); 
 
+	
+		var baseLayers = {
+		"Base": map,
+		"Ortoimagen": osm,
+		"IGN": Spain_IGNBase
+		};
+		var overlays = {
+		"Casa": myMarker,
+		"Otro": myMarker1,
+		};
+		var control = new L.control.layers(baseLayers, overlays,
+		{collapsed:true});
+		control.addTo(map); 
+
+	
     
 // Grupo para los marcadores
 let markersLayer = L.featureGroup().addTo(map);
@@ -316,6 +337,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
