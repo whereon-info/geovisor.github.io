@@ -148,30 +148,42 @@ L.geoJson(hive_cdmx).addTo(map);
 	};
 	title.addTo(map);
 
-    function getColor(d) {
-        return d > 100000 ? '#d7191c' :
-               d > 50000  ? '#fdae61' :
-               d > 20000  ? '#ffffbf' :
-               d > 10000  ? '#abdda4' :
-                          	'#2b83ba';
-    }
+			// Función para definir el color según POPADUL
+			function getColor(d) {
+			    return d > 100000 ? '#d7191c' :
+			           d > 50000  ? '#fdae61' :
+			           d > 20000  ? '#ffffbf' :
+			           d > 10000  ? '#abdda4' :
+			                        '#2b83ba';
+			}
 
-	function style(feature) {
-		return {
-			fillColor: getColor(feature.properties.POPADUL),
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7
-		};
-	}
+			// Función para definir el estilo de cada polígono
+			function style(feature) {
+			    return {
+			        fillColor: getColor(feature.properties.POPADUL),
+			        weight: 2,
+			        opacity: 1,
+			        color: 'white',
+			        dashArray: '3',
+			        fillOpacity: 0.7
+			    };
+			}
+			
+			// Función para popups
+			function onEachFeature(feature, layer) {
+			    if (feature.properties && feature.properties.POPADUL) {
+			        layer.bindPopup(
+			            `<b>${feature.properties.NOMBRE || 'Zona'}</b><br>Población: ${feature.properties.POPADUL}`
+			        );
+			    }
+			}
+			
+			// Crear capa GeoJSON con estilo y popup
+			L.geoJson(hive_cdmx, {
+			    style: style,
+			    onEachFeature: onEachFeature
+			}).addTo(map);
 
-	function popup(feature, layer) {
-		if (feature.properties && feature.properties.POPADUL) {
-			layer.bindPopup(feature.properties.POPADUL);
-		}
-	}
 
     var legend = L.control({position: 'bottomright'}); 
 
@@ -304,6 +316,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
