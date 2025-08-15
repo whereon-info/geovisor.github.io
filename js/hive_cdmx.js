@@ -1,5 +1,5 @@
 
-var countries = {
+var hive_cdmx = {
 "type": "FeatureCollection",
 "name": "hive_cdmx",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
