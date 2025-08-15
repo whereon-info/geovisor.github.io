@@ -148,7 +148,7 @@ L.geoJson(hive_cdmx).addTo(map);
 	};
 	title.addTo(map);
 
-			// Función para definir el color según POPADUL
+			// Función para definir el color según POBADUL
 			function getColor(d) {
 			    return d > 5000 ? '#d7191c' :
 			           d > 2500  ? '#fdae61' :
@@ -160,7 +160,7 @@ L.geoJson(hive_cdmx).addTo(map);
 			// Función para definir el estilo de cada polígono
 			function style(feature) {
 			    return {
-			        fillColor: getColor(feature.properties.POPADUL),
+			        fillColor: getColor(feature.properties.POBADUL),
 			        weight: 2,
 			        opacity: 1,
 			        color: 'white',
@@ -171,9 +171,9 @@ L.geoJson(hive_cdmx).addTo(map);
 			
 			// Función para popups
 			function onEachFeature(feature, layer) {
-			    if (feature.properties && feature.properties.POPADUL) {
+			    if (feature.properties && feature.properties.POBADUL) {
 			        layer.bindPopup(
-			            `<b>${feature.properties.NOMBRE || 'Zona'}</b><br>Población: ${feature.properties.POPADUL}`
+			            `<b>${feature.properties.NOMBRE || 'Zona'}</b><br>Población: ${feature.properties.POBADUL}`
 			        );
 			    }
 			}
@@ -316,6 +316,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
