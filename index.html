@@ -149,14 +149,11 @@ L.geoJson(hive_cdmx).addTo(map);
 	title.addTo(map);
 
     function getColor(d) {
-        return d > 1000000 ? '#800026' :
-               d > 500000  ? '#BD0026' :
-               d > 200000  ? '#E31A1C' :
-               d > 100000  ? '#FC4E2A' :
-               d > 50000   ? '#FD8D3C' :
-               d > 200000  ? '#FEB24C' :
-               d > 10000   ? '#FED976' :
-                          '#FFEDA0';
+        return d > 100000 ? '#d7191c' :
+               d > 50000  ? '#fdae61' :
+               d > 20000  ? '#ffffbf' :
+               d > 10000  ? '#abdda4' :
+                          	'#2b83ba';
     }
 
     var legend = L.control({position: 'bottomright'}); 
@@ -164,7 +161,7 @@ L.geoJson(hive_cdmx).addTo(map);
 	legend.onAdd = function (map) { 
 
     var div = L.DomUtil.create('div', 'info legend'), 
-        grades = [0, 100000, 200000, 500000, 1000000, 2000000, 5000000, 10000000], 
+        grades = [0, 10000, 20000, 50000, 1000000], 
         labels = []; 
 
     // Intervalos de poblacion 
@@ -290,6 +287,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
