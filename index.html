@@ -114,15 +114,18 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19
 }).addTo(map);
 
- L.geoJson(hive_cdmx).addTo(map); 
-
-    L.geoJson(hive_cdmx, {
-    style: {
-        color: "#ffcc00",
-        weight: 2,
-        fillOpacity: 0
-    }
-}).addTo(map);
+fetch("hive_cdmx.geojson")
+    .then(res => res.json())
+    .then(data => {
+        L.geoJson(data, {
+            style: {
+                color: "#ffcc00",
+                weight: 2,
+                fillOpacity: 0
+            }
+        }).addTo(map);
+    })
+    .catch(err => console.error("Error cargando GeoJSON:", err));
     
 // Grupo para los marcadores
 let markersLayer = L.featureGroup().addTo(map);
@@ -235,6 +238,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
