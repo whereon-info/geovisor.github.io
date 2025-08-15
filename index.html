@@ -116,6 +116,36 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 
 L.geoJson(hive_cdmx).addTo(map);
 
+	var title = L.control();
+	 
+	title.onAdd = function (map) {
+		var div = L.DomUtil.create('div', 'info');
+		    div.innerHTML +=
+		    '<h1>Estudio de mercado</h1>Análisis de entornos';
+		 return div;
+	};
+	 
+	title.addTo(map);
+
+    	var legend = L.control({position: 'bottomright'}); 
+
+	legend.onAdd = function (map) { 
+
+    var div = L.DomUtil.create('div', 'info legend'), 
+        grades = [0, 100000, 200000, 500000, 1000000, 2000000, 5000000, 10000000], 
+        labels = []; 
+
+    // Intervalos de poblacion 
+    for (var i = 0; i < grades.length; i++) { 
+        div.innerHTML += 
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + 
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'); 
+    } 
+    return div; 
+	}; 
+	legend.addTo(map); 
+
+
     
 // Grupo para los marcadores
 let markersLayer = L.featureGroup().addTo(map);
@@ -228,6 +258,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
