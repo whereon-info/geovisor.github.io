@@ -176,13 +176,32 @@ L.geoJson(hive_cdmx).addTo(map);
 			}
 			
 			// Función para popups
-			function onEachFeature(feature, layer) {
-			    if (feature.properties && feature.properties.POBADUL) {
-			        layer.bindPopup(
-			            `<b>${feature.properties.nomgeo || 'Zona'}</b><br>Población adulta: ${feature.properties.POBADUL}`
-			        );
-			    }
-			}
+function onEachFeature(feature, layer) {
+    if (feature.properties) {
+        // Crear el contenido del popup con todos los campos deseados
+        const props = feature.properties;
+        const popupContent = `
+            <b>${props.nomgeo || 'Zona'}</b><br>
+            <b>Población total:</b> ${props.pobtot || 0}<br>
+            <b>Población adulta:</b> ${props.POBADUL || 0}<br>
+            <b>Extorsión:</b> ${props["extorsión"] || 0}<br>
+            <b>Narcomenudeo:</b> ${props.narcomenud || 0}<br>
+            <b>Robo a negocio:</b> ${props["robo a neg"] || 0}<br>
+            <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
+            <b>Rezago:</b> ${props.REZAGO || 'N/A'}<br>
+            <b>Tarjetas de crédito (personales):</b> ${props.CRED_PERS || 0}<br>
+            <b>Tarjetas de crédito (nómina):</b> ${props.CRED_NOMI || 0}<br>
+            <b>Crédito hipotecario:</b> ${props.CRED_HIPOT || 0}<br>
+            <b>Crédito automotriz:</b> ${props.CRED_AUTOM || 0}<br>
+            <b>Tasa crédito hipotecario:</b> ${props.T_C_HIP || 0}%<br>
+            <b>Tasa crédito automotriz:</b> ${props.T_C_AUTO || 0}%<br>
+            <b>Tasa tarjetas de crédito:</b> ${props.T_TC || 0}%
+        `;
+
+        // Asignar popup al polígono
+        layer.bindPopup(popupContent);
+    }
+}
 			
 			// Crear capa GeoJSON con estilo y popup
 			L.geoJson(hive_cdmx, {
@@ -340,6 +359,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
