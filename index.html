@@ -2,127 +2,74 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mapa DENUE con Panel Lateral</title>
+    <title>Mapa DENUE con Iconos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; }
-        #map { height: 100%; }
-
-        /* Panel lateral */
-        #sidebar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 300px;
-            height: 100%;
-            background: white;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-            overflow-y: auto;
-            transition: transform 0.3s ease-in-out;
-            z-index: 1000;
-        }
-        #sidebar.minimizado {
-            transform: translateX(-100%);
-        }
-
-        /* Botón de toggle */
-        #toggle-btn {
-            position: absolute;
-            top: 10px;
-            left: 310px;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 5px 8px;
-            cursor: pointer;
-            z-index: 1100;
-            border-radius: 4px;
-            box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-        }
-        #toggle-btn i { font-size: 20px; }
+        #map { height: 100vh; }
+        .custom-div-icon { text-align: center; line-height: 24px; }
     </style>
 </head>
 <body>
-
-    <!-- Panel lateral -->
-    <div id="sidebar">
-        <h3 style="margin:10px;">Direcciones</h3>
-        <ul id="lista-direcciones" style="list-style:none; padding:10px;"></ul>
-    </div>
-
-    <!-- Botón para ocultar/mostrar -->
-    <div id="toggle-btn">
-        <i class="bi bi-chevron-left"></i>
-    </div>
-
-    <!-- Mapa -->
     <div id="map"></div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        const TOKEN_DENUE = "TU_TOKEN_AQUI"; // Sustituye con tu token
-        const LAT = 21.12;
+        const TOKEN_DENUE = "TU_TOKEN_AQUI"; // Sustituye por tu token oficial
+        const LAT = 21.12; // Centro del mapa
         const LON = -101.68;
-        const RADIO = 500;
+        const RADIO = 500; // metros
+        let iconConfig = [];
 
-        const iconConfig = [
-            { match: ["restaurante", "comida"], icon: "bi-shop", color: "orange" },
-            { match: ["hotel", "hospedaje"], icon: "bi-building", color: "blue" },
-            { match: ["escuela", "colegio"], icon: "bi-mortarboard", color: "purple" },
-            { match: ["tienda", "comercio"], icon: "bi-bag", color: "green" },
-            { match: ["farmacia", "medicina"], icon: "bi-capsule", color: "teal" }
-        ];
-
-        // Inicializar mapa
-        const map = L.map('map').setView([LAT, LON], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19
-        }).addTo(map);
-
-        const markersLayer = L.layerGroup().addTo(map);
-
-        // Consulta DENUE
-        const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar//${LAT},${LON}/${RADIO}/${TOKEN_DENUE}`;
-
-        fetch(url)
+        // Cargar configuración de iconos
+        fetch("iconConfig.json")
             .then(res => res.json())
-            .then(datos => {
-                const lista = document.getElementById("lista-direcciones");
-
-                datos.forEach(item => {
-                    const icono = obtenerIcono(item.nombre_act);
-
-                    const marker = L.marker([item.latitud, item.longitud], { icon: icono })
-                        .bindPopup(`
-                            <b>${item.nom_estab}</b><br>
-                            ${item.nombre_act}<br>
-                            <small>${item.ubicacion}</small>
-                        `);
-
-                    markersLayer.addLayer(marker);
-
-                    // Agregar al panel lateral
-                    const li = document.createElement("li");
-                    li.style.marginBottom = "8px";
-                    li.innerHTML = `<b>${item.nom_estab}</b><br><small>${item.ubicacion}</small>`;
-                    li.style.cursor = "pointer";
-                    li.onclick = () => {
-                        map.setView([item.latitud, item.longitud], 18);
-                        marker.openPopup();
-                    };
-                    lista.appendChild(li);
-                });
+            .then(data => {
+                iconConfig = data;
+                iniciarMapa();
             })
-            .catch(err => console.error("Error consultando DENUE:", err));
+            .catch(err => console.error("Error cargando configuración:", err));
 
-        // Función para elegir ícono
+        function iniciarMapa() {
+            const map = L.map('map').setView([LAT, LON], 15);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19
+            }).addTo(map);
+
+            const markersLayer = L.layerGroup().addTo(map);
+
+            // Consulta a la API DENUE
+            const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar//${LAT},${LON}/${RADIO}/${TOKEN_DENUE}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(datos => {
+                    datos.forEach(item => {
+                        const icono = obtenerIcono(item.nombre_act);
+
+                        const marker = L.marker([item.latitud, item.longitud], { icon: icono })
+                            .bindPopup(`
+                                <b>${item.nom_estab}</b><br>
+                                ${item.nombre_act}<br>
+                                <small>${item.ubicacion}</small>
+                            `);
+
+                        markersLayer.addLayer(marker);
+                    });
+                })
+                .catch(err => console.error("Error consultando DENUE:", err));
+        }
+
+        // Selección de ícono según giro
         function obtenerIcono(texto) {
             texto = texto.toLowerCase();
             for (let cfg of iconConfig) {
@@ -144,20 +91,6 @@
                 popupAnchor: [0, -24]
             });
         }
-
-        // Botón para minimizar/expandir
-        const sidebar = document.getElementById("sidebar");
-        const toggleBtn = document.getElementById("toggle-btn");
-        toggleBtn.onclick = () => {
-            sidebar.classList.toggle("minimizado");
-            if (sidebar.classList.contains("minimizado")) {
-                toggleBtn.style.left = "10px";
-                toggleBtn.innerHTML = `<i class="bi bi-chevron-right"></i>`;
-            } else {
-                toggleBtn.style.left = "310px";
-                toggleBtn.innerHTML = `<i class="bi bi-chevron-left"></i>`;
-            }
-        };
     </script>
 </body>
 </html>
