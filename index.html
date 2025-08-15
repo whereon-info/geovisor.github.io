@@ -142,6 +142,18 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 });
 
 map.addLayer(osm);
+
+				function buscarLocalizacion(e) {
+				var mydate = new Date(e.timestamp);
+				L.marker(e.latlng).addTo(map).bindPopup(mydate.toString());
+				}
+				function errorLocalizacion(e) {
+				 alert("No es posible encontrar su ubicación. Es posible que tenga que
+				activar la Geolocation.");
+				}
+				map.on('locationerror', errorLocalizacion);
+				map.on('locationfound', buscarLocalizacion);
+				map.locate({setView: true, maxZoom:6}); 
 	
 var hive = L.geoJson(hive_cdmx).addTo(map);
 
@@ -361,6 +373,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
