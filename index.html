@@ -96,7 +96,6 @@
                     <th>Teléfono</th>
                     <th>Clase</th>
                     <th>Personal ocupado</th>
-                    <th>Tipo</th>
                 </tr>
             </thead>
             <tbody id="tablaResultados"></tbody>
@@ -202,7 +201,6 @@ async function buscarDENUE() {
                 <td>${item.Telefono || ''}</td>
                 <td>${item.Estrato || ''}</td>
                 <td>${item.Clase_actividad || ''}</td>
-                <td>${item.Tipo|| ''}</td>
             `;
             row.addEventListener("click", () => {
                 map.setView([latNum, lonNum], 18);
@@ -227,6 +225,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
