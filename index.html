@@ -8,7 +8,8 @@
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+    <script type="text/javascript" src="js/hive_cdmx.js"></script>
+    
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
@@ -101,10 +102,9 @@
             <tbody id="tablaResultados"></tbody>
         </table>
     </div>
-<script type="text/javascript" src="js/hive_cdmx.js"></script>
- L.geoJson(hive_cdmx).addTo(map);   
 
 <script>
+L.geoJson(hive_cdmx).addTo(map);  
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
 // Inicializar mapa en modo oscuro
@@ -227,6 +227,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
