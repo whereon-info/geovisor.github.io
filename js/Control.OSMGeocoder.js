@@ -7,7 +7,7 @@ L.Control.OSMGeocoder = L.Control.extend({
 	options: {
 		collapsed: true,
 		position: 'topright',
-		text: 'Locate',
+		text: 'Buscar',
 		placeholder: '',
 		bounds: null, // L.LatLngBounds
 		email: null, // String
