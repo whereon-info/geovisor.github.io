@@ -341,7 +341,6 @@ async function buscarDENUE() {
 
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
-L.geoJson(hive_cdmx, { style, onEachFeature }).addTo(map);
 var hiveLayer = L.geoJson(hive_cdmx, { 
     style: style, 
     onEachFeature: onEachFeature 
@@ -389,6 +388,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
