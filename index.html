@@ -183,9 +183,6 @@ map.on("locationerror", onLocationError);
 // Solicitar ubicación del navegador
 map.locate({ setView: true, maxZoom: 16 });
 
-// ==================================================
-
-
 // ======= TUS CAPAS Y FUNCIONES EXISTENTES =======
 var hive = L.geoJson(hive_cdmx).addTo(map);
 
@@ -198,16 +195,6 @@ var baseLayers = { "Base": osm, "Ortoimagen": map };
 var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive": hive, }; 
 var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
 
-
-
-	var title = L.control();
-	title.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info');
-		    div.innerHTML +=
-		    '<h1>Estudio de mercado</h1>Análisis de entornos';
-		 return div;
-	};
-	title.addTo(map);
 
 function getColor(d) {
     return d > 1000000 ? '#d7191c' :
@@ -269,12 +256,23 @@ legend.onAdd = function (map) {
 }; 
 legend.addTo(map); 
 
-// Geocoder
+// ========================TITULO=========================
+	var title = L.control();
+	title.onAdd = function (map) {
+		var div = L.DomUtil.create('div', 'info');
+		    div.innerHTML +=
+		    '<h1>Estudio de mercado</h1>Análisis de entornos';
+		 return div;
+	};
+	title.addTo(map);	
+
+// Geocoder ======================
 var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
 map.addControl(osmGeocoder);
 
 </script>
 </body>
 </html>
+
 
 
