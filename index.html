@@ -156,7 +156,7 @@ map.addLayer(osm);
 				}
 				map.on('locationerror', errorLocalizacion);
 				map.on('locationfound', buscarLocalizacion);
-				map.locate({setView: true, maxZoom:3}); 
+				map.locate({setView: true, maxZoom:16}); 
 	
 var hive = L.geoJson(hive_cdmx).addTo(map);
 
@@ -394,5 +394,6 @@ var searchControl = L.esri.Geocoding.geosearch({
 </script>
 </body>
 </html>
+
 
 
