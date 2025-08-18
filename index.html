@@ -196,16 +196,6 @@ function getColor(d) {
                         '#2b83ba';
 }
 
-function style(feature) {
-    return {
-        fillColor: getColor(feature.properties.POBADUL),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
-}
 
 	
 function onEachFeature(feature, layer) {
@@ -387,6 +377,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
