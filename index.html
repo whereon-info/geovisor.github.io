@@ -16,6 +16,9 @@
 	 <!-- Geocode -->
 	<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css">
  	<script src="https://unpkg.com/esri-leaflet-geocoder"></script>
+	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/esri-leaflet/dist/esri-leaflet.js"></script>
+	<script src="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.js"></script>
 
     <style>
         body {
@@ -373,15 +376,12 @@ async function buscarDENUE() {
 
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
- var arcgisOnline = new L.esri.Geocoding.arcgisOnlineProvider();
 
-var searchControl = L.esri.Geocoding.geosearch({
-  providers: [
-    new L.esri.Geocoding.arcgisOnlineProvider({
-      // options for arcgisOnlineProvider
-    })
-  ]
-}).addTo(map); 
+- var arcgisOnline = L.esri.Geocoding.arcgisOnlineProvider();
++ var arcgisOnline = new L.esri.Geocoding.arcgisOnlineProvider();
+ var searchControl = L.esri.Geocoding.geosearch({
+ providers: [arcgisOnline]
+ }).addTo(map);
 
  var results = L.layerGroup().addTo(map);
  searchControl.on('results', function(data){
@@ -389,11 +389,17 @@ var searchControl = L.esri.Geocoding.geosearch({
  for (var i = data.results.length - 1; i >= 0; i--) {
  results.addLayer(L.marker(data.results[i].latlng));
  }
- }); 
+ });
+
+</script>
+</body>
+</html>
+ 
     
 </script>
 </body>
 </html>
+
 
 
 
