@@ -184,8 +184,12 @@ map.on("locationerror", onLocationError);
 map.locate({ setView: true, maxZoom: 16 });
 
 // ======= TUS CAPAS Y FUNCIONES EXISTENTES =======
-var hive = L.geoJson(hive_cdmx).addTo(map);
+var hive = L.geoJson(hive_cdmx),{
+    style: style, 
+    onEachFeature: onEachFeature 
+}).addTo(map);	
 
+//L.geoJson(hive_cdmx, { style, onEachFeature }).addTo(map);
 
 
 function getColor(d) {
@@ -196,7 +200,16 @@ function getColor(d) {
                         '#2b83ba';
 }
 
-
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.POBADUL),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
 	
 function onEachFeature(feature, layer) {
     if (feature.properties) {
@@ -351,15 +364,6 @@ legend.onAdd = function (map) {
 }; 
 legend.addTo(map); 
 
-// ===== LAYER CONTROL =====
-var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
-var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
-map.addLayer(myMarker); 
-map.addLayer(myMarker1); 
-var baseLayers = { "Base": osm, "Ortoimagen": map }; 
-var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive": hiveLayer, }; 
-var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
-
 // ========================TITULO=========================
 	var title = L.control();
 	title.onAdd = function (map) {
@@ -370,6 +374,17 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
 	};
 	title.addTo(map);	
 
+	
+	// ===== LAYER CONTROL =====
+var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
+var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
+map.addLayer(myMarker); 
+map.addLayer(myMarker1); 
+var baseLayers = { "Base": osm, "Ortoimagen": map }; 
+var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive": hive, }; 
+var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
+
+
 // Geocoder ======================
 var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
 map.addControl(osmGeocoder);
@@ -377,6 +392,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
