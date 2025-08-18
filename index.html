@@ -189,7 +189,7 @@ var hive = L.geoJson(hive_cdmx),{
     onEachFeature: onEachFeature 
 }).addTo(map);	
 
-//L.geoJson(hive_cdmx, { style, onEachFeature }).addTo(map);
+L.geoJson(hive_cdmx, { style, onEachFeature }).addTo(map);
 
 
 function getColor(d) {
@@ -392,6 +392,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
