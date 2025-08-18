@@ -373,10 +373,15 @@ async function buscarDENUE() {
 
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
- var arcgisOnline = L.esri.Geocoding.arcgisOnlineProvider();
- var searchControl = L.esri.Geocoding.geosearch({
- providers: [arcgisOnline]
- }).addTo(map); 
+ var arcgisOnline = new L.esri.Geocoding.arcgisOnlineProvider();
+
+var searchControl = L.esri.Geocoding.geosearch({
+  providers: [
+    new L.esri.Geocoding.arcgisOnlineProvider({
+      // options for arcgisOnlineProvider
+    })
+  ]
+}).addTo(map); 
 
  var results = L.layerGroup().addTo(map);
  searchControl.on('results', function(data){
@@ -389,4 +394,5 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
