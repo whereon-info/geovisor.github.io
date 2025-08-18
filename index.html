@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
 	 <!-- Geocode -->
-
+		<script src="js/Control.OSMGeocoder.js"></script>
+		<link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
 
     <style>
         body {
@@ -145,6 +146,10 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 });
 
 map.addLayer(osm);
+
+var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Search location...'});
+map.addControl(osmGeocoder);
+
 
 				function buscarLocalizacion(e) {
 				var mydate = new Date(e.timestamp);
@@ -393,6 +398,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
