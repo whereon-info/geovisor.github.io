@@ -147,9 +147,6 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 map.addLayer(osm);
 
-var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
-map.addControl(osmGeocoder);
-
 
 				function buscarLocalizacion(e) {
 				var mydate = new Date(e.timestamp);
@@ -267,7 +264,8 @@ function onEachFeature(feature, layer) {
 		{collapsed:true});
 		control.addTo(map); 
 
-	
+var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
+map.addControl(osmGeocoder);
     
 // Grupo para los marcadores
 let markersLayer = L.featureGroup().addTo(map);
@@ -398,6 +396,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
