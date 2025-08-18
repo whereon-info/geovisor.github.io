@@ -147,16 +147,6 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 map.addLayer(osm);
 
-// ===== LAYER CONTROL =====
-var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
-var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
-map.addLayer(myMarker); 
-map.addLayer(myMarker1); 
-var baseLayers = { "Base": osm, "Ortoimagen": map }; 
-var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive": hive, }; 
-var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
-
-
 	
 // ===== MARCADOR DRAGGABLE CON GEOLOCALIZACIÓN =====
 let userMarker;
@@ -198,6 +188,17 @@ map.locate({ setView: true, maxZoom: 16 });
 
 // ======= TUS CAPAS Y FUNCIONES EXISTENTES =======
 var hive = L.geoJson(hive_cdmx).addTo(map);
+
+// ===== LAYER CONTROL =====
+var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
+var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
+map.addLayer(myMarker); 
+map.addLayer(myMarker1); 
+var baseLayers = { "Base": osm, "Ortoimagen": map }; 
+var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive": hive, }; 
+var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
+
+
 
 	var title = L.control();
 	title.onAdd = function (map) {
@@ -275,4 +276,5 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
