@@ -240,7 +240,40 @@ function onEachFeature(feature, layer) {
     }
 }
 
-// Buscar datos DENUE
+
+// Grupo para los marcadores
+let markersLayer = L.featureGroup().addTo(map);
+
+// Función para obtener icono según la clase de actividad
+function getBootstrapIconFromActividad(clase) {
+    clase = (clase || "").toLowerCase();
+    let iconHTML;
+
+    if (clase.includes("restaurante") || clase.includes("cafetería") || clase.includes("taquería")) {
+        iconHTML = '<i class="bi bi-shop" style="font-size: 26px; color: orange;"></i>';
+    } else if (clase.includes("hotel") || clase.includes("motel") || clase.includes("alojamiento")) {
+        iconHTML = '<i class="bi bi-building" style="font-size: 26px; color: blue;"></i>';
+    } else if (clase.includes("escuela") || clase.includes("colegio") || clase.includes("universidad") || clase.includes("capacitación")) {
+        iconHTML = '<i class="bi bi-mortarboard-fill" style="font-size: 26px; color: yellow;"></i>';
+    } else if (clase.includes("farmacia") || clase.includes("medicinas") || clase.includes("botica")) {
+        iconHTML = '<i class="bi bi-capsule-pill" style="font-size: 26px; color: green;"></i>';
+    } else if (clase.includes("abarrotes") || clase.includes("supermercado") || clase.includes("tienda de autoservicio")) {
+        iconHTML = '<i class="bi bi-basket3-fill" style="font-size: 26px; color: violet;"></i>';
+    } else if (clase.includes("hospital") || clase.includes("clínica") || clase.includes("consultorio")) {
+        iconHTML = '<i class="bi bi-hospital" style="font-size: 26px; color: pink;"></i>';
+    } else {
+        iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 26px; color: red;"></i>';
+    }
+
+    return L.divIcon({
+        html: iconHTML,
+        className: 'custom-div-icon',
+        iconSize: [26, 26],
+        iconAnchor: [13, 26],
+        popupAnchor: [0, -26]
+    });
+} 
+// Buscar datos DENUE	
 async function buscarDENUE() {
     markersLayer.clearLayers();
     document.getElementById("tablaResultados").innerHTML = "";
@@ -348,6 +381,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
