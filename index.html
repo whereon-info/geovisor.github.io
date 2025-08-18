@@ -147,18 +147,45 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 map.addLayer(osm);
 
+// ===== MARCADOR DRAGGABLE CON GEOLOCALIZACIÓN =====
+let userMarker;
 
-				function buscarLocalizacion(e) {
-				var mydate = new Date(e.timestamp);
-				L.marker(e.latlng).addTo(map).bindPopup(mydate.toString());
-				}
-				function errorLocalizacion(e) {
-				 alert("No es posible encontrar su ubicación. Es posible que tenga que activar la Geolocation.");
-				}
-				map.on('locationerror', errorLocalizacion);
-				map.on('locationfound', buscarLocalizacion);
-				map.locate({setView: true, maxZoom:16}); 
-	
+function onLocationFound(e) {
+    const lat = e.latlng.lat;
+    const lon = e.latlng.lng;
+
+    // Crear marcador draggable
+    userMarker = L.marker([lat, lon], { draggable: true }).addTo(map)
+        .bindPopup("📍 Arrástrame para mover tu ubicación").openPopup();
+
+    // Actualizar campos al detectar ubicación
+    document.getElementById("lat").value = lat;
+    document.getElementById("lon").value = lon;
+
+    // Evento para actualizar al mover el marcador
+    userMarker.on("dragend", function (event) {
+        const position = event.target.getLatLng();
+        document.getElementById("lat").value = position.lat;
+        document.getElementById("lon").value = position.lng;
+    });
+
+    map.setView([lat, lon], 15);
+}
+
+function onLocationError(e) {
+    alert("⚠️ No se pudo obtener tu ubicación. Ingresa manualmente las coordenadas.");
+}
+
+map.on("locationfound", onLocationFound);
+map.on("locationerror", onLocationError);
+
+// Solicitar ubicación del navegador
+map.locate({ setView: true, maxZoom: 16 });
+
+// ==================================================
+
+
+// ======= TUS CAPAS Y FUNCIONES EXISTENTES =======
 var hive = L.geoJson(hive_cdmx).addTo(map);
 
 	var title = L.control();
@@ -170,28 +197,25 @@ var hive = L.geoJson(hive_cdmx).addTo(map);
 	};
 	title.addTo(map);
 
-			// Función para definir el color según POBADUL
-			function getColor(d) {
-			    return d > 1000000 ? '#d7191c' :
-			           d > 500000  ? '#fdae61' :
-			           d > 250000  ? '#ffffbf' :
-			           d > 100000  ? '#abdda4' :
-			                        '#2b83ba';
-			}
+function getColor(d) {
+    return d > 1000000 ? '#d7191c' :
+           d > 500000  ? '#fdae61' :
+           d > 250000  ? '#ffffbf' :
+           d > 100000  ? '#abdda4' :
+                        '#2b83ba';
+}
 
-			// Función para definir el estilo de cada polígono
-			function style(feature) {
-			    return {
-			        fillColor: getColor(feature.properties.POBADUL),
-			        weight: 2,
-			        opacity: 1,
-			        color: 'white',
-			        dashArray: '3',
-			        fillOpacity: 0.7
-			    };
-			}
-			
-// Función para popups
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.POBADUL),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
 function onEachFeature(feature, layer) {
     if (feature.properties) {
         const props = feature.properties;
@@ -217,193 +241,26 @@ function onEachFeature(feature, layer) {
     }
 }
 
-			
-		// Crear capa GeoJSON con estilo y popup
-			L.geoJson(hive_cdmx, {
-			    style: style,
-			    onEachFeature: onEachFeature
-			}).addTo(map);
+L.geoJson(hive_cdmx, { style, onEachFeature }).addTo(map);
 
-
-    var legend = L.control({position: 'bottomright'}); 
-
-	legend.onAdd = function (map) { 
-
+// Leyenda
+var legend = L.control({position: 'bottomright'}); 
+legend.onAdd = function (map) { 
     var div = L.DomUtil.create('div', 'info legend'), 
-        grades = [0, 100000, 250000, 500000, 1000000], 
-        labels = []; 
-
-    // Intervalos de poblacion 
+        grades = [0, 100000, 250000, 500000, 1000000]; 
     for (var i = 0; i < grades.length; i++) { 
         div.innerHTML += 
             '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + 
             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'); 
     } 
     return div; 
-	}; 
-	legend.addTo(map); 
+}; 
+legend.addTo(map); 
 
-	var myMarker = L.marker([19.28581583157899, -99.40670897151347])	
-	var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]);
-		map.addLayer(myMarker);
-		map.addLayer(myMarker1); 
-
-	
-		var baseLayers = {
-		"Base": osm,
-		"Ortoimagen": map
-		};
-		var overlays = {
-		"Casa": myMarker,
-		"Otro": myMarker1,
-		"Hive": hive,
-		};
-		var control = new L.control.layers(baseLayers, overlays,
-		{collapsed:true});
-		control.addTo(map); 
-
+// Geocoder
 var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
 map.addControl(osmGeocoder);
-    
-// Grupo para los marcadores
-let markersLayer = L.featureGroup().addTo(map);
-
-// Función para obtener icono según la clase de actividad
-function getBootstrapIconFromActividad(clase) {
-    clase = (clase || "").toLowerCase();
-    let iconHTML;
-
-    if (clase.includes("restaurante") || clase.includes("cafetería") || clase.includes("taquería")) {
-        iconHTML = '<i class="bi bi-shop" style="font-size: 26px; color: orange;"></i>';
-    } else if (clase.includes("hotel") || clase.includes("motel") || clase.includes("alojamiento")) {
-        iconHTML = '<i class="bi bi-building" style="font-size: 26px; color: blue;"></i>';
-    } else if (clase.includes("escuela") || clase.includes("colegio") || clase.includes("universidad") || clase.includes("capacitación")) {
-        iconHTML = '<i class="bi bi-mortarboard-fill" style="font-size: 26px; color: yellow;"></i>';
-    } else if (clase.includes("farmacia") || clase.includes("medicinas") || clase.includes("botica")) {
-        iconHTML = '<i class="bi bi-capsule-pill" style="font-size: 26px; color: green;"></i>';
-    } else if (clase.includes("abarrotes") || clase.includes("supermercado") || clase.includes("tienda de autoservicio")) {
-        iconHTML = '<i class="bi bi-basket3-fill" style="font-size: 26px; color: violet;"></i>';
-    } else if (clase.includes("hospital") || clase.includes("clínica") || clase.includes("consultorio")) {
-        iconHTML = '<i class="bi bi-hospital" style="font-size: 26px; color: pink;"></i>';
-    } else {
-        iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 26px; color: red;"></i>';
-    }
-
-    return L.divIcon({
-        html: iconHTML,
-        className: 'custom-div-icon',
-        iconSize: [26, 26],
-        iconAnchor: [13, 26],
-        popupAnchor: [0, -26]
-    });
-} 
-    
-// Buscar datos DENUE
-async function buscarDENUE() {
-    markersLayer.clearLayers();
-    document.getElementById("tablaResultados").innerHTML = "";
-
-    let condi = document.getElementById('condi').value.trim();
-    const lat = parseFloat(document.getElementById('lat').value.trim());
-    const lon = parseFloat(document.getElementById('lon').value.trim());
-    const mts = parseInt(document.getElementById('mts').value.trim());
-
-    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
-        alert("Por favor ingresa datos válidos.");
-        return;
-    }
-
-    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
-
-    try {
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const data = await resp.json();
-
-        if (!Array.isArray(data) || data.length === 0) {
-            alert("No se encontraron resultados.");
-            return;
-        }
-
-        data.forEach(item => {
-            const latNum = parseFloat(item.Latitud);
-            const lonNum = parseFloat(item.Longitud);
-            if (isNaN(latNum) || isNaN(lonNum)) return;
-
-            const popupContent = `
-                <b>${item.Nombre || ''}</b><br>
-                <small>${item.Clase_actividad || ''}</small><br>
-                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
-                ${item.Colonia || ''}, ${item.CP || ''}<br>
-                ${item.Telefono || ''}
-            `;
-
-            // Icono basado en la Clase_actividad real
-            const icono = getBootstrapIconFromActividad(item.Clase_actividad);
-
-            const marker = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
-            markersLayer.addLayer(marker);
-
-            // Agregar a tabla
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${item.Nombre || ''}</td>
-                <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
-                <td>${item.Telefono || ''}</td>
-                <td>${item.Estrato || ''}</td>
-                <td>${item.Clase_actividad || ''}</td>
-            `;
-            row.addEventListener("click", () => {
-                map.setView([latNum, lonNum], 18);
-                marker.openPopup();
-            });
-            document.getElementById("tablaResultados").appendChild(row);
-        });
-
-        const bounds = markersLayer.getBounds();
-        if (bounds.isValid()) {
-            map.fitBounds(bounds.pad(0.1));
-        }
-
-    } catch (error) {
-        console.error("Error consultando DENUE:", error);
-        alert("Error al consultar la API.");
-    }
-}
-
-document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-
-var cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
-    cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {attribution: cloudmadeAttribution});
-
-var map2 = new L.Map('map').addLayer(cloudmade).setView(new L.LatLng(48.5, 2.5), 15);
-
-var osmGeocoder = new L.Control.OSMGeocoder();
-
-map.addControl(osmGeocoder);
-
-
- var results = L.layerGroup().addTo(map);
- searchControl.on('results', function(data){
- results.clearLayers();
- for (var i = data.results.length - 1; i >= 0; i--) {
- results.addLayer(L.marker(data.results[i].latlng));
- }
- });
 
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
