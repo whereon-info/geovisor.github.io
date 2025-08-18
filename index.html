@@ -240,6 +240,81 @@ function onEachFeature(feature, layer) {
     }
 }
 
+// Buscar datos DENUE
+async function buscarDENUE() {
+    markersLayer.clearLayers();
+    document.getElementById("tablaResultados").innerHTML = "";
+
+    let condi = document.getElementById('condi').value.trim();
+    const lat = parseFloat(document.getElementById('lat').value.trim());
+    const lon = parseFloat(document.getElementById('lon').value.trim());
+    const mts = parseInt(document.getElementById('mts').value.trim());
+
+    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
+        alert("Por favor ingresa datos válidos.");
+        return;
+    }
+
+    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+
+    try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            alert("No se encontraron resultados.");
+            return;
+        }
+
+        data.forEach(item => {
+            const latNum = parseFloat(item.Latitud);
+            const lonNum = parseFloat(item.Longitud);
+            if (isNaN(latNum) || isNaN(lonNum)) return;
+
+            const popupContent = `
+                <b>${item.Nombre || ''}</b><br>
+                <small>${item.Clase_actividad || ''}</small><br>
+                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
+                ${item.Colonia || ''}, ${item.CP || ''}<br>
+                ${item.Telefono || ''}
+            `;
+
+            // Icono basado en la Clase_actividad real
+            const icono = getBootstrapIconFromActividad(item.Clase_actividad);
+
+            const marker = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
+            markersLayer.addLayer(marker);
+
+            // Agregar a tabla
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${item.Nombre || ''}</td>
+                <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
+                <td>${item.Telefono || ''}</td>
+                <td>${item.Estrato || ''}</td>
+                <td>${item.Clase_actividad || ''}</td>
+            `;
+            row.addEventListener("click", () => {
+                map.setView([latNum, lonNum], 18);
+                marker.openPopup();
+            });
+            document.getElementById("tablaResultados").appendChild(row);
+        });
+
+        const bounds = markersLayer.getBounds();
+        if (bounds.isValid()) {
+            map.fitBounds(bounds.pad(0.1));
+        }
+
+    } catch (error) {
+        console.error("Error consultando DENUE:", error);
+        alert("Error al consultar la API.");
+    }
+}
+
+document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+
 L.geoJson(hive_cdmx, { style, onEachFeature }).addTo(map);
 
 // Leyenda
@@ -273,6 +348,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
