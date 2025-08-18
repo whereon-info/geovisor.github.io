@@ -377,8 +377,7 @@ async function buscarDENUE() {
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 
-- var arcgisOnline = L.esri.Geocoding.arcgisOnlineProvider();
-+ var arcgisOnline = new L.esri.Geocoding.arcgisOnlineProvider();
+ var arcgisOnline = new L.esri.Geocoding.arcgisOnlineProvider();
  var searchControl = L.esri.Geocoding.geosearch({
  providers: [arcgisOnline]
  }).addTo(map);
@@ -399,6 +398,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
