@@ -152,7 +152,7 @@ map.addLayer(osm);
 				}
 				map.on('locationerror', errorLocalizacion);
 				map.on('locationfound', buscarLocalizacion);
-				map.locate({setView: true, maxZoom:6}); 
+				map.locate({setView: true, maxZoom:3}); 
 	
 var hive = L.geoJson(hive_cdmx).addTo(map);
 
@@ -215,7 +215,7 @@ function onEachFeature(feature, layer) {
     }
 }
 			
-			// Crear capa GeoJSON con estilo y popup
+		// Crear capa GeoJSON con estilo y popup
 			L.geoJson(hive_cdmx, {
 			    style: style,
 			    onEachFeature: onEachFeature
@@ -372,6 +372,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 </script>
 </body>
 </html>
+
 
 
 
