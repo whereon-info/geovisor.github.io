@@ -1,345 +1,190 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Estudio de mercado a un clic</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Estudio de mercado a un clic</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/hive_cdmx.js"></script>
+<script src="js/hive_edomex.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<script src="js/Control.OSMGeocoder.js"></script>
+<link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script type="text/javascript" src="js/hive_cdmx.js"></script>
-    <script type="text/javascript" src="js/hive_edomex.js"></script>
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-    <!-- Geocode -->
-    <script src="js/Control.OSMGeocoder.js"></script>
-    <link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
-
-    <style>
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        margin: 0;
-        background: #121212;
-        color: #e0e0e0;
-    }
-    #controls {
-        padding: 10px;
-        background: #1e1e1e;
-        border-bottom: 1px solid #333;
-    }
-    label { margin-right: 5px; }
-    input, button {
-        margin: 3px;
-        padding: 5px;
-        background: #2a2a2a;
-        border: 1px solid #444;
-        color: #e0e0e0;
-    }
-    button {
-        cursor: pointer;
-    }
-    button:hover {
-        background: #444;
-    }
-
-    /* Layout */
-    #map {
-        width: 100%;
-        height: calc(100vh - 60px);
-        float: left;
-        transition: width 0.3s;
-    }
-    #sidebar {
-        width: 25%;
-        height: calc(100vh - 60px);
-        float: right;
-        padding: 10px;
-        border-left: 2px solid #333;
-        background: #181818;
-        overflow-y: auto;
-        transition: width 0.3s, padding 0.3s;
-        position: relative;
-    }
-    #sidebar.collapsed {
-        width: 0;
-        padding: 0;
-        border-left: none;
-        overflow: hidden;
-    }
-    #map.expanded {
-        width: 100%;
-    }
-
-    #sidebar h2 {
-        margin-top: 0;
-        color: #f0f0f0;
-    }
-
-    /* Botón flotante */
-    #toggleSidebar {
-        position: absolute;
-        top: 10px;
-        left: -35px;
-        background: #333;
-        border: none;
-        color: #fff;
-        padding: 6px 8px;
-        cursor: pointer;
-        border-radius: 4px 0 0 4px;
-        font-size: 14px;
-        transition: left 0.3s;
-    }
-    #toggleSidebar:hover {
-        background: #444;
-    }
-
-    #listado {
-        max-height: 40vh;
-        overflow-y: auto;
-        background: #181818;
-        border-top: 1px solid #333;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        color: #e0e0e0;
-    }
-    th, td {
-        padding: 8px;
-        border-bottom: 1px solid #333;
-    }
-    tr:hover {
-        background: #333;
-        cursor: pointer;
-    }
-    th {
-        background: #222;
-        position: sticky;
-        top: 0;
-    }
-    </style>
+<style>
+body { font-family: Arial, Helvetica, sans-serif; margin:0; background:#121212; color:#e0e0e0; }
+#controls { padding:10px; background:#1e1e1e; border-bottom:1px solid #333; }
+label { margin-right:5px; }
+input, button { margin:3px; padding:5px; background:#2a2a2a; border:1px solid #444; color:#e0e0e0; }
+button { cursor:pointer; } button:hover { background:#444; }
+#map { width:100%; height:calc(100vh-60px); float:left; transition: width 0.3s; }
+#sidebar { width:25%; height:calc(100vh-60px); float:right; padding:10px; border-left:2px solid #333; background:#181818; overflow-y:auto; transition: width 0.3s, padding 0.3s; position:relative; }
+#sidebar.collapsed { width:0; padding:0; border-left:none; overflow:hidden; }
+#map.expanded { width:100%; }
+#sidebar h2 { margin-top:0; color:#f0f0f0; }
+#toggleSidebar { position:absolute; top:10px; left:-35px; background:#333; border:none; color:#fff; padding:6px 8px; cursor:pointer; border-radius:4px 0 0 4px; font-size:14px; transition:left 0.3s; }
+#toggleSidebar:hover { background:#444; }
+#listado { max-height:40vh; overflow-y:auto; background:#181818; border-top:1px solid #333; }
+table { width:100%; border-collapse:collapse; color:#e0e0e0; }
+th, td { padding:8px; border-bottom:1px solid #333; }
+tr:hover { background:#333; cursor:pointer; }
+th { background:#222; position:sticky; top:0; }
+</style>
 </head>
 <body>
-    <div id="controls">
-        <label>Establecimiento:</label>
-        <input type="text" id="condi" value="restaurantes" />
-        <label>Latitud:</label>
-        <input type="text" id="lat" value="19.432650801677962" />
-        <label>Longitud:</label>
-        <input type="text" id="lon" value="-99.13316794583835" />
-        <label>Metros:</label>
-        <input type="number" id="mts" value="500" />
-        <button id="btnBuscar">Buscar</button>
-    </div>
 
-    <div id="map"></div>
-    
-    <div id="sidebar" class="collapsed">
-        <button id="toggleSidebar">➡</button>
-        <h2>Detalles</h2>
-        <div id="info">Haz clic en un hexágono</div>
-        <hr>
-        <h3>Resultados DENUE</h3>
-        <div id="listado">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Dirección</th>
-                        <th>Teléfono</th>
-                        <th>Personal ocupado</th>
-                        <th>Clase</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaResultados"></tbody>
-            </table>
-        </div>
-    </div>
+<div id="controls">
+<label>Establecimiento:</label>
+<input type="text" id="condi" value="restaurantes" />
+<label>Latitud:</label>
+<input type="text" id="lat" value="19.432650801677962" />
+<label>Longitud:</label>
+<input type="text" id="lon" value="-99.13316794583835" />
+<label>Metros:</label>
+<input type="number" id="mts" value="500" />
+<button id="btnBuscar">Buscar</button>
+</div>
+
+<div id="map"></div>
+
+<div id="sidebar" class="collapsed">
+<button id="toggleSidebar">➡</button>
+<h2>Detalles</h2>
+<div id="info">Haz clic en un hexágono</div>
+<hr>
+<h3>Resultados DENUE</h3>
+<div id="listado">
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Dirección</th>
+<th>Teléfono</th>
+<th>Personal ocupado</th>
+<th>Clase</th>
+</tr>
+</thead>
+<tbody id="tablaResultados"></tbody>
+</table>
+</div>
+</div>
 
 <script>
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-const map = L.map('map').setView([22.5, -100.5], 5);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    subdomains: 'abcd',
-    maxZoom: 19
-}).addTo(map);
-
-var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; OpenStreetMap contributors'
-}).addTo(map);
+const map = L.map('map').setView([22.5,-100.5],5);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{ attribution:'&copy; OpenStreetMap contributors', subdomains:'abcd', maxZoom:19 }).addTo(map);
+var osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ attribution:'Map data &copy; OpenStreetMap contributors' }).addTo(map);
 
 // ===== MARCADOR DRAGGABLE =====
 let userMarker;
-function onLocationFound(e) {
-    const lat = e.latlng.lat;
-    const lon = e.latlng.lng;
-    userMarker = L.marker([lat, lon], { draggable: true }).addTo(map)
-        .bindPopup("📍 Arrástrame para mover tu ubicación").openPopup();
-    document.getElementById("lat").value = lat;
-    document.getElementById("lon").value = lon;
-    userMarker.on("dragend", function (event) {
-        const position = event.target.getLatLng();
-        document.getElementById("lat").value = position.lat;
-        document.getElementById("lon").value = position.lng;
-    });
-    map.setView([lat, lon], 15);
+function onLocationFound(e){
+    const lat=e.latlng.lat, lon=e.latlng.lng;
+    userMarker=L.marker([lat,lon],{draggable:true}).addTo(map).bindPopup("📍 Arrástrame para mover tu ubicación").openPopup();
+    document.getElementById("lat").value=lat; document.getElementById("lon").value=lon;
+    userMarker.on("dragend",e=>{ const p=e.target.getLatLng(); document.getElementById("lat").value=p.lat; document.getElementById("lon").value=p.lng; });
+    map.setView([lat,lon],15);
 }
-function onLocationError(e) {
-    alert("⚠️ No se pudo obtener tu ubicación. Ingresa manualmente las coordenadas.");
-}
-map.on("locationfound", onLocationFound);
-map.on("locationerror", onLocationError);
-map.locate({ setView: true, maxZoom: 16 });
+function onLocationError(e){ alert("⚠️ No se pudo obtener tu ubicación. Ingresa manualmente las coordenadas."); }
+map.on("locationfound",onLocationFound); map.on("locationerror",onLocationError); map.locate({setView:true,maxZoom:16});
 
 // ===== CAPAS HEXAGONALES =====
-var hiveLayer09 = L.geoJson(hive_cdmx, { style: style, onEachFeature: onEachFeature }).addTo(map);
-var hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: onEachFeature }).addTo(map);
+function getColor(d){ return d>1000000?'#d7191c':d>500000?'#fdae61':d>250000?'#ffffbf':d>100000?'#abdda4':'#2b83ba'; }
+function style(feature){ return { fillColor:getColor(feature.properties.POBADUL), weight:2, opacity:1, color:'white', dashArray:'3', fillOpacity:0.7 }; }
 
-function getColor(d) {
-    return d > 1000000 ? '#d7191c' :
-           d > 500000  ? '#fdae61' :
-           d > 250000  ? '#ffffbf' :
-           d > 100000  ? '#abdda4' :
-                        '#2b83ba';
+function onEachFeature(feature, layer){
+    layer.on("click",()=>{ mostrarInfoHexagono(feature, layer); });
 }
-function style(feature) {
-    return {
-        fillColor: getColor(feature.properties.POBADUL),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
-}
-function onEachFeature(feature, layer) {
-    layer.on("click", () => { mostrarInfoHexagono(feature, layer); });
-}
-function mostrarInfoHexagono(feature, layer=null) {
-    sidebar.classList.remove("collapsed");
-    mapDiv.classList.remove("expanded");
-    toggleBtn.innerHTML = "⬅";
-    document.getElementById("info").innerHTML = `
-        <h3>${feature.properties.nomgeo || 'Zona'}</h3>
-        <b>Tipo:</b> ${feature.properties.TIPO || 'N/A'}<br>
-        <b>Rezago municipal:</b> ${feature.properties.REZAGO || 'N/A'}<br>
-        <hr>
-        <b>Población total:</b> ${feature.properties.pobtot?.toLocaleString() || 0}<br>
-        <b>Población adulta:</b> ${feature.properties.POBADUL?.toLocaleString() || 0}
-    `;
-    if(layer) {
-        layer.setStyle({ weight: 4, color: 'yellow' });
-        setTimeout(()=> layer.setStyle(style(feature)), 1500); // vuelve al estilo original
-    }
-}
+var hiveLayer09=L.geoJson(hive_cdmx,{style:style,onEachFeature:onEachFeature}).addTo(map);
+var hiveLayer15=L.geoJson(hive_edomex,{style:style,onEachFeature:onEachFeature}).addTo(map);
 
-// =============SIDEBAR====================
-const sidebar = document.getElementById("sidebar");
-const mapDiv = document.getElementById("map");
-const toggleBtn = document.getElementById("toggleSidebar");
-toggleBtn.addEventListener("click", function () {
-    sidebar.classList.toggle("collapsed");
-    mapDiv.classList.toggle("expanded");
-    this.innerHTML = sidebar.classList.contains("collapsed") ? "➡" : "⬅";
-    setTimeout(() => map.invalidateSize(), 310);
+const sidebar=document.getElementById("sidebar");
+const mapDiv=document.getElementById("map");
+const toggleBtn=document.getElementById("toggleSidebar");
+toggleBtn.addEventListener("click",function(){
+    sidebar.classList.toggle("collapsed"); mapDiv.classList.toggle("expanded");
+    this.innerHTML=sidebar.classList.contains("collapsed")?"➡":"⬅"; setTimeout(()=>map.invalidateSize(),310);
 });
 
-// =============MARKERS DENUE====================
-let markersLayer = L.featureGroup().addTo(map);
-function getBootstrapIconFromActividad(clase) {
-    clase = (clase || "").toLowerCase();
+let markersLayer=L.featureGroup().addTo(map);
+function getBootstrapIconFromActividad(clase){
+    clase=(clase||"").toLowerCase();
     let iconHTML;
     if(clase.includes("restaurante")||clase.includes("cafetería")) iconHTML='<i class="bi bi-shop" style="font-size:26px;color:orange;"></i>';
     else if(clase.includes("hotel")) iconHTML='<i class="bi bi-building" style="font-size:26px;color:blue;"></i>';
     else iconHTML='<i class="bi bi-geo-alt-fill" style="font-size:26px;color:red;"></i>';
-    return L.divIcon({ html: iconHTML, className:'custom-div-icon', iconSize:[26,26], iconAnchor:[13,26], popupAnchor:[0,-26] });
+    return L.divIcon({ html:iconHTML, className:'custom-div-icon', iconSize:[26,26], iconAnchor:[13,26], popupAnchor:[0,-26] });
 }
 
-async function buscarDENUE() {
-    markersLayer.clearLayers();
-    document.getElementById("tablaResultados").innerHTML = "";
-    let condi = document.getElementById('condi').value.trim();
-    const lat = parseFloat(document.getElementById('lat').value.trim());
-    const lon = parseFloat(document.getElementById('lon').value.trim());
-    const mts = parseInt(document.getElementById('mts').value.trim());
+function mostrarInfoHexagono(feature, layer=null){
+    sidebar.classList.remove("collapsed"); mapDiv.classList.remove("expanded"); toggleBtn.innerHTML="⬅";
+    document.getElementById("info").innerHTML=`<h3>${feature.properties.nomgeo||'Zona'}</h3><b>Tipo:</b> ${feature.properties.TIPO||'N/A'}<br><b>Rezago municipal:</b> ${feature.properties.REZAGO||'N/A'}<br><hr><b>Población total:</b> ${feature.properties.pobtot?.toLocaleString()||0}<br><b>Población adulta:</b> ${feature.properties.POBADUL?.toLocaleString()||0}`;
+    if(layer){
+        // Resaltar hexágono
+        layer.setStyle({ weight:4, color:'yellow', fillOpacity:0.8 });
+        setTimeout(()=>layer.setStyle(style(feature)),1500);
+    }
+}
+
+async function buscarDENUE(){
+    markersLayer.clearLayers(); document.getElementById("tablaResultados").innerHTML="";
+    let condi=document.getElementById('condi').value.trim();
+    const lat=parseFloat(document.getElementById('lat').value.trim());
+    const lon=parseFloat(document.getElementById('lon').value.trim());
+    const mts=parseInt(document.getElementById('mts').value.trim());
     if(!condi||isNaN(lat)||isNaN(lon)||isNaN(mts)){ alert("Por favor ingresa datos válidos."); return; }
     const url=`https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
     try{
-        const resp = await fetch(url);
-        if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const data = await resp.json();
-        if(!Array.isArray(data)||data.length===0){ alert("No se encontraron resultados."); return; }
+        const resp=await fetch(url); if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data=await resp.json(); if(!Array.isArray(data)||data.length===0){ alert("No se encontraron resultados."); return; }
         data.forEach(item=>{
-            const latNum=parseFloat(item.Latitud);
-            const lonNum=parseFloat(item.Longitud);
+            const latNum=parseFloat(item.Latitud), lonNum=parseFloat(item.Longitud);
             if(isNaN(latNum)||isNaN(lonNum)) return;
             const popupContent=`<b>${item.Nombre||''}</b><br><small>${item.Clase_actividad||''}</small>`;
             const icono=getBootstrapIconFromActividad(item.Clase_actividad);
-            const marker=L.marker([latNum, lonNum],{icon:icono}).bindPopup(popupContent);
+            const marker=L.marker([latNum,lonNum],{icon:icono}).bindPopup(popupContent);
             markersLayer.addLayer(marker);
-
-            // agregar a tabla
             const row=document.createElement("tr");
             row.innerHTML=`<td>${item.Nombre||''}</td><td>${(item.Calle||'')+' '+(item.Num_Exterior||'')+', '+(item.Colonia||'')}</td><td>${item.Telefono||''}</td><td>${item.Estrato||''}</td><td>${item.Clase_actividad||''}</td>`;
-            row.addEventListener("click", ()=>{
-                // Zoom animado
-                map.flyTo([latNum, lonNum],18);
-                marker.openPopup();
-                // hexágono más cercano
+            row.addEventListener("click",()=>{
+                map.flyTo([latNum,lonNum],18); marker.openPopup();
+                // Encontrar hexágono más cercano
                 let minDist=Infinity, nearestHex=null, nearestLayer=null;
-                [hiveLayer09, hiveLayer15].forEach(layerGroup=>{
-                    layerGroup.eachLayer(layer=>{
-                        if(layer.feature && layer.getBounds){
-                            const bounds=layer.getBounds();
-                            const center=bounds.getCenter();
-                            const d=map.distance([latNum,lonNum],center);
-                            if(d<minDist){ minDist=d; nearestHex=layer.feature; nearestLayer=layer; }
-                        }
-                    });
-                });
-                if(nearestHex && nearestLayer) mostrarInfoHexagono(nearestHex, nearestLayer);
+                [hiveLayer09,hiveLayer15].forEach(layerGroup=>layerGroup.eachLayer(layer=>{
+                    if(layer.feature && layer.getBounds){
+                        const center=layer.getBounds().getCenter();
+                        const d=map.distance([latNum,lonNum],center);
+                        if(d<minDist){ minDist=d; nearestHex=layer.feature; nearestLayer=layer; }
+                    }
+                }));
+                if(nearestHex && nearestLayer) mostrarInfoHexagono(nearestHex,nearestLayer);
             });
             document.getElementById("tablaResultados").appendChild(row);
         });
         const bounds=markersLayer.getBounds();
         if(bounds.isValid()) map.fitBounds(bounds.pad(0.1));
-    }catch(error){ console.error("Error consultando DENUE:",error); alert("Error al consultar la API."); }
+    }catch(e){ console.error("Error DENUE:",e); alert("Error al consultar la API."); }
 }
 document.getElementById('btnBuscar').addEventListener('click',buscarDENUE);
 
-// ====== LEYENDA ======
-var legend = L.control({position: 'bottomright'});
-legend.onAdd=function(map){
-    var div=L.DomUtil.create('div','info legend'),grades=[0,100000,250000,500000,1000000];
-    for(var i=0;i<grades.length;i++){
-        div.innerHTML+='<i style="background:'+getColor(grades[i]+1)+'"></i> '+grades[i]+(grades[i+1]?'&ndash;'+grades[i+1]+'<br>':'+');
-    }
-    return div;
-};
+// ===== LEYENDA =====
+var legend=L.control({position:'bottomright'});
+legend.onAdd=function(map){ var div=L.DomUtil.create('div','info legend'), grades=[0,100000,250000,500000,1000000]; for(var i=0;i<grades.length;i++){ div.innerHTML+='<i style="background:'+getColor(grades[i]+1)+'"></i> '+grades[i]+(grades[i+1]?'&ndash;'+grades[i+1]+'<br>':'+'); } return div; };
 legend.addTo(map);
 
-// ====== TITULO ======
+// ===== TITULO =====
 var title=L.control();
-title.onAdd=function(map){
-    var div=L.DomUtil.create('div','info');
-    div.innerHTML+='<h1>Estudio de mercado</h1>Análisis de entornos';
-    return div;
-};
+title.onAdd=function(map){ var div=L.DomUtil.create('div','info'); div.innerHTML+='<h1>Estudio de mercado</h1>Análisis de entornos'; return div; };
 title.addTo(map);
 
-// ====== LAYER CONTROL ======
+// ===== LAYER CONTROL =====
 var baseLayers={ "Base": osm };
 var overlays={ "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15, "Marcadores DENUE": markersLayer };
 L.control.layers(baseLayers, overlays,{collapsed:true}).addTo(map);
 
-// ====== GEOCODER ======
-var osmGeocoder = new L.Control.OSMGeocoder({placeholder:'Escribir dirección...'});
+// ===== GEOCODER =====
+var osmGeocoder=new L.Control.OSMGeocoder({placeholder:'Escribir dirección...'});
 map.addControl(osmGeocoder);
-
 </script>
 </body>
 </html>
