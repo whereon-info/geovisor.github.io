@@ -178,7 +178,7 @@ title.onAdd=function(map){ var div=L.DomUtil.create('div','info'); div.innerHTML
 title.addTo(map);
 
 // ===== LAYER CONTROL =====
-var baseLayers={ "Base": osm };
+var baseLayers={ "Base": osm, "Black": map  };
 var overlays={ "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15, "Marcadores DENUE": markersLayer };
 L.control.layers(baseLayers, overlays,{collapsed:true}).addTo(map);
 
@@ -188,3 +188,4 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
