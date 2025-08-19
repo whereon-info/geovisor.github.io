@@ -129,7 +129,10 @@
             <tbody id="tablaResultados"></tbody>
         </table>
     </div>
-
+	<div id="sidebar" style="width: 25%; height: 100%; float: right; padding: 10px; border-left: 2px solid #ccc; overflow-y: auto;">
+   	<h2>Detalles</h2>
+  	<div id="info">Haz clic en un hexágono</div>
+	</div>
 <script>
 
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
@@ -189,7 +192,6 @@ var hive09 = L.geoJson(hive_cdmx).addTo(map);
 var hive15 = L.geoJson(hive_edomex).addTo(map);
 
 
-
 function getColor(d) {
     return d > 1000000 ? '#d7191c' :
            d > 500000  ? '#fdae61' :
@@ -234,6 +236,18 @@ function onEachFeature(feature, layer) {
         layer.bindPopup(popupContent);
     }
 }
+
+	   function onEachFeature(feature, layer) {
+       layer.on("click", function () {
+           // Aquí pones lo que quieras mostrar
+           document.getElementById("info").innerHTML = `
+               <h3>Hexágono</h3>
+               <p><b>ID:</b> ${feature.properties.id}</p>
+               <p><b>Nombre:</b> ${feature.properties.nombre}</p>
+               <p><b>Valor:</b> ${feature.properties.valor}</p>
+           `;
+       });
+   }
 
 
 // Grupo para los marcadores
@@ -396,6 +410,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
