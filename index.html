@@ -416,6 +416,9 @@ var hiveLayer09 = L.geoJson(hive_cdmx, {
         layer.on("click", function () {
             mostrarInfoHexagono(feature); 
 }).addTo(map);
+	}
+}
+)
 
 var hiveLayer15 = L.geoJson(hive_edomex, { 
     style: style, 
@@ -423,6 +426,9 @@ var hiveLayer15 = L.geoJson(hive_edomex, {
         layer.on("click", function () {
             mostrarInfoHexagono(feature);
 }).addTo(map);
+			}
+}
+)
 	
 // ========================LEYENDA==============================
 var legend = L.control({position: 'bottomright'}); 
@@ -466,6 +472,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
