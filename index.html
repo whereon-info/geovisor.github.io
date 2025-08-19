@@ -19,88 +19,110 @@
 		<link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
 
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            background: #121212;
-            color: #e0e0e0;
-        }
-        #controls {
-            padding: 10px;
-            background: #1e1e1e;
-            border-bottom: 1px solid #333;
-        }
-        label { margin-right: 5px; }
-        input, button {
-            margin: 3px;
-            padding: 5px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #e0e0e0;
-        }
-        button {
-            cursor: pointer;
-        }
-        button:hover {
-            background: #444;
-        }
-        #map {
-            height: 60vh;
-            width: 100%;
-        }
-        #listado {
-            height: 40vh;
-            overflow-y: auto;
-            background: #181818;
-            border-top: 1px solid #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            color: #e0e0e0;
-        }
-        th, td {
-            padding: 8px;
-            border-bottom: 1px solid #333;
-        }
-        tr:hover {
-            background: #333;
-            cursor: pointer;
-        }
-        th {
-            background: #222;
-            position: sticky;
-            top: 0;
-        }
-        .custom-div-icon {
-            background: transparent;
-            border: none;
-        }
-		  .info {
-		padding: 6px 8px;
-		font: 14px/16px Arial, Helvetica, sans-serif;
-		background: red;
-		background: rgba(186,186,186,0.8);
-		box-shadow: 0 0 15px rgba(0,0,0,0.2);
-		border-radius: 5px;
-	}
-	.info h2 {
-		margin: 0 0 5px;
-		color: #404040;
-	}
-	.legend {
-	    line-height: 18px;
-	    color: #555;
-	}
-	.legend i {
-	    width: 18px;
-	    height: 18px;
-	    float: left;
-	    margin-right: 8px;
-	    opacity: 0.7;
-	}
-    </style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        background: #121212;
+        color: #e0e0e0;
+    }
+    #controls {
+        padding: 10px;
+        background: #1e1e1e;
+        border-bottom: 1px solid #333;
+    }
+    label { margin-right: 5px; }
+    input, button {
+        margin: 3px;
+        padding: 5px;
+        background: #2a2a2a;
+        border: 1px solid #444;
+        color: #e0e0e0;
+    }
+    button {
+        cursor: pointer;
+    }
+    button:hover {
+        background: #444;
+    }
+
+    /* Layout */
+    #map {
+        width: 100%; /* inicia expandido */
+        height: calc(100vh - 60px);
+        float: left;
+        transition: width 0.3s;
+    }
+    #sidebar {
+        width: 25%;
+        height: calc(100vh - 60px);
+        float: right;
+        padding: 10px;
+        border-left: 2px solid #333;
+        background: #181818;
+        overflow-y: auto;
+        transition: width 0.3s, padding 0.3s;
+        position: relative;
+    }
+    #sidebar.collapsed {
+        width: 0;
+        padding: 0;
+        border-left: none;
+        overflow: hidden;
+    }
+    #map.expanded {
+        width: 100%;
+    }
+
+    #sidebar h2 {
+        margin-top: 0;
+        color: #f0f0f0;
+    }
+
+    /* Botón flotante */
+    #toggleSidebar {
+        position: absolute;
+        top: 10px;
+        left: -35px;
+        background: #333;
+        border: none;
+        color: #fff;
+        padding: 6px 8px;
+        cursor: pointer;
+        border-radius: 4px 0 0 4px;
+        font-size: 14px;
+        transition: left 0.3s;
+    }
+    #toggleSidebar:hover {
+        background: #444;
+    }
+
+    #listado {
+        max-height: 40vh;
+        overflow-y: auto;
+        background: #181818;
+        border-top: 1px solid #333;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #e0e0e0;
+    }
+    th, td {
+        padding: 8px;
+        border-bottom: 1px solid #333;
+    }
+    tr:hover {
+        background: #333;
+        cursor: pointer;
+    }
+    th {
+        background: #222;
+        position: sticky;
+        top: 0;
+    }
+</style>
 </head>
+	
 <body>
     <div id="controls">
         <label>Establecimiento:</label>
@@ -115,24 +137,29 @@
     </div>
 
     <div id="map"></div>
-    <div id="listado">
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Dirección</th>
-                    <th>Teléfono</th>
-                    <th>Personal ocupado</th>
-                    <th>Clase</th>
-                </tr>
-            </thead>
-            <tbody id="tablaResultados"></tbody>
-        </table>
+	
+    <div id="sidebar" class="collapsed">
+        <button id="toggleSidebar">➡</button>
+        <h2>Detalles</h2>
+        <div id="info">Haz clic en un hexágono</div>
+        <hr>
+        <h3>Resultados DENUE</h3>
+        <div id="listado">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Personal ocupado</th>
+                        <th>Clase</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaResultados"></tbody>
+            </table>
+        </div>
     </div>
-	<div id="sidebar" style="width: 25%; height: 100%; float: right; padding: 10px; border-left: 2px solid #ccc; overflow-y: auto;">
-   	<h2>Detalles</h2>
-  	<div id="info">Haz clic en un hexágono</div>
-	</div>
+	
 <script>
 
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
@@ -237,20 +264,43 @@ function onEachFeature(feature, layer) {
     }
 }
 
-	   function onEachFeature(feature, layer) {
-       layer.on("click", function () {
-           // Aquí pones lo que quieras mostrar
-           document.getElementById("info").innerHTML = `
-               <h3>Hexágono</h3>
-               <p><b>ID:</b> ${feature.properties.id}</p>
-               <p><b>Nombre:</b> ${feature.properties.nombre}</p>
-               <p><b>Valor:</b> ${feature.properties.valor}</p>
-           `;
-       });
-   }
+// =============Pestaña====================
+	
+const sidebar = document.getElementById("sidebar");
+const mapDiv = document.getElementById("map");
+const toggleBtn = document.getElementById("toggleSidebar");
+
+toggleBtn.addEventListener("click", function () {
+    sidebar.classList.toggle("collapsed");
+    mapDiv.classList.toggle("expanded");
+
+    if (sidebar.classList.contains("collapsed")) {
+        this.innerHTML = "➡";
+    } else {
+        this.innerHTML = "⬅";
+    }
+
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 310);
+});
+
+// 🔹 Esta función abre el sidebar automáticamente al dar clic en un hexágono
+function mostrarInfoHexagono(feature) {
+    sidebar.classList.remove("collapsed");
+    mapDiv.classList.remove("expanded");
+    toggleBtn.innerHTML = "⬅";
+
+    document.getElementById("info").innerHTML = `
+        <h3>Hexágono</h3>
+        <p><b>ID:</b> ${feature.properties.id}</p>
+        <p><b>Nombre:</b> ${feature.properties.nombre}</p>
+        <p><b>Valor:</b> ${feature.properties.valor}</p>
+    `;
+}
 
 
-// Grupo para los marcadores
+// =============Grupo para los marcadores====================
 let markersLayer = L.featureGroup().addTo(map);
 
 // Función para obtener icono según la clase de actividad
@@ -282,7 +332,7 @@ function getBootstrapIconFromActividad(clase) {
         popupAnchor: [0, -26]
     });
 } 
-// Buscar datos DENUE	
+// =============Buscar datos DENUE==============================
 async function buscarDENUE() {
     markersLayer.clearLayers();
     document.getElementById("tablaResultados").innerHTML = "";
@@ -358,17 +408,23 @@ async function buscarDENUE() {
 
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
+
+// ========================Buscar datos DENUE==============================
 var hiveLayer09 = L.geoJson(hive_cdmx, { 
     style: style, 
-    onEachFeature: onEachFeature 
+    onEachFeature: function (feature, layer) {
+        layer.on("click", function () {
+            mostrarInfoHexagono(feature); 
 }).addTo(map);
 
 var hiveLayer15 = L.geoJson(hive_edomex, { 
     style: style, 
-    onEachFeature: onEachFeature 
+        onEachFeature: function (feature, layer) {
+        layer.on("click", function () {
+            mostrarInfoHexagono(feature);
 }).addTo(map);
 	
-// Leyenda
+// ========================LEYENDA==============================
 var legend = L.control({position: 'bottomright'}); 
 legend.onAdd = function (map) { 
     var div = L.DomUtil.create('div', 'info legend'), 
@@ -410,6 +466,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
