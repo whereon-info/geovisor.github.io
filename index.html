@@ -175,7 +175,7 @@ async function buscarDENUE(){
 document.getElementById('btnBuscar').addEventListener('click',buscarDENUE);
 
 // Control de capas
-const baseLayers = { "OSM": osm };
+const baseLayers = { "OSM": osm, "Base": map };
 const overlays = { "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15, "Resultados DENUE": markersLayer };
 L.control.layers(baseLayers, overlays, {collapsed:true}).addTo(map);
 
@@ -190,3 +190,4 @@ hiveLayer15.addTo(map);
 </script>
 </body>
 </html>
+
