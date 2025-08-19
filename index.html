@@ -122,8 +122,8 @@
                     <th>Nombre</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
-                    <th>Clase</th>
                     <th>Personal ocupado</th>
+                    <th>Clase</th>
                 </tr>
             </thead>
             <tbody id="tablaResultados"></tbody>
@@ -303,6 +303,7 @@ async function buscarDENUE() {
             const popupContent = `
                 <b>${item.Nombre || ''}</b><br>
                 <small>${item.Clase_actividad || ''}</small><br>
+				${item.Estrato || ''}
                 ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
                 ${item.Colonia || ''}, ${item.CP || ''}<br>
                 ${item.Telefono || ''}
@@ -395,6 +396,7 @@ map.addControl(osmGeocoder);
 </script>
 </body>
 </html>
+
 
 
 
