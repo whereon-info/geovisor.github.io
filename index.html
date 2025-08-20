@@ -277,7 +277,8 @@ function onLocationFound(e) {
     const lon = e.latlng.lng;
 
     // Crear marcador draggable
-    userMarker = L.marker([lat, lon], { draggable: true }).addTo(map)
+    userMarker = L.marker([lat, lon], { draggable: true, {icon: L.AwesomeMarkers.icon({
+icon: 'bell', prefix: 'glyphicon', markerColor: 'red'}) }).addTo(map)
         .bindPopup("📍 Arrástrame para conocer la información de otra ubicación").openPopup();
 
     // Actualizar campos al detectar ubicación
@@ -604,6 +605,7 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
+
 
 
 
