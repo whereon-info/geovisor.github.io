@@ -283,6 +283,14 @@ function onLocationFound(e) {
 		icon: 'bell', prefix: 'glyphicon', markerColor: 'red'}) }).addTo(map)
         .bindPopup("📍 Arrástrame para conocer la información de otra ubicación").openPopup();
 
+// Creates a red marker with the coffee icon
+  var redMarker = L.AwesomeMarkers.icon({
+    icon: 'coffee',
+    markerColor: 'red'
+  });
+      
+  L.marker([19.33333333333, -99.4444444444444444], {icon: redMarker}).addTo(map);
+
     // Actualizar campos al detectar ubicación
     document.getElementById("lat").value = lat;
     document.getElementById("lon").value = lon;
@@ -607,6 +615,7 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
+
 
 
 
