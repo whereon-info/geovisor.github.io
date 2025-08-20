@@ -49,11 +49,41 @@
             width: 100%;
         }
         #listado {
-            height: 40vh;
-            overflow-y: auto;
-            background: #181818;
-            border-top: 1px solid #333;
-        }
+        height: 40vh;
+        overflow-y: auto;
+        background: #181818;
+        border-top: 1px solid #333;
+        transition: height 0.3s ease;
+    }
+
+    #listado.minimized {
+        height: 30px; /* solo muestra la barra de título */
+        overflow: hidden;
+    }
+
+    #listado-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #222;
+        padding: 5px 10px;
+        border-bottom: 1px solid #333;
+        cursor: pointer;
+    }
+
+    #listado-header h3 {
+        margin: 0;
+        font-size: 14px;
+        color: #e0e0e0;
+    }
+
+    #btnToggle {
+        background: none;
+        border: none;
+        color: #e0e0e0;
+        font-size: 16px;
+        cursor: pointer;
+    }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -115,20 +145,27 @@
     </div>
 
     <div id="map"></div>
-    <div id="listado">
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Dirección</th>
-                    <th>Teléfono</th>
-                    <th>Clase</th>
-                    <th>Personal ocupado</th>
-                </tr>
-            </thead>
-            <tbody id="tablaResultados"></tbody>
-        </table>
-    </div>
+
+	<!-- Ventana resultados -->
+		<div id="listado">
+		    <div id="listado-header">
+		        <h3>📋 Resultados DENUE</h3>
+		        <button id="btnToggle"><i class="bi bi-dash"></i></button>
+		    </div>
+		    <table>
+		        <thead>
+		            <tr>
+		                <th>Nombre</th>
+		                <th>Dirección</th>
+		                <th>Teléfono</th>
+		                <th>Clase</th>
+		                <th>Personal ocupado</th>
+		            </tr>
+		        </thead>
+		        <tbody id="tablaResultados"></tbody>
+		    </table>
+		</div>
+
 
 <script>
 
@@ -392,9 +429,26 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
 var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
 map.addControl(osmGeocoder);
 
+
+// ========BOTON======================
+    const listado = document.getElementById("listado");
+    const btnToggle = document.getElementById("btnToggle");
+
+    btnToggle.addEventListener("click", () => {
+        listado.classList.toggle("minimized");
+
+        // Cambiar icono entre "-" y "+"
+        if (listado.classList.contains("minimized")) {
+            btnToggle.innerHTML = '<i class="bi bi-plus"></i>';
+        } else {
+            btnToggle.innerHTML = '<i class="bi bi-dash"></i>';
+        }
+    });
+	
 </script>
 </body>
 </html>
+
 
 
 
