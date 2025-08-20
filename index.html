@@ -13,10 +13,6 @@
     
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
-	<link rel="stylesheet" href="css/leaflet.awesome-markers.css">
-	<script src="js/leaflet.awesome-markers.js"></script>
-	
 
 	 <!-- Geocode -->
 		<script src="js/Control.OSMGeocoder.js"></script>
@@ -281,7 +277,7 @@ function onLocationFound(e) {
     const lon = e.latlng.lng;
 
     // Crear marcador draggable
-    userMarker = L.marker([lat, lon], { draggable: true, {icon: L.AwesomeMarkers.icon({
+    userMarker = L.marker([lat, lon], { draggable: true, icon: L.AwesomeMarkers.icon({
 icon: 'bell', prefix: 'glyphicon', markerColor: 'red'}) }).addTo(map)
         .bindPopup("📍 Arrástrame para conocer la información de otra ubicación").openPopup();
 
@@ -609,6 +605,7 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
+
 
 
 
