@@ -107,6 +107,10 @@ const map = L.map('map').setView([19.4326, -99.1332], 12);
 const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; OpenStreetMap contributors'
 }).addTo(map);
+const osm2 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+}).addTo(map);
+    
 
 // Hive CDMX y EDOMEX
 function getColor(d) {
@@ -204,7 +208,7 @@ async function buscarDENUE(){
 document.getElementById('btnBuscar').addEventListener('click',buscarDENUE);
 
 // Control de capas
-const baseLayers = { "OSM": osm, "Base": map };
+const baseLayers = { "OSM": osm, "Base": osm2 };
 const overlays = { "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15, "Resultados DENUE": markersLayer };
 L.control.layers(baseLayers, overlays, {collapsed:true}).addTo(map);
 
@@ -232,5 +236,6 @@ document.querySelectorAll(".tab-btn").forEach(btn=>{
 </script>
 </body>
 </html>
+
 
 
