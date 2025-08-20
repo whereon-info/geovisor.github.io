@@ -54,45 +54,34 @@ th { background: #222; position: sticky; top: 0; }
     <input type="number" id="mts" value="500" />
     <button id="btnBuscar">Buscar</button>
 </div>
-<div style="display:flex; height:calc(100vh - 60px);">
-<div id="map"></div>
-<div id="sidebar" class="collapsed">
-    <button id="toggleSidebar">➡</button>
-    <h2>Detalles</h2>
-</div> 
-    <!-- Tabs -->
-    <div id="tabs">
-        <button class="tab-btn active" data-tab="hexagono">Hexágono</button>
-        <button class="tab-btn" data-tab="denue">DENUE</button>
-    </div>
+    
+<div class="contenedor-principal">
+  <!-- Mapa -->
+  <div id="map"></div>
 
     <!-- Contenedor de pestañas -->
-    <div id="tab-content">
-        <!-- Pestaña Hexágonos -->
-        <div id="hexagono" class="tab-pane active">
-            <div id="info">Haz clic en un hexágono</div>
+          <div id="sidebar" class="collapsed">
+            <h2>Información de hexágono</h2>
+            <div id="sidebar-content">
+              <p>Haz clic en un hexágono para ver detalles</p>
+            </div>
+          </div>
         </div>
 
         <!-- Pestaña DENUE -->
-        <div id="denue" class="tab-pane">
-            <h3>Resultados DENUE</h3>
-            <div id="listado">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Dirección</th>
-                            <th>Teléfono</th>
-                            <th>Personal ocupado</th>
-                            <th>Clase</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaResultados"></tbody>
-                </table>
-            </div>
+        <div id="bottom-panel">
+          <h2>Resultados DENUE</h2>
+          <table id="results-table" border="1">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Clase Actividad</th>
+                <th>Estrato</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
-    </div>
-</div>
 
 
 <script type="text/javascript" src="js/hive_cdmx.js"></script>
@@ -126,27 +115,15 @@ function getColor(d) {
 function style(feature) {
     return { fillColor: getColor(feature.properties.POBADUL), weight: 2, color: 'white', dashArray: '3', fillOpacity: 0.7 };
 }
-function mostrarInfoHexagono(feature) {
-    document.getElementById("info").innerHTML = `
-        <h3>Hexágono</h3>
-        <p><b>ID:</b> ${feature.properties.id}</p>
-        <p><b>Nombre:</b> ${feature.properties.nombre}</p>
-        <p><b>Valor:</b> ${feature.properties.valor}</p>
+function onEachFeature(feature, layer) {
+  layer.on('click', function () {
+    document.getElementById('sidebar-content').innerHTML = `
+      <h3>Hexágono</h3>
+      <p>Colonia: ${feature.properties.colonia}</p>
+      <p>Delegación: ${feature.properties.delegacion}</p>
+      <p>Género: ${feature.properties.genero}</p>
     `;
-
-    // Abrir sidebar y activar pestaña hexágono
-    document.getElementById("sidebar").classList.remove("collapsed");
-    document.getElementById("map").classList.remove("expanded");
-    document.getElementById("toggleSidebar").innerHTML = "⬅";
-    document.querySelectorAll(".tab-btn, .tab-pane").forEach(el=>el.classList.remove("active"));
-    document.querySelector('.tab-btn[data-tab="hexagono"]').classList.add("active");
-    document.getElementById("hexagono").classList.add("active");
-
-    // Centrar mapa
-    if(feature.geometry && feature.geometry.coordinates){
-        const coords = feature.geometry.coordinates[0][0];
-        map.flyTo([coords[1], coords[0]], 15, {duration: 1.0});
-    }
+  });
 }
 
 const hiveLayer09 = L.geoJson(hive_cdmx, { style: style, onEachFeature: (f,l) => l.on("click",()=>mostrarInfoHexagono(f)) });
@@ -210,6 +187,21 @@ async function buscarDENUE(){
 }
 document.getElementById('btnBuscar').addEventListener('click',buscarDENUE);
 
+function mostrarResultados(data) {
+  const tbody = document.querySelector('#results-table tbody');
+  tbody.innerHTML = "";
+  data.forEach(negocio => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${negocio.nom_estab}</td>
+        <td>${negocio.nombre_act}</td>
+        <td>${negocio.estrato}</td>
+      </tr>
+    `;
+  });
+}
+
+
 // Control de capas
 const baseLayers = { "Mapa callejero": osm, "Base oscuro": osm2 };
 const overlays = { "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15, "Resultados DENUE": markersLayer };
@@ -239,6 +231,7 @@ document.querySelectorAll(".tab-btn").forEach(btn=>{
 </script>
 </body>
 </html>
+
 
 
 
