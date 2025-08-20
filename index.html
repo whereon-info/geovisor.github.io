@@ -313,8 +313,8 @@ map.on("locationerror", onLocationError);
 map.locate({ setView: true, maxZoom: 16 });
 
 // ======= TUS CAPAS Y FUNCIONES EXISTENTES =======
-var hive09 = L.geoJson(hive_cdmx).addTo(map);
-var hive15 = L.geoJson(hive_edomex).addTo(map);
+// var hive09 = L.geoJson(hive_cdmx).addTo(map);
+// var hive15 = L.geoJson(hive_edomex).addTo(map);
 
 
 
@@ -336,33 +336,6 @@ function style(feature) {
         fillOpacity: 0.7
     };
 }
-
-	
-function onEachFeature(feature, layer) {
-    if (feature.properties) {
-        const props = feature.properties;
-        const popupContent = `
-            <h3>${props.nomgeo || 'Zona'}</h3>
-            <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
-            <b>Rezago:</b> ${props.REZAGO || 'N/A'}<br><hr>
-            <b>Población total:</b> ${props.pobtot?.toLocaleString() || 0}<br>
-            <b>Población adulta:</b> ${props.POBADUL?.toLocaleString() || 0}<br><hr>
-            <b>Extorsión:</b> ${props["extorsión"] || 0}<br>
-            <b>Narcomenudeo:</b> ${props.narcomenud || 0}<br>
-            <b>Robo a negocio:</b> ${props["robo a neg"] || 0}<br><hr>
-            <b>Total créditos:</b> ${props.TC?.toLocaleString() || 0}<br>
-            <b>Crédito personal:</b> ${props.CRED_PERS?.toLocaleString() || 0}<br>
-            <b>Crédito nómina:</b> ${props.CRED_NOMI?.toLocaleString() || 0}<br>
-            <b>Crédito hipotecario:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}<br>
-            <b>Crédito automotriz:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}<br><hr>
-            <b>Tasa crédito hipotecario:</b> ${props.T_C_HIP || 0}<br>
-            <b>Tasa crédito automotriz:</b> ${props.T_C_AUTO || 0}<br>
-            <b>Tasa tarjetas crédito:</b> ${props.T_TC || 0}
-        `;
-        layer.bindPopup(popupContent);
-    }
-}
-
 
 // Grupo para los marcadores
 let markersLayer = L.featureGroup().addTo(map);
@@ -609,18 +582,10 @@ function onEachFeature(feature, layer) {
     });
 }
 
+hiveLayer09.addTo(map);
+hiveLayer15.addTo(map);
+
+	
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
