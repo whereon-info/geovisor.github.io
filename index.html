@@ -579,35 +579,32 @@ function onEachFeature(feature, layer) {
         const html = `
             <h4>${props.nomgeo || 'Zona'}</h4>
 			<b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
-            <p><b>Población total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
-            <p><b>Población adulta:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
-            <p><b>Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
-            <p><b>Extorsión:</b> ${props["extorsión"] || 0}</p>
-            <p><b>Narcomenudeo:</b> ${props.narcomenud || 0}</p>
-            <p><b>Robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
-            <b>Total créditos:</b> ${props.TC?.toLocaleString() || 0}<br>
-            <b>Crédito personal:</b> ${props.CRED_PERS?.toLocaleString() || 0}<br>
-            <b>Crédito nómina:</b> ${props.CRED_NOMI?.toLocaleString() || 0}<br>
-            <b>Crédito hipotecario:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}<br>
-            <b>Crédito automotriz:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}<br><hr>
-            <b>Tasa crédito hipotecario:</b> ${props.T_C_HIP || 0}<br>
-            <b>Tasa crédito automotriz:</b> ${props.T_C_AUTO || 0}<br>
-            <b>Tasa tarjetas crédito:</b> ${props.T_TC || 0}
+            <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
+            <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
+            <p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
+			
+            <p><b>Incidencia delicitiva municipal en delitos de extorsión:</b> ${props["extorsión"] || 0}</p>
+            <p><b>Incidencia delicitiva municipal en delitos de Narcomenudeo:</b> ${props.narcomenud || 0}</p>
+            <p><b>Incidencia delicitiva municipal en delitos de Robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
+            
+            <p><b>Total de créditos personales a nivel municipal:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
+            <p><b>Total de créditos vía nómina a nivel municipal:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
+            <p><b>Total de créditos hipotecarios a nivel municipal:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
+            <p><b>Total de créditos automotrices a nivel municipal:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
+			<p><b>Total créditos a nivel municipal:</b> ${props.TC?.toLocaleString() || 0}</p><hr>
+   
+            <p><b>Tasa de créditos hipotecarios por cada 10 mil adultos:</b> ${props.T_C_HIP || 0}</p>
+            <p><b>Tasa de créditos automotrices por cada 10 mil adultos:</b> ${props.T_C_AUTO || 0}</p>
+            <p><b>Tasa de tarjetas crédito por cada 10 mil adultos:</b> ${props.T_TC || 0}</p><hr>
         `;
         mostrarEnSidebar(html);
     });
 }
 
-
-
-
-
-
-
-	
 </script>
 </body>
 </html>
+
 
 
 
