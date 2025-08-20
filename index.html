@@ -35,6 +35,10 @@ table { width: 100%; border-collapse: collapse; color: #e0e0e0; }
 th, td { padding: 8px; border-bottom: 1px solid #333; }
 tr:hover { background: #333; cursor: pointer; }
 th { background: #222; position: sticky; top: 0; }
+#tabs { display: flex; margin-bottom: 10px; } .tab-btn {flex: 1;background: #222;border: 1px solid #333;color: #eee;padding: 6px;cursor: pointer;text-align: center;}
+.tab-btn.active { background: #444; font-weight: bold; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
 </style>
 </head>
 <body>
@@ -56,24 +60,41 @@ th { background: #222; position: sticky; top: 0; }
 <div id="sidebar" class="collapsed">
     <button id="toggleSidebar">➡</button>
     <h2>Detalles</h2>
-    <div id="info">Haz clic en un hexágono</div>
-    <hr>
-    <h3>Resultados DENUE</h3>
-    <div id="listado">
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Dirección</th>
-                    <th>Teléfono</th>
-                    <th>Personal ocupado</th>
-                    <th>Clase</th>
-                </tr>
-            </thead>
-            <tbody id="tablaResultados"></tbody>
-        </table>
+    
+    <!-- Tabs -->
+    <div id="tabs">
+        <button class="tab-btn active" data-tab="hexagono">Hexágono</button>
+        <button class="tab-btn" data-tab="denue">DENUE</button>
+    </div>
+
+    <!-- Contenedor de pestañas -->
+    <div id="tab-content">
+        <!-- Pestaña Hexágonos -->
+        <div id="hexagono" class="tab-pane active">
+            <div id="info">Haz clic en un hexágono</div>
+        </div>
+
+        <!-- Pestaña DENUE -->
+        <div id="denue" class="tab-pane">
+            <h3>Resultados DENUE</h3>
+            <div id="listado">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                            <th>Personal ocupado</th>
+                            <th>Clase</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaResultados"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
 
 <script type="text/javascript" src="js/hive_cdmx.js"></script>
 <script type="text/javascript" src="js/hive_edomex.js"></script>
@@ -105,14 +126,22 @@ function mostrarInfoHexagono(feature) {
         <p><b>Nombre:</b> ${feature.properties.nombre}</p>
         <p><b>Valor:</b> ${feature.properties.valor}</p>
     `;
+
+    // Abrir sidebar y activar pestaña hexágono
     document.getElementById("sidebar").classList.remove("collapsed");
     document.getElementById("map").classList.remove("expanded");
     document.getElementById("toggleSidebar").innerHTML = "⬅";
+    document.querySelectorAll(".tab-btn, .tab-pane").forEach(el=>el.classList.remove("active"));
+    document.querySelector('.tab-btn[data-tab="hexagono"]').classList.add("active");
+    document.getElementById("hexagono").classList.add("active");
+
+    // Centrar mapa
     if(feature.geometry && feature.geometry.coordinates){
         const coords = feature.geometry.coordinates[0][0];
         map.flyTo([coords[1], coords[0]], 15, {duration: 1.0});
     }
 }
+
 const hiveLayer09 = L.geoJson(hive_cdmx, { style: style, onEachFeature: (f,l) => l.on("click",()=>mostrarInfoHexagono(f)) });
 const hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: (f,l) => l.on("click",()=>mostrarInfoHexagono(f)) });
 
@@ -187,7 +216,21 @@ map.addControl(osmGeocoder);
 hiveLayer09.addTo(map);
 hiveLayer15.addTo(map);
 
+// ⬇⬇⬇ AQUÍ AGREGAS EL MANEJO DE LAS PESTAÑAS
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        // Quitar activos
+        document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("active"));
+
+        // Activar el clicado
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+});
+    
 </script>
 </body>
 </html>
+
 
