@@ -147,51 +147,68 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 map.addLayer(osm);
 
-
-				function buscarLocalizacion(e) {
-				var mydate = new Date(e.timestamp);
-				L.marker(e.latlng).addTo(map).bindPopup(mydate.toString());
-				}
-				function errorLocalizacion(e) {
-				 alert("No es posible encontrar su ubicación. Es posible que tenga que activar la Geolocation.");
-				}
-				map.on('locationerror', errorLocalizacion);
-				map.on('locationfound', buscarLocalizacion);
-				map.locate({setView: true, maxZoom:16}); 
 	
-var hive = L.geoJson(hive_cdmx).addTo(map);
+// ===== MARCADOR DRAGGABLE CON GEOLOCALIZACIÓN =====
+let userMarker;
 
-	var title = L.control();
-	title.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info');
-		    div.innerHTML +=
-		    '<h1>Estudio de mercado</h1>Análisis de entornos';
-		 return div;
-	};
-	title.addTo(map);
+function onLocationFound(e) {
+    const lat = e.latlng.lat;
+    const lon = e.latlng.lng;
 
-			// Función para definir el color según POBADUL
-			function getColor(d) {
-			    return d > 1000000 ? '#d7191c' :
-			           d > 500000  ? '#fdae61' :
-			           d > 250000  ? '#ffffbf' :
-			           d > 100000  ? '#abdda4' :
-			                        '#2b83ba';
-			}
+    // Crear marcador draggable
+    userMarker = L.marker([lat, lon], { draggable: true }).addTo(map)
+        .bindPopup("📍 Arrástrame para mover tu ubicación").openPopup();
 
-			// Función para definir el estilo de cada polígono
-			function style(feature) {
-			    return {
-			        fillColor: getColor(feature.properties.POBADUL),
-			        weight: 2,
-			        opacity: 1,
-			        color: 'white',
-			        dashArray: '3',
-			        fillOpacity: 0.7
-			    };
-			}
-			
-// Función para popups
+    // Actualizar campos al detectar ubicación
+    document.getElementById("lat").value = lat;
+    document.getElementById("lon").value = lon;
+
+    // Evento para actualizar al mover el marcador
+    userMarker.on("dragend", function (event) {
+        const position = event.target.getLatLng();
+        document.getElementById("lat").value = position.lat;
+        document.getElementById("lon").value = position.lng;
+    });
+
+    map.setView([lat, lon], 15);
+}
+
+function onLocationError(e) {
+    alert("⚠️ No se pudo obtener tu ubicación. Ingresa manualmente las coordenadas.");
+}
+
+map.on("locationfound", onLocationFound);
+map.on("locationerror", onLocationError);
+
+// Solicitar ubicación del navegador
+map.locate({ setView: true, maxZoom: 16 });
+
+// ======= TUS CAPAS Y FUNCIONES EXISTENTES =======
+var hive09 = L.geoJson(hive_cdmx).addTo(map);
+var hive15 = L.geoJson(hive_edomex).addTo(map);
+
+
+
+function getColor(d) {
+    return d > 1000000 ? '#d7191c' :
+           d > 500000  ? '#fdae61' :
+           d > 250000  ? '#ffffbf' :
+           d > 100000  ? '#abdda4' :
+                        '#2b83ba';
+}
+
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.POBADUL),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
+	
 function onEachFeature(feature, layer) {
     if (feature.properties) {
         const props = feature.properties;
@@ -217,54 +234,7 @@ function onEachFeature(feature, layer) {
     }
 }
 
-			
-		// Crear capa GeoJSON con estilo y popup
-			L.geoJson(hive_cdmx, {
-			    style: style,
-			    onEachFeature: onEachFeature
-			}).addTo(map);
 
-
-    var legend = L.control({position: 'bottomright'}); 
-
-	legend.onAdd = function (map) { 
-
-    var div = L.DomUtil.create('div', 'info legend'), 
-        grades = [0, 100000, 250000, 500000, 1000000], 
-        labels = []; 
-
-    // Intervalos de poblacion 
-    for (var i = 0; i < grades.length; i++) { 
-        div.innerHTML += 
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + 
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'); 
-    } 
-    return div; 
-	}; 
-	legend.addTo(map); 
-
-	var myMarker = L.marker([19.28581583157899, -99.40670897151347])	
-	var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]);
-		map.addLayer(myMarker);
-		map.addLayer(myMarker1); 
-
-	
-		var baseLayers = {
-		"Base": osm,
-		"Ortoimagen": map
-		};
-		var overlays = {
-		"Casa": myMarker,
-		"Otro": myMarker1,
-		"Hive": hive,
-		};
-		var control = new L.control.layers(baseLayers, overlays,
-		{collapsed:true});
-		control.addTo(map); 
-
-var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
-map.addControl(osmGeocoder);
-    
 // Grupo para los marcadores
 let markersLayer = L.featureGroup().addTo(map);
 
@@ -297,8 +267,7 @@ function getBootstrapIconFromActividad(clase) {
         popupAnchor: [0, -26]
     });
 } 
-    
-// Buscar datos DENUE
+// Buscar datos DENUE	
 async function buscarDENUE() {
     markersLayer.clearLayers();
     document.getElementById("tablaResultados").innerHTML = "";
@@ -373,27 +342,60 @@ async function buscarDENUE() {
 
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
-var cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
-    cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {attribution: cloudmadeAttribution});
+var hiveLayer09 = L.geoJson(hive_cdmx, { 
+    style: style, 
+    onEachFeature: onEachFeature 
+}).addTo(map);
 
-var map2 = new L.Map('map').addLayer(cloudmade).setView(new L.LatLng(48.5, 2.5), 15);
+var hiveLayer15 = L.geoJson(hive_edomex, { 
+    style: style, 
+    onEachFeature: onEachFeature 
+}).addTo(map);
+	
+// Leyenda
+var legend = L.control({position: 'bottomright'}); 
+legend.onAdd = function (map) { 
+    var div = L.DomUtil.create('div', 'info legend'), 
+        grades = [0, 100000, 250000, 500000, 1000000]; 
+    for (var i = 0; i < grades.length; i++) { 
+        div.innerHTML += 
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + 
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'); 
+    } 
+    return div; 
+}; 
+legend.addTo(map); 
 
-var osmGeocoder = new L.Control.OSMGeocoder();
+// ========================TITULO=========================
+	var title = L.control();
+	title.onAdd = function (map) {
+		var div = L.DomUtil.create('div', 'info');
+		    div.innerHTML +=
+		    '<h1>Estudio de mercado</h1>Análisis de entornos';
+		 return div;
+	};
+	title.addTo(map);	
+	
+	
+// ===== LAYER CONTROL =====
+var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
+var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
+map.addLayer(myMarker); 
+map.addLayer(myMarker1); 
+var baseLayers = { "Base": osm, "Ortoimagen": map }; 
+var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15 }; 
+var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
 
+
+// Geocoder ======================
+var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
 map.addControl(osmGeocoder);
-
-
- var results = L.layerGroup().addTo(map);
- searchControl.on('results', function(data){
- results.clearLayers();
- for (var i = data.results.length - 1; i >= 0; i--) {
- results.addLayer(L.marker(data.results[i].latlng));
- }
- });
 
 </script>
 </body>
 </html>
+
+
 
 
 
