@@ -44,11 +44,17 @@
         button:hover {
             background: #444;
         }
-        #map {
-            height: 60vh;
-            width: 100%;
-        }
-        #listado {
+           #map {
+        height: 60vh;
+        width: 100%;
+        transition: height 0.3s ease;
+    }
+
+    #map.expanded {
+        height: 90vh; /* crece cuando se minimiza el listado */
+    }
+
+    #listado {
         height: 40vh;
         overflow-y: auto;
         background: #181818;
@@ -433,9 +439,11 @@ map.addControl(osmGeocoder);
 // ========BOTON======================
     const listado = document.getElementById("listado");
     const btnToggle = document.getElementById("btnToggle");
+    const mapDiv = document.getElementById("map");
 
     btnToggle.addEventListener("click", () => {
         listado.classList.toggle("minimized");
+        mapDiv.classList.toggle("expanded");
 
         // Cambiar icono entre "-" y "+"
         if (listado.classList.contains("minimized")) {
@@ -443,11 +451,17 @@ map.addControl(osmGeocoder);
         } else {
             btnToggle.innerHTML = '<i class="bi bi-dash"></i>';
         }
+
+        // Redibujar mapa para que se ajuste al nuevo tamaño
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 310);
     });
 	
 </script>
 </body>
 </html>
+
 
 
 
