@@ -1,236 +1,403 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Estudio de mercado a un clic</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Estudio de mercado a un clic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Leaflet CSS y JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="text/javascript" src="js/hive_cdmx.js"></script>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+	 <!-- Geocode -->
+		<script src="js/Control.OSMGeocoder.js"></script>
+		<link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
 
-<!-- Geocode -->
-<script src="js/Control.OSMGeocoder.js"></script>
-<link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
-
-<style>
-body { font-family: Arial, Helvetica, sans-serif; margin: 0; background: #121212; color: #e0e0e0; }
-#controls { padding: 10px; background: #1e1e1e; border-bottom: 1px solid #333; }
-label { margin-right: 5px; }
-input, button { margin: 3px; padding: 5px; background: #2a2a2a; border: 1px solid #444; color: #e0e0e0; }
-button { cursor: pointer; }
-button:hover { background: #444; }
-#map { width: 100%; height: calc(100vh - 60px); transition: width 0.3s; float: left; }
-#sidebar { width: 25%; height: calc(100vh - 60px); float: right; padding: 10px; border-left: 2px solid #333; background: #181818; overflow-y: auto; transition: width 0.3s, padding 0.3s; position: relative; }
-#sidebar.collapsed { width: 0; padding: 0; border-left: none; overflow: hidden; }
-#map.expanded { width: 100%; }
-#sidebar h2 { margin-top: 0; color: #f0f0f0; }
-#toggleSidebar { position: absolute; top: 10px; left: -35px; background: #333; border: none; color: #fff; padding: 6px 8px; cursor: pointer; border-radius: 4px 0 0 4px; font-size: 14px; transition: left 0.3s; }
-#toggleSidebar:hover { background: #444; }
-#listado { max-height: 40vh; overflow-y: auto; background: #181818; border-top: 1px solid #333; }
-table { width: 100%; border-collapse: collapse; color: #e0e0e0; }
-th, td { padding: 8px; border-bottom: 1px solid #333; }
-tr:hover { background: #333; cursor: pointer; }
-th { background: #222; position: sticky; top: 0; }
-#tabs { display: flex; margin-bottom: 10px; } .tab-btn {flex: 1;background: #222;border: 1px solid #333;color: #eee;padding: 6px;cursor: pointer;text-align: center;}
-.tab-btn.active { background: #444; font-weight: bold; }
-.tab-pane { display: none; }
-.tab-pane.active { display: block; }
-</style>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            background: #121212;
+            color: #e0e0e0;
+        }
+        #controls {
+            padding: 10px;
+            background: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+        label { margin-right: 5px; }
+        input, button {
+            margin: 3px;
+            padding: 5px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #e0e0e0;
+        }
+        button {
+            cursor: pointer;
+        }
+        button:hover {
+            background: #444;
+        }
+        #map {
+            height: 60vh;
+            width: 100%;
+        }
+        #listado {
+            height: 40vh;
+            overflow-y: auto;
+            background: #181818;
+            border-top: 1px solid #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #e0e0e0;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #333;
+        }
+        tr:hover {
+            background: #333;
+            cursor: pointer;
+        }
+        th {
+            background: #222;
+            position: sticky;
+            top: 0;
+        }
+        .custom-div-icon {
+            background: transparent;
+            border: none;
+        }
+		  .info {
+		padding: 6px 8px;
+		font: 14px/16px Arial, Helvetica, sans-serif;
+		background: red;
+		background: rgba(186,186,186,0.8);
+		box-shadow: 0 0 15px rgba(0,0,0,0.2);
+		border-radius: 5px;
+	}
+	.info h2 {
+		margin: 0 0 5px;
+		color: #404040;
+	}
+	.legend {
+	    line-height: 18px;
+	    color: #555;
+	}
+	.legend i {
+	    width: 18px;
+	    height: 18px;
+	    float: left;
+	    margin-right: 8px;
+	    opacity: 0.7;
+	}
+    </style>
 </head>
 <body>
+    <div id="controls">
+        <label>Establecimiento:</label>
+        <input type="text" id="condi" value="restaurantes" />
+        <label>Latitud:</label>
+        <input type="text" id="lat" value="19.432650801677962" />
+        <label>Longitud:</label>
+        <input type="text" id="lon" value="-99.13316794583835" />
+        <label>Metros:</label>
+        <input type="number" id="mts" value="500" />
+        <button id="btnBuscar">Buscar</button>
+    </div>
 
-<div id="controls">
-    <label>Establecimiento:</label>
-    <input type="text" id="condi" value="restaurantes" />
-    <label>Latitud:</label>
-    <input type="text" id="lat" value="19.432650801677962" />
-    <label>Longitud:</label>
-    <input type="text" id="lon" value="-99.13316794583835" />
-    <label>Metros:</label>
-    <input type="number" id="mts" value="500" />
-    <button id="btnBuscar">Buscar</button>
-</div>
-    
-<div class="contenedor-principal">
-  <!-- Mapa -->
-  <div id="map"></div>
-
-    <!-- Contenedor de pestañas -->
-          <div id="sidebar" class="collapsed">
-            <h2>Información de hexágono</h2>
-            <div id="sidebar-content">
-              <p>Haz clic en un hexágono para ver detalles</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pestaña DENUE -->
-        <div id="bottom-panel">
-          <h2>Resultados DENUE</h2>
-          <table id="results-table" border="1">
+    <div id="map"></div>
+    <div id="listado">
+        <table>
             <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Clase Actividad</th>
-                <th>Estrato</th>
-              </tr>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Clase</th>
+                    <th>Personal ocupado</th>
+                </tr>
             </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-
-
-<script type="text/javascript" src="js/hive_cdmx.js"></script>
-<script type="text/javascript" src="js/hive_edomex.js"></script>
+            <tbody id="tablaResultados"></tbody>
+        </table>
+    </div>
 
 <script>
+
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
-// Inicializar mapa
-const map = L.map('map').setView([19.4326, -99.1332], 12);
-const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+// Inicializar mapa en modo oscuro
+const map = L.map('map').setView([22.5, -100.5], 5);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    subdomains: 'abcd',
+    maxZoom: 19
 }).addTo(map);
 
-// Base OSM oscuro (Carto Dark)
-const osm2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 20
+var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
 });
-    
 
-// Hive CDMX y EDOMEX
-function getColor(d) {
-    return d > 1000000 ? '#d7191c' :
-           d > 500000  ? '#fdae61' :
-           d > 250000  ? '#ffffbf' :
-           d > 100000  ? '#abdda4' :
-                        '#2b83ba';
-}
-function style(feature) {
-    return { fillColor: getColor(feature.properties.POBADUL), weight: 2, color: 'white', dashArray: '3', fillOpacity: 0.7 };
-}
+map.addLayer(osm);
+
+
+				function buscarLocalizacion(e) {
+				var mydate = new Date(e.timestamp);
+				L.marker(e.latlng).addTo(map).bindPopup(mydate.toString());
+				}
+				function errorLocalizacion(e) {
+				 alert("No es posible encontrar su ubicación. Es posible que tenga que activar la Geolocation.");
+				}
+				map.on('locationerror', errorLocalizacion);
+				map.on('locationfound', buscarLocalizacion);
+				map.locate({setView: true, maxZoom:16}); 
+	
+var hive = L.geoJson(hive_cdmx).addTo(map);
+
+	var title = L.control();
+	title.onAdd = function (map) {
+		var div = L.DomUtil.create('div', 'info');
+		    div.innerHTML +=
+		    '<h1>Estudio de mercado</h1>Análisis de entornos';
+		 return div;
+	};
+	title.addTo(map);
+
+			// Función para definir el color según POBADUL
+			function getColor(d) {
+			    return d > 1000000 ? '#d7191c' :
+			           d > 500000  ? '#fdae61' :
+			           d > 250000  ? '#ffffbf' :
+			           d > 100000  ? '#abdda4' :
+			                        '#2b83ba';
+			}
+
+			// Función para definir el estilo de cada polígono
+			function style(feature) {
+			    return {
+			        fillColor: getColor(feature.properties.POBADUL),
+			        weight: 2,
+			        opacity: 1,
+			        color: 'white',
+			        dashArray: '3',
+			        fillOpacity: 0.7
+			    };
+			}
+			
+// Función para popups
 function onEachFeature(feature, layer) {
-  layer.on('click', function () {
-    document.getElementById('sidebar-content').innerHTML = `
-      <h3>Hexágono</h3>
-      <p>Colonia: ${feature.properties.colonia}</p>
-      <p>Delegación: ${feature.properties.delegacion}</p>
-      <p>Género: ${feature.properties.genero}</p>
-    `;
-  });
+    if (feature.properties) {
+        const props = feature.properties;
+        const popupContent = `
+            <h3>${props.nomgeo || 'Zona'}</h3>
+            <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
+            <b>Rezago:</b> ${props.REZAGO || 'N/A'}<br><hr>
+            <b>Población total:</b> ${props.pobtot?.toLocaleString() || 0}<br>
+            <b>Población adulta:</b> ${props.POBADUL?.toLocaleString() || 0}<br><hr>
+            <b>Extorsión:</b> ${props["extorsión"] || 0}<br>
+            <b>Narcomenudeo:</b> ${props.narcomenud || 0}<br>
+            <b>Robo a negocio:</b> ${props["robo a neg"] || 0}<br><hr>
+            <b>Total créditos:</b> ${props.TC?.toLocaleString() || 0}<br>
+            <b>Crédito personal:</b> ${props.CRED_PERS?.toLocaleString() || 0}<br>
+            <b>Crédito nómina:</b> ${props.CRED_NOMI?.toLocaleString() || 0}<br>
+            <b>Crédito hipotecario:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}<br>
+            <b>Crédito automotriz:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}<br><hr>
+            <b>Tasa crédito hipotecario:</b> ${props.T_C_HIP || 0}<br>
+            <b>Tasa crédito automotriz:</b> ${props.T_C_AUTO || 0}<br>
+            <b>Tasa tarjetas crédito:</b> ${props.T_TC || 0}
+        `;
+        layer.bindPopup(popupContent);
+    }
 }
 
-const hiveLayer09 = L.geoJson(hive_cdmx, { style: style, onEachFeature: (f,l) => l.on("click",()=>mostrarInfoHexagono(f)) });
-const hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: (f,l) => l.on("click",()=>mostrarInfoHexagono(f)) });
-
-// Sidebar toggle
-const sidebar = document.getElementById("sidebar");
-const mapDiv = document.getElementById("map");
-const toggleBtn = document.getElementById("toggleSidebar");
-toggleBtn.addEventListener("click", ()=>{
-    sidebar.classList.toggle("collapsed");
-    mapDiv.classList.toggle("expanded");
-    toggleBtn.innerHTML = sidebar.classList.contains("collapsed") ? "➡":"⬅";
-    setTimeout(()=>map.invalidateSize(),310);
-});
-
-// FeatureGroup para marcadores DENUE
-let markersLayer = L.featureGroup().addTo(map);
-function getBootstrapIconFromActividad(clase){
-    clase = (clase||"").toLowerCase();
-    let iconHTML;
-    if(clase.includes("restaurante")||clase.includes("cafetería")||clase.includes("taquería")) iconHTML='<i class="bi bi-shop" style="font-size:26px;color:orange;"></i>';
-    else if(clase.includes("hotel")||clase.includes("motel")||clase.includes("alojamiento")) iconHTML='<i class="bi bi-building" style="font-size:26px;color:blue;"></i>';
-    else if(clase.includes("escuela")||clase.includes("colegio")||clase.includes("universidad")||clase.includes("capacitación")) iconHTML='<i class="bi bi-mortarboard-fill" style="font-size:26px;color:yellow;"></i>';
-    else if(clase.includes("farmacia")||clase.includes("medicinas")||clase.includes("botica")) iconHTML='<i class="bi bi-capsule-pill" style="font-size:26px;color:green;"></i>';
-    else if(clase.includes("abarrotes")||clase.includes("supermercado")||clase.includes("tienda de autoservicio")) iconHTML='<i class="bi bi-basket3-fill" style="font-size:26px;color:violet;"></i>';
-    else if(clase.includes("hospital")||clase.includes("clínica")||clase.includes("consultorio")) iconHTML='<i class="bi bi-hospital" style="font-size:26px;color:pink;"></i>';
-    else iconHTML='<i class="bi bi-geo-alt-fill" style="font-size:26px;color:red;"></i>';
-    return L.divIcon({html:iconHTML,className:'custom-div-icon',iconSize:[26,26],iconAnchor:[13,26],popupAnchor:[0,-26]});
-}
-
-// Función para buscar DENUE
-async function buscarDENUE(){
-    markersLayer.clearLayers();
-    document.getElementById("tablaResultados").innerHTML="";
-    let condi=document.getElementById('condi').value.trim();
-    const lat=parseFloat(document.getElementById('lat').value.trim());
-    const lon=parseFloat(document.getElementById('lon').value.trim());
-    const mts=parseInt(document.getElementById('mts').value.trim());
-    if(!condi||isNaN(lat)||isNaN(lon)||isNaN(mts)){ alert("Datos inválidos."); return; }
-    const url=`https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
-    try{
-        const resp=await fetch(url);
-        if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const data=await resp.json();
-        if(!Array.isArray(data)||data.length===0){ alert("No se encontraron resultados."); return; }
-        data.forEach(item=>{
-            const latNum=parseFloat(item.Latitud), lonNum=parseFloat(item.Longitud);
-            if(isNaN(latNum)||isNaN(lonNum)) return;
-            const icono=getBootstrapIconFromActividad(item.Clase_actividad);
-            const marker=L.marker([latNum,lonNum],{icon:icono}).bindPopup(`<b>${item.Nombre||''}</b><br><small>${item.Clase_actividad||''}</small><br>${item.Calle||''} ${item.Num_Exterior||''}<br>${item.Colonia||''}, ${item.CP||''}<br>${item.Telefono||''}`);
-            markersLayer.addLayer(marker);
-            const row=document.createElement("tr");
-            row.innerHTML=`<td>${item.Nombre||''}</td><td>${(item.Calle||'')+' '+(item.Num_Exterior||'')+', '+(item.Colonia||'')}</td><td>${item.Telefono||''}</td><td>${item.Estrato||''}</td><td>${item.Clase_actividad||''}</td>`;
-            row.addEventListener("click",()=>{ map.flyTo([latNum,lonNum],18,{duration:1}); marker.openPopup(); });
-            document.getElementById("tablaResultados").appendChild(row);
-        });
-        const bounds=markersLayer.getBounds();
-        if(bounds.isValid()) map.fitBounds(bounds.pad(0.1));
-    } catch(e){ console.error("Error DENUE:",e); alert("Error al consultar la API."); }
-}
-document.getElementById('btnBuscar').addEventListener('click',buscarDENUE);
-
-function mostrarResultados(data) {
-  const tbody = document.querySelector('#results-table tbody');
-  tbody.innerHTML = "";
-  data.forEach(negocio => {
-    tbody.innerHTML += `
-      <tr>
-        <td>${negocio.nom_estab}</td>
-        <td>${negocio.nombre_act}</td>
-        <td>${negocio.estrato}</td>
-      </tr>
-    `;
-  });
-}
+			
+		// Crear capa GeoJSON con estilo y popup
+			L.geoJson(hive_cdmx, {
+			    style: style,
+			    onEachFeature: onEachFeature
+			}).addTo(map);
 
 
-// Control de capas
-const baseLayers = { "Mapa callejero": osm, "Base oscuro": osm2 };
-const overlays = { "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15, "Resultados DENUE": markersLayer };
-L.control.layers(baseLayers, overlays, {collapsed:true}).addTo(map);
+    var legend = L.control({position: 'bottomright'}); 
 
-// Geocoder
+	legend.onAdd = function (map) { 
+
+    var div = L.DomUtil.create('div', 'info legend'), 
+        grades = [0, 100000, 250000, 500000, 1000000], 
+        labels = []; 
+
+    // Intervalos de poblacion 
+    for (var i = 0; i < grades.length; i++) { 
+        div.innerHTML += 
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + 
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'); 
+    } 
+    return div; 
+	}; 
+	legend.addTo(map); 
+
+	var myMarker = L.marker([19.28581583157899, -99.40670897151347])	
+	var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]);
+		map.addLayer(myMarker);
+		map.addLayer(myMarker1); 
+
+	
+		var baseLayers = {
+		"Base": osm,
+		"Ortoimagen": map
+		};
+		var overlays = {
+		"Casa": myMarker,
+		"Otro": myMarker1,
+		"Hive": hive,
+		};
+		var control = new L.control.layers(baseLayers, overlays,
+		{collapsed:true});
+		control.addTo(map); 
+
 var osmGeocoder = new L.Control.OSMGeocoder({placeholder: 'Escribir dirección...'});
 map.addControl(osmGeocoder);
-
-// Agregar capas por defecto
-hiveLayer09.addTo(map);
-hiveLayer15.addTo(map);
-
-// ⬇⬇⬇ AQUÍ AGREGAS EL MANEJO DE LAS PESTAÑAS
-document.querySelectorAll(".tab-btn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-        // Quitar activos
-        document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-        document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("active"));
-
-        // Activar el clicado
-        btn.classList.add("active");
-        document.getElementById(btn.dataset.tab).classList.add("active");
-    });
-});
     
+// Grupo para los marcadores
+let markersLayer = L.featureGroup().addTo(map);
+
+// Función para obtener icono según la clase de actividad
+function getBootstrapIconFromActividad(clase) {
+    clase = (clase || "").toLowerCase();
+    let iconHTML;
+
+    if (clase.includes("restaurante") || clase.includes("cafetería") || clase.includes("taquería")) {
+        iconHTML = '<i class="bi bi-shop" style="font-size: 26px; color: orange;"></i>';
+    } else if (clase.includes("hotel") || clase.includes("motel") || clase.includes("alojamiento")) {
+        iconHTML = '<i class="bi bi-building" style="font-size: 26px; color: blue;"></i>';
+    } else if (clase.includes("escuela") || clase.includes("colegio") || clase.includes("universidad") || clase.includes("capacitación")) {
+        iconHTML = '<i class="bi bi-mortarboard-fill" style="font-size: 26px; color: yellow;"></i>';
+    } else if (clase.includes("farmacia") || clase.includes("medicinas") || clase.includes("botica")) {
+        iconHTML = '<i class="bi bi-capsule-pill" style="font-size: 26px; color: green;"></i>';
+    } else if (clase.includes("abarrotes") || clase.includes("supermercado") || clase.includes("tienda de autoservicio")) {
+        iconHTML = '<i class="bi bi-basket3-fill" style="font-size: 26px; color: violet;"></i>';
+    } else if (clase.includes("hospital") || clase.includes("clínica") || clase.includes("consultorio")) {
+        iconHTML = '<i class="bi bi-hospital" style="font-size: 26px; color: pink;"></i>';
+    } else {
+        iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 26px; color: red;"></i>';
+    }
+
+    return L.divIcon({
+        html: iconHTML,
+        className: 'custom-div-icon',
+        iconSize: [26, 26],
+        iconAnchor: [13, 26],
+        popupAnchor: [0, -26]
+    });
+} 
+    
+// Buscar datos DENUE
+async function buscarDENUE() {
+    markersLayer.clearLayers();
+    document.getElementById("tablaResultados").innerHTML = "";
+
+    let condi = document.getElementById('condi').value.trim();
+    const lat = parseFloat(document.getElementById('lat').value.trim());
+    const lon = parseFloat(document.getElementById('lon').value.trim());
+    const mts = parseInt(document.getElementById('mts').value.trim());
+
+    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
+        alert("Por favor ingresa datos válidos.");
+        return;
+    }
+
+    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+
+    try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            alert("No se encontraron resultados.");
+            return;
+        }
+
+        data.forEach(item => {
+            const latNum = parseFloat(item.Latitud);
+            const lonNum = parseFloat(item.Longitud);
+            if (isNaN(latNum) || isNaN(lonNum)) return;
+
+            const popupContent = `
+                <b>${item.Nombre || ''}</b><br>
+                <small>${item.Clase_actividad || ''}</small><br>
+                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
+                ${item.Colonia || ''}, ${item.CP || ''}<br>
+                ${item.Telefono || ''}
+            `;
+
+            // Icono basado en la Clase_actividad real
+            const icono = getBootstrapIconFromActividad(item.Clase_actividad);
+
+            const marker = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
+            markersLayer.addLayer(marker);
+
+            // Agregar a tabla
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${item.Nombre || ''}</td>
+                <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
+                <td>${item.Telefono || ''}</td>
+                <td>${item.Estrato || ''}</td>
+                <td>${item.Clase_actividad || ''}</td>
+            `;
+            row.addEventListener("click", () => {
+                map.setView([latNum, lonNum], 18);
+                marker.openPopup();
+            });
+            document.getElementById("tablaResultados").appendChild(row);
+        });
+
+        const bounds = markersLayer.getBounds();
+        if (bounds.isValid()) {
+            map.fitBounds(bounds.pad(0.1));
+        }
+
+    } catch (error) {
+        console.error("Error consultando DENUE:", error);
+        alert("Error al consultar la API.");
+    }
+}
+
+document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+
+var cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+    cloudmade = new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {attribution: cloudmadeAttribution});
+
+var map2 = new L.Map('map').addLayer(cloudmade).setView(new L.LatLng(48.5, 2.5), 15);
+
+var osmGeocoder = new L.Control.OSMGeocoder();
+
+map.addControl(osmGeocoder);
+
+
+ var results = L.layerGroup().addTo(map);
+ searchControl.on('results', function(data){
+ results.clearLayers();
+ for (var i = data.results.length - 1; i >= 0; i--) {
+ results.addLayer(L.marker(data.results[i].latlng));
+ }
+ });
+
 </script>
 </body>
 </html>
+
+
+
+
 
 
 
