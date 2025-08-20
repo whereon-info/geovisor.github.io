@@ -583,9 +583,9 @@ function onEachFeature(feature, layer) {
             <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
             <p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
 			
-            <p><b>Incidencia delicitiva municipal en delitos de extorsión:</b> ${props["extorsión"] || 0}</p>
-            <p><b>Incidencia delicitiva municipal en delitos de Narcomenudeo:</b> ${props.narcomenud || 0}</p>
-            <p><b>Incidencia delicitiva municipal en delitos de Robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
+            <p><b>Incidencia delicitiva municipal relacionada a extorsión:</b> ${props["extorsión"] || 0}</p>
+            <p><b>Incidencia delicitiva municipal relacionada a narcomenudeo:</b> ${props.narcomenud || 0}</p>
+            <p><b>Incidencia delicitiva municipal relacionada a robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
             
             <p><b>Total de créditos personales a nivel municipal:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
             <p><b>Total de créditos vía nómina a nivel municipal:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
@@ -604,23 +604,5 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
