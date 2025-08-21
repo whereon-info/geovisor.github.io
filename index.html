@@ -216,10 +216,13 @@
         <label>Metros:</label>
         <input type="number" id="mts" value="500" />
         <button id="btnBuscar">Buscar</button>
+		<button id="btnExportar">Exportar a PDF</button>
     </div>
 
     <div id="map"></div>
 	<script src="js/leaflet-measure.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	
 	<!-- Ventana resultados -->
 		<div id="listado">
 		    <div id="listado-header">
@@ -443,6 +446,31 @@ async function buscarDENUE() {
     }
 }
 
+////////////////////////////////////////// Exportar a PDF
+        async function exportarPDF() {
+            const { jsPDF } = window.jspdf;
+            let pdf = new jsPDF('l', 'pt', 'a4');
+
+            // Captura de pantalla de todo el contenedor
+            const container = document.querySelector("#container");
+            let canvas = await html2canvas(container, { useCORS: true });
+
+            let imgData = canvas.toDataURL('image/png');
+            let imgProps = pdf.getImageProperties(imgData);
+
+            // Ajustar la imagen al ancho del PDF
+            let pdfWidth = pdf.internal.pageSize.getWidth();
+            let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save("mapa_denue.pdf");
+        }
+
+        document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+        document.getElementById('btnExportar').addEventListener('click', exportarPDF);
+
+//////////////////////////////////////////////////////////////////////////////////////	
+	
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 var hiveLayer09 = L.geoJson(hive_cdmx, { 
@@ -605,6 +633,7 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
 
 
