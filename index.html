@@ -454,7 +454,7 @@ async function buscarDENUE() {
             let pdf = new jsPDF('l', 'pt', 'a4');
 
             // Captura de pantalla de todo el contenedor
-            const container = document.querySelector("#container");
+            const container = document.body;
             let canvas = await html2canvas(container, { useCORS: true });
 
             let imgData = canvas.toDataURL('image/png');
@@ -635,6 +635,7 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
 
 
