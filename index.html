@@ -19,6 +19,7 @@
 	 <!-- Geocode -->
 		<script src="js/Control.OSMGeocoder.js"></script>
 		<link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
+		<link rel="stylesheet" href="css/leaflet-measure.css">
 
     <style>
         body {
@@ -585,7 +586,24 @@ function onEachFeature(feature, layer) {
 hiveLayer09.addTo(map);
 hiveLayer15.addTo(map);
 
+	L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+	var measureControl = new L.Control.Measure({
+		position: 'topleft',
+		primaryLengthUnit: 'meters',
+		secondaryLengthUnit: 'kilometers',
+		primaryAreaUnit: 'sqmeters',
+		secondaryAreaUnit: 'hectares'
+	});
+	measureControl.addTo(map);
+	document.getElementsByClassName('leaflet-control-measure-toggle')[0].innerHTML = '';
+	document.getElementsByClassName('leaflet-control-measure-toggle')[0].className += ' fas fa-ruler';
+	var bounds_group = new L.featureGroup([]);
+	function setBounds() {
+	}
+
+
 	
 </script>
 </body>
 </html>
+
