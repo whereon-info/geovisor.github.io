@@ -586,25 +586,26 @@ function onEachFeature(feature, layer) {
 hiveLayer09.addTo(map);
 hiveLayer15.addTo(map);
 
-	var measureControl = new L.Control.Measure({
-		position: 'topleft',
-		primaryLengthUnit: 'meters',
-		secondaryLengthUnit: 'kilometers',
-		primaryAreaUnit: 'sqmeters',
-		secondaryAreaUnit: 'hectares'
-	});
-	measureControl.addTo(map);
-	document.getElementsByClassName('leaflet-control-measure-toggle')[0].innerHTML = '';
-	document.getElementsByClassName('leaflet-control-measure-toggle')[0].className += ' fas fa-ruler';
-	var bounds_group = new L.featureGroup([]);
-	function setBounds() {
-	}
+var measureControl = new L.Control.Measure({
+    position: 'topleft',
+    primaryLengthUnit: 'meters',
+    secondaryLengthUnit: 'kilometers',
+    primaryAreaUnit: 'sqmeters',
+    secondaryAreaUnit: 'hectares'
+});
+measureControl.addTo(map);
+
+// Reemplazar ícono del botón con Bootstrap Icons
+let measureBtn = document.getElementsByClassName('leaflet-control-measure-toggle')[0];
+measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
+
 
 
 	
 </script>
 </body>
 </html>
+
 
 
 
