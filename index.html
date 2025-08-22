@@ -22,6 +22,7 @@
 		<script src="js/Control.OSMGeocoder.js"></script>
 		<link rel="stylesheet" href="css/Control.OSMGeocoder.css" />
 		<link rel="stylesheet" href="css/leaflet-measure.css">
+		<link rel="stylesheet" href="css/leaflet-search.css">
 
     <style>
         body {
@@ -223,6 +224,7 @@
 
     <div id="map"></div>
 	<script src="js/leaflet-measure.js"></script>
+	<script src="js/leaflet-search.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 	
 	<!-- Ventana resultados -->
@@ -630,11 +632,45 @@ let measureBtn = document.getElementsByClassName('leaflet-control-measure-toggle
 measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 
 
+//======================SEARCH==========================================	
+	var search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
+	search.classList.add("leaflet-control-search")
+	search.style.display = "flex";
+	search.style.backgroundColor="rgba(255,255,255,0.5)" 
+
+	// Créer le nouvel élément bouton
+	var button = document.createElement("div");
+	button.id = "gcd-button-control";
+	button.className = "gcd-gl-btn fa fa-search search-button";
+
+	// Ajouter le bouton à l'élément parent
+	search.insertBefore(button, search.firstChild);
+	last = search.lastChild;
+	last.style.display = "none";
+	button.addEventListener("click", function (e) {
+		if (last.style.display === "none") {
+			last.style.display = "block";
+		} else {
+			last.style.display = "none";
+		}
+	});
+	setBounds();
+	map.addControl(new L.Control.Search({
+		layer: layer_TheHive_1,
+		initial: false,
+		hideMarkerOnCollapse: true,
+		propertyName: 'id'}));
+	if (typeof url === 'undefined') {
+		document.getElementsByClassName('search-button')[0].className += ' fa fa-binoculars';
+	} else {
+		document.getElementsByClassName('search-button')[1].className += ' fa fa-binoculars';
+	}
 
 	
 </script>
 </body>
 </html>
+
 
 
 
