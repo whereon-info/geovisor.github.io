@@ -629,7 +629,9 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 
 
 //======================SEARCH==========================================	
-var search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
+
+	var photonControl = new L.Control.Photon({ url: 'https://photon.komoot.io/' }).addTo(map);
+	var search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
 
     // Check if the element was found
     if (search) {
@@ -654,6 +656,7 @@ var search = document.getElementsByClassName("leaflet-photon leaflet-control")[0
 </script>
 </body>
 </html>
+
 
 
 
