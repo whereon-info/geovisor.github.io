@@ -53,28 +53,42 @@
             background: #444;
         }
 		
-           #map {
-        height: 60vh;
-        width: 100%;
-        transition: height 1.0s ease;
-    }
+	#main {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 50px); /* altura total menos la barra de controles */
+  width: 100%;
+}
 
-    #map.expanded {
-        height: 90vh; /* crece cuando se minimiza el listado */
-    }
+/* mapa ocupa lo que quede disponible */
+#map {
+  flex: 1;
+  transition: all 0.5s ease;
+}
 
-    #listado {
-        height: 40vh;
-        overflow-y: auto;
-        background: #181818;
-        border-top: 1px solid #333;
-        transition: height 1.0s ease;
-    }
+/* listado abajo como está */
+#listado {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40vh;
+  transition: height 0.5s ease;
+}
 
-    #listado.minimized {
-        height: 30px; /* solo muestra la barra de título */
-        overflow: hidden;
-    }
+/* sidebar en el lado derecho */
+#sidebar {
+  width: 300px;
+  background: #181818;
+  border-left: 1px solid #333;
+  overflow-y: auto;
+  transition: margin-right 0.5s ease;
+}
+
+/* estado cerrado → sidebar se oculta y el mapa/listado se expanden */
+#sidebar.minimized {
+  margin-right: -300px;
+}
 
     #listado-header {
         display: flex;
@@ -145,24 +159,6 @@
 	    margin-right: 8px;
 	    opacity: 0.7;
 	}
-	    /* Sidebar lateral */
-    #sidebar {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 300px;
-        height: 100%;
-        background: #181818;
-        border-left: 1px solid #333;
-        overflow-y: auto;
-        transition: transform 1.0s ease;
-        z-index: 1000;
-        transform: translateX(0); /* 0 visible, 100% oculto */
-    }
-
-    #sidebar.minimized {
-        transform: translateX(100%);
-    }
 
     #sidebar-header {
         display: flex;
@@ -232,7 +228,8 @@
         <button id="btnBuscar">Buscar</button>
 		<button id="btnExportar">Exportar a PDF</button>
     </div>
-
+	
+	<div id="main">
     <div id="map"></div>
 	<script src="js/leaflet-measure.js"></script>
 	<script src="js/leaflet-search.js"></script>
@@ -259,18 +256,18 @@
 		    </table>
 		</div>
 
-			<!-- Sidebar lateral -->
+	<!-- Sidebar lateral -->
 		<div id="sidebar">
 		    <div id="sidebar-header">
 		        <h3>Información</h3>
 		        <button id="btnSidebarToggle"><i class="bi bi-x"></i></button>
 		    </div>
-		    <div id="sidebar-content">
+	<div id="sidebar-content">
 		        <!-- Aquí se cargará la info de DENUE y geojson -->
 		        <p>Haz clic en un marcador o en un área para ver los detalles.</p>
 		    </div>
 		</div>
-
+</div>
 
 <script>
 
@@ -693,6 +690,7 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
 
 
