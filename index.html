@@ -210,12 +210,12 @@
 
     #sidebar th {background: #222;position: sticky; top: 0;}
 
-	/*#logo-mapa {
+	#logo-mapa {
     position: absolute;
     bottom: 10px;   /* separación desde abajo */
     left: 10px;     /* separación desde la izquierda */
     z-index: 1000;  /* asegura que quede sobre el mapa */
-	}*/
+	}
 	
 	#logo-mapa img {
 	    width: 100px;   /* ajusta tamaño */
@@ -240,16 +240,15 @@
 		<button id="btnExportar">Exportar a PDF</button>
     </div>
 
-		<!-- Logo -->
-	<div id="logo-mapa">
-  	<img src="images/WhereOn-Logo-Color-Vrt.png" alt="Logo" />
-	</div>
-
     <div id="map"></div>
 	<script src="js/leaflet-measure.js"></script>
 	<script src="js/leaflet-search.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-	<img src="images/WhereOn-Logo-Color-Vrt.png" alt="Logo" />
+
+	<!-- Logo -->
+	<div id="logo-mapa">
+  	<img src="images/WhereOn-Logo-Color-Vrt.png" alt="Logo" />
+	</div>
 
 	
 	<!-- Ventana resultados -->
@@ -694,6 +693,7 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
 
 
