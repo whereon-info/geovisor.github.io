@@ -211,17 +211,9 @@
 
     #sidebar th {background: #222;position: sticky; top: 0;}
 
-	#logo-mapa {
-    position: absolute;
-    bottom: 10px;   /* separación desde abajo */
-    left: 10px;     /* separación desde la izquierda */
-    z-index: 1000;  /* asegura que quede sobre el mapa */
-	}
-	
-	#logo-mapa img {
-	    width: 100px;   /* ajusta tamaño */
-	    opacity: 0.5;  /* opcional, un poco transparente */
-	}
+.logo-leaflet {
+    padding: 5px;
+}
 	
     </style>
 </head>
@@ -246,12 +238,7 @@
 	<script src="js/leaflet-search.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-	<!-- Logo -->
-	<div id="logo-mapa">
-  	<img src="images/WhereOn-Logo-Color-Vrt.png" alt="Logo" />
-	</div>
 
-	
 	<!-- Ventana resultados -->
 		<div id="listado">
 		    <div id="listado-header">
@@ -288,6 +275,17 @@
 <script>
 
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+
+// Logo
+	var logoControl = L.control({ position: "bottomleft" });
+
+logoControl.onAdd = function (map) {
+    var div = L.DomUtil.create("div", "logo-leaflet");
+    div.innerHTML = '<img src="logo.png" style="width:80px; opacity:0.9;">';
+    return div;
+};
+
+logoControl.addTo(map);
 
 // Inicializar mapa en modo oscuro
 const map = L.map('map').setView([22.5, -100.5], 5);
@@ -694,6 +692,7 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
 
 
