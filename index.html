@@ -45,12 +45,23 @@
             color: #e0e0e0;
         }
 		
-        button {cursor: pointer;}
-        button:hover {background: #444;        }
+        button {
+            cursor: pointer;
+        }
 		
-    #map {height: 60vh; width: 100%; transition: height 1.0s ease;}
+        button:hover {
+            background: #444;
+        }
+		
+           #map {
+        height: 60vh;
+        width: 100%;
+        transition: height 1.0s ease;
+    }
 
-    #map.expanded {height: 90vh; /* crece cuando se minimiza el listado */    }
+    #map.expanded {
+        height: 90vh; /* crece cuando se minimiza el listado */
+    }
 
     #listado {
         height: 40vh;
@@ -137,7 +148,6 @@
 	    /* Sidebar lateral */
     #sidebar {
         position: fixed;
-		display: flex;
         top: 0;
         right: 0;
         width: 300px;
@@ -224,14 +234,13 @@
     </div>
 
     <div id="map"></div>
-	
 	<script src="js/leaflet-measure.js"></script>
 	<script src="js/leaflet-search.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
 	<!-- Ventana resultados -->
-	<div id="listado">
+		<div id="listado">
 		    <div id="listado-header">
 		        <h3>📋 Resultados DENUE</h3>
 		        <button id="btnToggle"><i class="bi bi-dash"></i></button>
@@ -248,24 +257,26 @@
 		        </thead>
 		        <tbody id="tablaResultados"></tbody>
 		    </table>
-	</div>
+		</div>
 
-	<!-- Sidebar lateral -->
-	<div id="sidebar">
-		<div id="sidebar-header">
+			<!-- Sidebar lateral -->
+		<div id="sidebar">
+		    <div id="sidebar-header">
 		        <h3>Información</h3>
 		        <button id="btnSidebarToggle"><i class="bi bi-x"></i></button>
 		    </div>
 		    <div id="sidebar-content">
 		        <!-- Aquí se cargará la info de DENUE y geojson -->
 		        <p>Haz clic en un marcador o en un área para ver los detalles.</p>
+		    </div>
 		</div>
-	</div>
 
 
 <script>
 
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+
+
 
 // Inicializar mapa en modo oscuro
 const map = L.map('map').setView([22.5, -100.5], 5);
@@ -682,18 +693,3 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
