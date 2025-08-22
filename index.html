@@ -25,12 +25,17 @@
 		<link rel="stylesheet" href="css/leaflet-search.css">
 
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            background: #121212;
-            color: #e0e0e0;
-        }
+		body {
+		    font-family: Arial, Helvetica, sans-serif;
+		    margin: 0;
+		    background: #121212;
+		    color: #e0e0e0;
+		    display: grid;
+		    grid-template-rows: auto 1fr; /* fila de controles arriba, contenido abajo */
+		    grid-template-columns: 1fr;
+		    height: 100vh;
+		}
+		
         #controls {
             padding: 10px;
             background: #1e1e1e;
@@ -50,28 +55,22 @@
         button:hover {
             background: #444;
         }
-           #map {
-        height: 60vh;
-        width: 100%;
-        transition: height 0.3s ease;
-    }
-
-    #map.expanded {
-        height: 90vh; /* crece cuando se minimiza el listado */
-    }
-
-    #listado {
-        height: 40vh;
-        overflow-y: auto;
-        background: #181818;
-        border-top: 1px solid #333;
-        transition: height 0.3s ease;
-    }
-
-    #listado.minimized {
-        height: 30px; /* solo muestra la barra de título */
-        overflow: hidden;
-    }
+		#map {
+		    width: 100%;
+		    height: 100%;
+		}
+		
+		#listado {
+		    height: 100%;
+		    overflow-y: auto;
+		    background: #181818;
+		    border-left: 1px solid #333;
+		}
+		
+		    #listado.minimized {
+		        height: 30px; /* solo muestra la barra de título */
+		        overflow: hidden;
+		    }
 
     #listado-header {
         display: flex;
@@ -142,19 +141,14 @@
 	    opacity: 0.7;
 	}
 	    /* Sidebar lateral */
-    #sidebar {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 300px;
-        height: 100%;
-        background: #181818;
-        border-left: 1px solid #333;
-        overflow-y: auto;
-        transition: transform 0.3s ease;
-        z-index: 1000;
-        transform: translateX(0); /* 0 visible, 100% oculto */
-    }
+	#sidebar {
+	    position: relative; /* ya no fixed */
+	    height: 100%;
+	    background: #181818;
+	    border-left: 1px solid #333;
+	    overflow-y: auto;
+	    transition: transform 0.3s ease;
+	}
 
     #sidebar.minimized {
         transform: translateX(100%);
@@ -670,6 +664,7 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
 
 
