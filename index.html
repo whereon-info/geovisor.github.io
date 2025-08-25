@@ -33,9 +33,7 @@
             background: #121212;
             color: #e0e0e0;
         }
-		
         #controls {padding: 10px; background: #1e1e1e; border-bottom: 1px solid #333;}
-		
         label { margin-right: 5px; }
         input, button {
             margin: 3px;
@@ -44,182 +42,83 @@
             border: 1px solid #444;
             color: #e0e0e0;
         }
-		
-        button {
+        button { cursor: pointer; }
+        button:hover { background: #444; }
+
+        #map { height: 60vh; width: 100%; transition: height 1.0s ease; }
+        #map.expanded { height: 90vh; }
+
+        #listado {
+            display: none; /* oculto por defecto */
+            height: 40vh;
+            overflow-y: auto;
+            background: #181818;
+            border-top: 1px solid #333;
+            transition: height 1.0s ease;
+        }
+        #listado.minimized { height: 30px; overflow: hidden; }
+
+        #listado-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #222;
+            padding: 5px 10px;
+            border-bottom: 1px solid #333;
             cursor: pointer;
         }
-		
-        button:hover {
-            background: #444;
-        }
-		
-           #map {
-        height: 60vh;
-        width: 100%;
-        transition: height 1.0s ease;
-    }
-
-    #map.expanded {
-        height: 90vh; /* crece cuando se minimiza el listado */
-    }
-
-	 #listado {
-	    display: none;
-	    height: 40vh;
-	    overflow-y: auto;
-	    background: #181818;
-	    border-top: 1px solid #333;
-	    transition: height 1.0s ease;
-	}
-
-
-    #listado.minimized {
-        height: 30px; /* solo muestra la barra de título */
-        overflow: hidden;
-    }
-
-    #listado-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #222;
-        padding: 5px 10px;
-        border-bottom: 1px solid #333;
-        cursor: pointer;
-    }
-
-    #listado-header h3 {
-        margin: 0;
-        font-size: 14px;
-        color: #e0e0e0;
-    }
-
-    #btnToggle {
-        background: none;
-        border: none;
-        color: #e0e0e0;
-        font-size: 12px;
-        cursor: pointer;
-		transition: height 1.0s ease
-    }
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        #listado-header h3 { margin: 0; font-size: 14px; color: #e0e0e0; }
+        #btnToggle {
+            background: none;
+            border: none;
             color: #e0e0e0;
+            font-size: 12px;
+            cursor: pointer;
         }
-        th, td {
-            padding: 8px;
+
+        table { width: 100%; border-collapse: collapse; color: #e0e0e0; }
+        th, td { padding: 8px; border-bottom: 1px solid #333; }
+        tr:hover { background: #333; cursor: pointer; }
+        th { background: #222; position: sticky; top: 0; }
+
+        .custom-div-icon { background: transparent; border: none; }
+
+        /* Sidebar lateral */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background: #181818;
+            border-left: 1px solid #333;
+            overflow-y: auto;
+            transition: transform 1.0s ease;
+            z-index: 1000;
+            transform: translateX(0);
+        }
+        #sidebar.minimized { transform: translateX(100%); }
+        #sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #222;
+            padding: 10px;
             border-bottom: 1px solid #333;
         }
-        tr:hover {
-            background: #333;
+        #sidebar-header h3 { margin: 0; font-size: 16px; color: #e0e0e0; }
+        #btnSidebarToggle {
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 18px;
             cursor: pointer;
         }
-        th {
-            background: #222;
-            position: sticky;
-            top: 0;
-        }
-        .custom-div-icon {
-            background: transparent;
-            border: none;
-        }
-		  .info {
-		padding: 6px 8px;
-		font: 14px/16px Arial, Helvetica, sans-serif;
-		background: red;
-		background: rgba(186,186,186,0.8);
-		box-shadow: 0 0 15px rgba(0,0,0,0.2);
-		border-radius: 5px;
-	}
-	.info h2 {
-		margin: 0 0 5px;
-		color: #404040;
-	}
-	.legend {
-	    line-height: 18px;
-	    color: #555;
-	}
-	.legend i {
-	    width: 18px;
-	    height: 18px;
-	    float: left;
-	    margin-right: 8px;
-	    opacity: 0.7;
-	}
-	    /* Sidebar lateral */
-    #sidebar {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 300px;
-        height: 100%;
-        background: #181818;
-        border-left: 1px solid #333;
-        overflow-y: auto;
-        transition: transform 1.0s ease;
-        z-index: 1000;
-        transform: translateX(0); /* 0 visible, 100% oculto */
-    }
+        #sidebar-content { padding: 10px; font-size: 14px; color: #e0e0e0; }
 
-    #sidebar.minimized {
-        transform: translateX(100%);
-    }
-
-    #sidebar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #222;
-        padding: 10px;
-        border-bottom: 1px solid #333;
-    }
-
-    #sidebar-header h3 {
-        margin: 0;
-        font-size: 16px;
-        color: #e0e0e0;
-    }
-
-    #btnSidebarToggle {
-        background: none;
-        border: none;
-        color: #e0e0e0;
-        font-size: 18px;
-        cursor: pointer;
-    }
-
-    #sidebar-content {
-        padding: 10px;
-        font-size: 14px;
-        color: #e0e0e0;
-    }
-
-    #sidebar table {
-        width: 100%;
-        border-collapse: collapse;
-        color: #e0e0e0;
-    }
-
-    #sidebar th, #sidebar td {
-        padding: 6px;
-        border-bottom: 1px solid #333;
-    }
-
-    #sidebar tr:hover {
-        background: #333;
-        cursor: pointer;
-    }
-
-    #sidebar th {background: #222;position: sticky; top: 0;}
-
-.logo-leaflet {
-    padding: 5px;
-}
-	
+        .logo-leaflet { padding: 5px; }
     </style>
 </head>
-
 
 <body>
     <div id="controls">
@@ -248,13 +147,11 @@
 		        <button id="btnSidebarToggle"><i class="bi bi-x"></i></button>
 		    </div>
 		    <div id="sidebar-content">
-		        <!-- Aquí se cargará la info de DENUE y geojson -->
 		        <p>Haz clic en un marcador o en un área para ver los detalles.</p>
 		    </div>
 		</div>
 	</aside>
 
-	
 	<!-- Ventana resultados -->
 	<footer>
 		<div id="listado">
@@ -277,13 +174,10 @@
 		</div>
 	<footer>
 
-
-		
 <script>
-
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
-// Inicializar mapa en modo oscuro
+// ================== MAPA ===================
 const map = L.map('map').setView([22.5, -100.5], 5);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap contributors',
@@ -291,70 +185,10 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19
 }).addTo(map);
 
-var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-});
-
+var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 map.addLayer(osm);
 
-//======================= Logo
-	var logoControl = L.control({ position: "bottomleft" });
-
-logoControl.onAdd = function (map) {
-    var div = L.DomUtil.create("div", "logo-leaflet");
-    div.innerHTML = '<img src="images/WhereOn-Logo-Color-Vrt.png" style="width:80px; opacity:0.9;">';
-    return div;
-};
-
-logoControl.addTo(map);
-	
-// ===== MARCADOR DRAGGABLE CON GEOLOCALIZACIÓN =====
-let userMarker;
-
-function onLocationFound(e) {
-    const lat = e.latlng.lat;
-    const lon = e.latlng.lng;
-
-// Crear marcador draggable
-    var userMarker = L.marker([lat, lon], { draggable: true, icon: L.AwesomeMarkers.icon({
-		icon: 'bell', prefix: 'glyphicon', markerColor: 'red'}) }).addTo(map)
-        .bindPopup("📍 Arrástrame para conocer la información de otra ubicación").openPopup();
-
-// Creates a red marker with the coffee icon
-  var redMarker = L.AwesomeMarkers.icon({icon: 'coffee', markerColor: 'red'});
-      
-  L.marker([19.33333333333, -99.4444444444444444], {icon: redMarker}).addTo(map);
-
-    // Actualizar campos al detectar ubicación
-    document.getElementById("lat").value = lat;
-    document.getElementById("lon").value = lon;
-
-    // Evento para actualizar al mover el marcador
-    userMarker.on("dragend", function (event) {
-        const position = event.target.getLatLng();
-        document.getElementById("lat").value = position.lat;
-        document.getElementById("lon").value = position.lng;
-    });
-
-    map.setView([lat, lon], 15);
-}
-
-function onLocationError(e) {
-    alert("⚠️ No se pudo obtener tu ubicación. Ingresa manualmente las coordenadas.");
-}
-
-map.on("locationfound", onLocationFound);
-map.on("locationerror", onLocationError);
-
-// Solicitar ubicación del navegador
-map.locate({ setView: true, maxZoom: 16 });
-
-// ======= TUS CAPAS Y FUNCIONES EXISTENTES =======
-// var hive09 = L.geoJson(hive_cdmx).addTo(map);
-// var hive15 = L.geoJson(hive_edomex).addTo(map);
-
-
-
+// ================== CAPAS HIVE ===================
 function getColor(d) {
     return d > 1000000 ? '#d7191c' :
            d > 500000  ? '#fdae61' :
@@ -362,7 +196,6 @@ function getColor(d) {
            d > 100000  ? '#abdda4' :
                         '#2b83ba';
 }
-
 function style(feature) {
     return {
         fillColor: getColor(feature.properties.POBADUL),
@@ -373,43 +206,27 @@ function style(feature) {
         fillOpacity: 0.7
     };
 }
+var hiveLayer09 = L.geoJson(hive_cdmx, { style: style, onEachFeature: onEachFeature }).addTo(map);
+var hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: onEachFeature }).addTo(map);
 
-// Grupo para los marcadores
+// ================== ICONOS ===================
 let markersLayer = L.featureGroup().addTo(map);
-
-// Función para obtener icono según la clase de actividad
 function getBootstrapIconFromActividad(clase) {
     clase = (clase || "").toLowerCase();
     let iconHTML;
+    if (clase.includes("hotel")) iconHTML = '<i class="bi bi-building" style="font-size:22px;color:blue"></i>';
+    else if (clase.includes("escuela")) iconHTML = '<i class="bi bi-mortarboard-fill" style="font-size:22px;color:yellow"></i>';
+    else if (clase.includes("supermercado") || clase.includes("abarrotes")) iconHTML = '<i class="bi bi-basket3-fill" style="font-size:22px;color:violet"></i>';
+    else if (clase.includes("banco")) iconHTML = '<i class="bi bi-bank" style="font-size:22px;color:green"></i>';
+    else iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size:22px;color:red"></i>';
+    return L.divIcon({ html: iconHTML, className: 'custom-div-icon', iconSize: [22,22], iconAnchor: [11,22] });
+}
 
-    if (clase.includes("restaurante") || clase.includes("cafetería") || clase.includes("taquería")) {
-        iconHTML = '<i class="bi bi-shop" style="font-size: 26px; color: orange;"></i>';
-    } else if (clase.includes("hotel") || clase.includes("motel") || clase.includes("alojamiento")) {
-        iconHTML = '<i class="bi bi-building" style="font-size: 26px; color: blue;"></i>';
-    } else if (clase.includes("escuela") || clase.includes("colegio") || clase.includes("universidad") || clase.includes("capacitación")) {
-        iconHTML = '<i class="bi bi-mortarboard-fill" style="font-size: 26px; color: yellow;"></i>';
-    } else if (clase.includes("farmacia") || clase.includes("medicinas") || clase.includes("botica")) {
-        iconHTML = '<i class="bi bi-capsule-pill" style="font-size: 26px; color: green;"></i>';
-    } else if (clase.includes("abarrotes") || clase.includes("supermercado") || clase.includes("tienda de autoservicio")) {
-        iconHTML = '<i class="bi bi-basket3-fill" style="font-size: 26px; color: violet;"></i>';
-    } else if (clase.includes("hospital") || clase.includes("clínica") || clase.includes("consultorio")) {
-        iconHTML = '<i class="bi bi-hospital" style="font-size: 26px; color: pink;"></i>';
-    } else {
-        iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 26px; color: red;"></i>';
-    }
-
-    return L.divIcon({
-        html: iconHTML,
-        className: 'custom-div-icon',
-        iconSize: [26, 26],
-        iconAnchor: [13, 26],
-        popupAnchor: [0, -26]
-    });
-} 
-// Buscar datos DENUE	
+// ================== DENUE ===================
 async function buscarDENUE() {
     markersLayer.clearLayers();
     document.getElementById("tablaResultados").innerHTML = "";
+    document.getElementById("listado").style.display = "none";
 
     let condi = document.getElementById('condi').value.trim();
     const lat = parseFloat(document.getElementById('lat').value.trim());
@@ -422,12 +239,10 @@ async function buscarDENUE() {
     }
 
     const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
-
     try {
         const resp = await fetch(url);
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
-
         if (!Array.isArray(data) || data.length === 0) {
             alert("No se encontraron resultados.");
             return;
@@ -437,268 +252,85 @@ async function buscarDENUE() {
             const latNum = parseFloat(item.Latitud);
             const lonNum = parseFloat(item.Longitud);
             if (isNaN(latNum) || isNaN(lonNum)) return;
+            const marker = L.marker([latNum, lonNum], { icon: getBootstrapIconFromActividad(item.Clase_actividad) })
+                .bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad||''}`).addTo(markersLayer);
 
-            const popupContent = `
-                <b>${item.Nombre || ''}</b><br>
-                <small>${item.Clase_actividad || ''}</small><br>
-                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
-                ${item.Colonia || ''}, ${item.CP || ''}<br>
-                ${item.Telefono || ''}
-            `;
-
-            // Icono basado en la Clase_actividad real
-            const icono = getBootstrapIconFromActividad(item.Clase_actividad);
-
-            const marker = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
-            markersLayer.addLayer(marker);
-
-            // Agregar a tabla
             const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${item.Nombre || ''}</td>
-                <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
-                <td>${item.Telefono || ''}</td>
-                <td>${item.Estrato || ''}</td>
-                <td>${item.Clase_actividad || ''}</td>
-            `;
-            row.addEventListener("click", () => {
-                map.setView([latNum, lonNum], 18);
-                marker.openPopup();
-            });
+            row.innerHTML = `<td>${item.Nombre||''}</td><td>${item.Calle||''}</td><td>${item.Telefono||''}</td><td>${item.Estrato||''}</td><td>${item.Clase_actividad||''}</td>`;
+            row.addEventListener("click", () => { map.setView([latNum, lonNum], 18); marker.openPopup(); });
             document.getElementById("tablaResultados").appendChild(row);
         });
 
         const bounds = markersLayer.getBounds();
-        if (bounds.isValid()) {
-            map.fitBounds(bounds.pad(0.1));
-        }
+        if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
+
+        // Mostrar tabla porque hay resultados
+        document.getElementById("listado").style.display = "block";
 
     } catch (error) {
         console.error("Error consultando DENUE:", error);
         alert("Error al consultar la API.");
     }
 }
+document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
-////////////////////////////////////////// Exportar a PDF
-        async function exportarPDF() {
-            const { jsPDF } = window.jspdf;
-            let pdf = new jsPDF('l', 'pt', 'a4');
+// ================== HEXAGONOS ===================
+const categoriasHex = ["bancos", "supermercado", "escuela", "hotel"];
+async function buscarEnHexagono(bounds, categorias) {
+    let resultados = [];
+    for (let cat of categorias) {
+        const centro = bounds.getCenter();
+        const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${centro.lat},${centro.lng}/1000/${token}`;
+        try {
+            const resp = await fetch(url);
+            if (!resp.ok) continue;
+            const data = await resp.json();
+            resultados = resultados.concat(data);
+        } catch (err) { console.error("Error en consulta hexágono:", err); }
+    }
+    return resultados;
+}
+function onEachFeature(feature, layer) {
+    layer.on("click", async () => {
+        const props = feature.properties || {};
+        let html = `<h4>${props.nomgeo||'Zona'}</h4><p>Población: ${props.pobtot?.toLocaleString()||0}</p><hr><h5>🔎 Buscando servicios...</h5>`;
+        mostrarEnSidebar(html);
 
-            // Captura de pantalla de todo el contenedor
-            const container = document.body;
-            let canvas = await html2canvas(container, { useCORS: true });
+        const bounds = layer.getBounds();
+        const resultados = await buscarEnHexagono(bounds, categoriasHex);
 
-            let imgData = canvas.toDataURL('image/png');
-            let imgProps = pdf.getImageProperties(imgData);
-
-            // Ajustar la imagen al ancho del PDF
-            let pdfWidth = pdf.internal.pageSize.getWidth();
-            let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save("mapa_denue.pdf");
-        }
-
-          document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-		  document.getElementById('btnExportar').addEventListener('click', exportarPDF);
-
-//////////////////////////////////////////////////////////////////////////////////////	
-	
-//document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-
-var hiveLayer09 = L.geoJson(hive_cdmx, { 
-    style: style, 
-    onEachFeature: onEachFeature 
-}).addTo(map);
-
-var hiveLayer15 = L.geoJson(hive_edomex, { 
-    style: style, 
-    onEachFeature: onEachFeature 
-}).addTo(map);
-	
-// Leyenda
-var legend = L.control({position: 'bottomright'}); 
-legend.onAdd = function (map) { 
-    var div = L.DomUtil.create('div', 'info legend'), 
-        grades = [0, 100000, 250000, 500000, 1000000]; 
-    for (var i = 0; i < grades.length; i++) { 
-        div.innerHTML += 
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + 
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'); 
-    } 
-    return div; 
-}; 
-legend.addTo(map); 
-
-// ========================TITULO=========================
-	var title = L.control();
-	title.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info');
-		    div.innerHTML +=
-		    '<h1>Estudio de mercado</h1>Análisis de entornos';
-		 return div;
-	};
-	title.addTo(map);	
-	
-	
-// ===== LAYER CONTROL =====
-var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
-var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
-map.addLayer(myMarker); 
-map.addLayer(myMarker1); 
-var baseLayers = { "Base": osm, "Ortoimagen": map }; 
-var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15 }; 
-var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
-
-
-// Geocoder ======================
-
-
-
-// ========BOTON======================
-    const listado = document.getElementById("listado");
-    const btnToggle = document.getElementById("btnToggle");
-    const mapDiv = document.getElementById("map");
-
-    btnToggle.addEventListener("click", () => {
-        listado.classList.toggle("minimized");
-        mapDiv.classList.toggle("expanded");
-
-        // Cambiar icono entre "-" y "+"
-        if (listado.classList.contains("minimized")) {
-            btnToggle.innerHTML = '<i class="bi bi-plus"></i>';
+        if (resultados.length > 0) {
+            let listado = "<h5>🏬 Servicios dentro del área:</h5><ul style='list-style:none;padding:0;'>";
+            resultados.forEach(item => {
+                const icono = getBootstrapIconFromActividad(item.Clase_actividad);
+                listado += `<li style="margin-bottom:6px;display:flex;align-items:center;">
+                    <span style="margin-right:6px;">${icono.options.html}</span>
+                    <b>${item.Nombre}</b><br><small>${item.Clase_actividad||''}</small>
+                </li>`;
+            });
+            listado += "</ul>";
+            mostrarEnSidebar(html + listado);
         } else {
-            btnToggle.innerHTML = '<i class="bi bi-dash"></i>';
+            mostrarEnSidebar(html + "<p>⚠️ No se encontraron bancos, escuelas, hoteles o supermercados en este área.</p>");
         }
-
-        // Redibujar mapa para que se ajuste al nuevo tamaño
-        setTimeout(() => {
-            map.invalidateSize();
-        }, 310);
     });
+}
 
-// ===========SIDEBAR======================
+// ================== SIDEBAR ===================
 const sidebar = document.getElementById("sidebar");
 const sidebarContent = document.getElementById("sidebar-content");
-const btnSidebarToggle = document.getElementById("btnSidebarToggle");
+document.getElementById("btnSidebarToggle").addEventListener("click", () => { sidebar.classList.add("minimized"); });
+function mostrarEnSidebar(html) { sidebarContent.innerHTML = html; sidebar.classList.remove("minimized"); }
 
-// Cerrar/abrir sidebar
-btnSidebarToggle.addEventListener("click", () => {
-    sidebar.classList.add("minimized");
+// ================== LISTADO TOGGLE ===================
+const listado = document.getElementById("listado");
+const btnToggle = document.getElementById("btnToggle");
+btnToggle.addEventListener("click", () => {
+    listado.classList.toggle("minimized");
+    if (listado.classList.contains("minimized")) btnToggle.innerHTML = '<i class="bi bi-plus"></i>';
+    else btnToggle.innerHTML = '<i class="bi bi-dash"></i>';
+    setTimeout(() => { map.invalidateSize(); }, 310);
 });
-
-// Función para mostrar información en sidebar
-function mostrarEnSidebar(html) {
-    sidebarContent.innerHTML = html;
-    sidebar.classList.remove("minimized");
-}
-
-// Actualizar al hacer clic en marcadores DENUE
-function crearMarkerDENUE(item) {
-    const latNum = parseFloat(item.Latitud);
-    const lonNum = parseFloat(item.Longitud);
-    if (isNaN(latNum) || isNaN(lonNum)) return;
-
-    const icono = getBootstrapIconFromActividad(item.Clase_actividad);
-
-    const marker = L.marker([latNum, lonNum], { icon: icono }).addTo(markersLayer);
-
-    marker.on("click", () => {
-        const html = `
-            <h4>${item.Nombre}</h4>
-            <p><b>Clase:</b> ${item.Clase_actividad || ''}</p>
-            <p><b>Dirección:</b> ${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</p>
-            <p><b>Teléfono:</b> ${item.Telefono || ''}</p>
-        `;
-        mostrarEnSidebar(html);
-    });
-}
-
-// Actualizar al hacer clic en geojson
-function onEachFeature(feature, layer) {
-    layer.on("click", () => {
-        const props = feature.properties || {};
-        const html = `
-            <h4>${props.nomgeo || 'Zona'}</h4>
-			<b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
-            <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
-            <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
-            <p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
-			
-            <p><b>Incidencia delicitiva municipal relacionada a extorsión:</b> ${props["extorsión"] || 0}</p>
-            <p><b>Incidencia delicitiva municipal relacionada a narcomenudeo:</b> ${props.narcomenud || 0}</p>
-            <p><b>Incidencia delicitiva municipal relacionada a robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
-            
-            <p><b>Total de créditos personales a nivel municipal:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
-            <p><b>Total de créditos vía nómina a nivel municipal:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
-            <p><b>Total de créditos hipotecarios a nivel municipal:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
-            <p><b>Total de créditos automotrices a nivel municipal:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
-			<p><b>Total créditos a nivel municipal:</b> ${props.TC?.toLocaleString() || 0}</p><hr>
-   
-            <p><b>Tasa de créditos hipotecarios por cada 10 mil adultos:</b> ${props.T_C_HIP || 0}</p>
-            <p><b>Tasa de créditos automotrices por cada 10 mil adultos:</b> ${props.T_C_AUTO || 0}</p>
-            <p><b>Tasa de tarjetas crédito por cada 10 mil adultos:</b> ${props.T_TC || 0}</p><hr>
-        `;
-        mostrarEnSidebar(html);
-    });
-}
-
-hiveLayer09.addTo(map);
-hiveLayer15.addTo(map);
-
-var measureControl = new L.Control.Measure({
-    position: 'topleft',
-    primaryLengthUnit: 'meters',
-    secondaryLengthUnit: 'kilometers',
-    primaryAreaUnit: 'sqmeters',
-    secondaryAreaUnit: 'hectares'
-});
-measureControl.addTo(map);
-
-// Reemplazar ícono del botón con Bootstrap Icons
-let measureBtn = document.getElementsByClassName('leaflet-control-measure-toggle')[0];
-measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
-
-
-//======================SEARCH==========================================	
-	var search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
-	search.classList.add("leaflet-control-search")
-	search.style.display = "flex";
-	search.style.backgroundColor="rgba(255,255,255,0.5)" 
-
-	// Créer le nouvel élément bouton
-	var button = document.createElement("div");
-	button.id = "gcd-button-control";
-	button.className = "gcd-gl-btn fa fa-search search-button";
-
-	// Ajouter le bouton à l'élément parent
-	search.insertBefore(button, search.firstChild);
-	last = search.lastChild;
-	last.style.display = "none";
-	button.addEventListener("click", function (e) {
-		if (last.style.display === "none") {
-			last.style.display = "block";
-		} else {
-			last.style.display = "none";
-		}
-	});
-	setBounds();
-	map.addControl(new L.Control.Search({
-		layer: layer_TheHive_1,
-		initial: false,
-		hideMarkerOnCollapse: true,
-		propertyName: 'id'}));
-	if (typeof url === 'undefined') {
-		document.getElementsByClassName('search-button')[0].className += ' fa fa-binoculars';
-	} else {
-		document.getElementsByClassName('search-button')[1].className += ' fa fa-binoculars';
-	}
-
-	
 </script>
 </body>
 </html>
-
-
-
-
