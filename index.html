@@ -63,13 +63,13 @@
         height: 90vh; /* crece cuando se minimiza el listado */
     }
 
-    #listado {
-        height: 40vh;
+    #listado { display: none; }
+        /*height: 40vh;
         overflow-y: auto;
         background: #181818;
         border-top: 1px solid #333;
         transition: height 1.0s ease;
-    }
+    }*/
 
     #listado.minimized {
         height: 30px; /* solo muestra la barra de título */
@@ -497,12 +497,12 @@ async function buscarDENUE() {
             pdf.save("mapa_denue.pdf");
         }
 
-        document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-        document.getElementById('btnExportar').addEventListener('click', exportarPDF);
+          document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+		  document.getElementById('btnExportar').addEventListener('click', exportarPDF);
 
 //////////////////////////////////////////////////////////////////////////////////////	
 	
-document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+//document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 var hiveLayer09 = L.geoJson(hive_cdmx, { 
     style: style, 
@@ -696,5 +696,6 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
 
