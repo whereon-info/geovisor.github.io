@@ -238,8 +238,23 @@
 	<script src="js/leaflet-search.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+	<!-- Sidebar -->
+	<aside>
+		<div id="sidebar">
+		    <div id="sidebar-header">
+		        <h3>Información</h3>
+		        <button id="btnSidebarToggle"><i class="bi bi-x"></i></button>
+		    </div>
+		    <div id="sidebar-content">
+		        <!-- Aquí se cargará la info de DENUE y geojson -->
+		        <p>Haz clic en un marcador o en un área para ver los detalles.</p>
+		    </div>
+		</div>
+	</aside>
 
+	
 	<!-- Ventana resultados -->
+	<footer>
 		<div id="listado">
 		    <div id="listado-header">
 		        <h3>📋 Resultados DENUE</h3>
@@ -258,26 +273,13 @@
 		        <tbody id="tablaResultados"></tbody>
 		    </table>
 		</div>
+	<footer>
 
-			<!-- Sidebar lateral -->
-	<aside>
-		<div id="sidebar">
-		    <div id="sidebar-header">
-		        <h3>Información</h3>
-		        <button id="btnSidebarToggle"><i class="bi bi-x"></i></button>
-		    </div>
-		    <div id="sidebar-content">
-		        <!-- Aquí se cargará la info de DENUE y geojson -->
-		        <p>Haz clic en un marcador o en un área para ver los detalles.</p>
-		    </div>
-		</div>
-	</aside>
 
+		
 <script>
 
 const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-
-
 
 // Inicializar mapa en modo oscuro
 const map = L.map('map').setView([22.5, -100.5], 5);
@@ -694,4 +696,5 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
