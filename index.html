@@ -275,7 +275,7 @@ async function buscarDENUE() {
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 // ================== HEXAGONOS ===================
-const categoriasHex = ["bancos", "supermercado", "escuela", "hotel"];
+const categoriasHex = ["bancos", "supermercados", "escuelas", "hoteles"];
 async function buscarEnHexagono(bounds, categorias) {
     let resultados = [];
     for (let cat of categorias) {
@@ -293,14 +293,14 @@ async function buscarEnHexagono(bounds, categorias) {
 function onEachFeature(feature, layer) {
     layer.on("click", async () => {
         const props = feature.properties || {};
-        let html = `<h4>${props.nomgeo||'Zona'}</h4><p>Población: ${props.pobtot?.toLocaleString()||0}</p><hr><h5>🔎 Buscando servicios...</h5>`;
+        let html = `<h4>${props.nomgeo||'Zona'}</h4><p>Población: ${props.pobtot?.toLocaleString()||0}</p><hr><h5>🔎 Buscando establecimientos...</h5>`;
         mostrarEnSidebar(html);
 
         const bounds = layer.getBounds();
         const resultados = await buscarEnHexagono(bounds, categoriasHex);
 
         if (resultados.length > 0) {
-            let listado = "<h5>🏬 Servicios dentro del área:</h5><ul style='list-style:none;padding:0;'>";
+            let listado = "<h5>🏬 Establecimientos dentro del área:</h5><ul style='list-style:none;padding:0;'>";
             resultados.forEach(item => {
                 const icono = getBootstrapIconFromActividad(item.Clase_actividad);
                 listado += `<li style="margin-bottom:6px;display:flex;align-items:center;">
@@ -311,7 +311,7 @@ function onEachFeature(feature, layer) {
             listado += "</ul>";
             mostrarEnSidebar(html + listado);
         } else {
-            mostrarEnSidebar(html + "<p>⚠️ No se encontraron bancos, escuelas, hoteles o supermercados en este área.</p>");
+            mostrarEnSidebar(html + "<p>⚠️ No se encontraron elementos urbanos atractores en este área.</p>");
         }
     });
 }
@@ -334,3 +334,4 @@ btnToggle.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
