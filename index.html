@@ -75,7 +75,6 @@
     const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
     // ================== CATEGORÍAS ===================
-   // ================== HEXAGONOS ===================
 const categoriasHex = ["bancos", "supermercados", "escuelas", "hoteles"];
 
 function getIconoCategoria(cat){
@@ -118,7 +117,7 @@ function onEachFeature(feature, layer) {
     // ----- Info fija (no se borra después) -----
     let htmlFija = `
       <div id="info-fija">
-        <h4>${props.nomgeo || 'Zona'}</h4>
+        <h3>${props.nomgeo || 'Zona'}</h3>
         	<b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
             <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
             <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
@@ -138,7 +137,6 @@ function onEachFeature(feature, layer) {
             <p><b>Tasa de créditos automotrices por cada 10 mil adultos:</b> ${props.T_C_AUTO || 0}</p>
             <p><b>Tasa de tarjetas crédito por cada 10 mil adultos:</b> ${props.T_TC || 0}</p><hr>
         <hr>
-        <h5>🔎 Buscando establecimientos...</h5>
       </div>
       <div id="info-dinamica"></div>
     `;
@@ -158,9 +156,9 @@ function onEachFeature(feature, layer) {
     }
 
     // Contenido dinámico (sólo cambia esta parte)
-    let listado = "<h5>🏬 Elementos urbanos dentro del área:</h5><ul style='list-style:none;padding:0;'>";
+    let listado = "<h4>🏬 Elementos urbanos dentro del área:</h4><ul style='list-style:none;padding:0;'>";
     for (const [cat, num] of Object.entries(resumen)) {
-      listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
+      listado += `<li style="margin-bottom:8px; display:flex; align-items:center;">
                     <span style="margin-right:6px;">${getIconoCategoria(cat)}</span>
                     <b>${cat}:</b> ${num}
                   </li>`;
@@ -243,6 +241,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
