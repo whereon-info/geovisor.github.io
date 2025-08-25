@@ -45,7 +45,7 @@
           Información
           <span class="leaflet-sidebar-close"><i class="bi bi-x-lg"></i></span>
         </h1>
-        <div id="sidebar-content">Haz clic en un hexágono para conocer la información de la zona</div>
+        <div id="sidebar-content">Hága clic en un hexágono para conocer la información de la zona</div>
       </div>
     </div>
   </div>
@@ -129,16 +129,16 @@
           else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
         }
 
-        let listado = "<h5>🏬 Elementos urbanos dentro del área:</h5><ul style='list-style:none;padding:0;'>";
+        let listado = "<h1>🏬 Elementos urbanos dentro del área:</h5><ul style='list-style:none;padding:0;'>";
         for (const [cat, num] of Object.entries(resumen)) {
-          listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
-                        <span style="margin-right:6px;">${getIconoCategoria(cat)}</span>
+          listado += `<li style="margin-bottom:12px; display:flex; align-items:center;">
+                        <span style="margin-right:8px;">${getIconoCategoria(cat)}</span>
                         <b>${cat}:</b> ${num}
                       </li>`;
         }
         listado += "</ul>";
 
-        mostrarEnSidebar(`<h4>${props.nomgeo||'Zona'}</h4>` + listado);
+        mostrarEnSidebar(`<h2>${props.nomgeo||'Zona'}</h3>` + listado);
       });
     }
 
@@ -213,6 +213,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
