@@ -45,7 +45,7 @@
           Información
           <span class="leaflet-sidebar-close"><i class="bi bi-x-lg"></i></span>
         </h1>
-        <div id="sidebar-content">Hága clic en un hexágono para conocer la información de la zona</div>
+        <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
       </div>
     </div>
   </div>
@@ -104,7 +104,7 @@ async function buscarEnHexagono(bounds, categorias) {
       });
       resultados.push(...dentro);
     } catch (err) {
-      console.error("Error en consulta hexágono:", err);
+      console.error("Error en consulta:", err);
     }
   }
   return resultados;
@@ -117,7 +117,7 @@ function onEachFeature(feature, layer) {
     // ----- Info fija (no se borra después) -----
     let htmlFija = `
       <div id="info-fija">
-        <h3>${props.nomgeo || 'Zona'}</h3>
+        <h2>${props.nomgeo || 'Zona'}</h2>
         	<b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
             <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
             <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
@@ -156,7 +156,7 @@ function onEachFeature(feature, layer) {
     }
 
     // Contenido dinámico (sólo cambia esta parte)
-    let listado = "<h4>🏬 Elementos urbanos dentro del área:</h4><ul style='list-style:none;padding:0;'>";
+    let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul style='list-style:none;padding:0;'>";
     for (const [cat, num] of Object.entries(resumen)) {
       listado += `<li style="margin-bottom:8px; display:flex; align-items:center;">
                     <span style="margin-right:6px;">${getIconoCategoria(cat)}</span>
@@ -220,7 +220,7 @@ legend.addTo(map);
 	title.onAdd = function (map) {
 		var div = L.DomUtil.create('div', 'info');
 		    div.innerHTML +=
-		    '<h1>Estudio de mercado</h1>Análisis de entornos';
+		    '<h1>Estudio de mercado</h1><h2>Análisis de entornos</h2>';
 		 return div;
 	};
 	title.addTo(map);	
@@ -241,6 +241,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
