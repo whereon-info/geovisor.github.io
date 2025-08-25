@@ -274,6 +274,24 @@ async function buscarDENUE() {
 }
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
+// ================== AGRUPADO ===================
+
+// Buscar elementos clave en este hexágono
+const resultados = await buscarEnHexagono(bounds, categoriasHex);
+
+// Agrupar y contar por categoría
+let resumen = {};
+resultados.forEach(item => {
+    let cat = "Otros";
+    if (item.Clase_actividad?.toLowerCase().includes("banco")) cat = "Bancos";
+    else if (item.Clase_actividad?.toLowerCase().includes("super")) cat = "Supermercados";
+    else if (item.Clase_actividad?.toLowerCase().includes("escuela")) cat = "Escuelas";
+    else if (item.Clase_actividad?.toLowerCase().includes("hotel")) cat = "Hoteles";
+
+    if (!resumen[cat]) resumen[cat] = 0;
+    resumen[cat]++;
+});
+
 // ================== HEXAGONOS ===================
 const categoriasHex = ["bancos", "supermercados", "escuelas", "hoteles"];
 async function buscarEnHexagono(bounds, categorias) {
@@ -299,22 +317,23 @@ function onEachFeature(feature, layer) {
         const bounds = layer.getBounds();
         const resultados = await buscarEnHexagono(bounds, categoriasHex);
 
-        if (resultados.length > 0) {
-            let listado = "<h5>🏬 Establecimientos dentro del área:</h5><ul style='list-style:none;padding:0;'>";
-            resultados.forEach(item => {
-                const icono = getBootstrapIconFromActividad(item.Clase_actividad);
-                listado += `<li style="margin-bottom:6px;display:flex;align-items:center;">
-                    <span style="margin-right:6px;">${icono.options.html}</span>
-                    <b>${item.Nombre}</b><br><small>${item.Clase_actividad||''}</small>
-                </li>`;
-            });
-            listado += "</ul>";
-            mostrarEnSidebar(html + listado);
-        } else {
-            mostrarEnSidebar(html + "<p>⚠️ No se encontraron elementos urbanos atractores en este área.</p>");
-        }
-    });
-}
+	if (Object.keys(resumen).length > 0) {
+	    let listado = "<h5>🏬 Elementos urbanos dentro del área:</h5><ul style='list-style:none;padding:0;'>";
+	    for (let cat in resumen) {
+	        const icono = getIconoCategoria(cat);
+	        listado += `
+	            <li style="margin-bottom:6px; display:flex; align-items:center;">
+	                <span style="margin-right:6px;">${icono}</span>
+	                <b>${cat}:</b> ${resumen[cat]}
+	            </li>
+	        `;
+	    }
+	    listado += "</ul>";
+	    mostrarEnSidebar(html + listado);
+	} else {
+	    mostrarEnSidebar(html + "<p>⚠️ No se encontraron elementos urbannos dentro de esta área.</p>");
+	}
+
 
 // ================== SIDEBAR ===================
 const sidebar = document.getElementById("sidebar");
@@ -334,4 +353,5 @@ btnToggle.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
