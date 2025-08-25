@@ -41,10 +41,10 @@
     </div>
     <div class="leaflet-sidebar-content">
       <div class="leaflet-sidebar-pane" id="info">
-        <h1 class="leaflet-sidebar-header">
-          Ficha de información urbano social de la zona
+        <h3 class="leaflet-sidebar-header">
+          Ficha de información urbano social y económica de la zona
           <span class="leaflet-sidebar-close"><i class="bi bi-x-lg"></i></span>
-        </h1>
+        </h3>
         <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
       </div>
     </div>
@@ -160,7 +160,7 @@ function onEachFeature(feature, layer) {
     for (const [cat, num] of Object.entries(resumen)) {
       listado += `<li style="margin-bottom:8px; display:flex; align-items:center;">
                     <span style="margin-right:6px;">${getIconoCategoria(cat)}</span>
-                    <b>${cat}:</b> ${num}
+                    <b><h3>${cat}:</h3></b> <h3>${num}</h3>
                   </li>`;
     }
     listado += "</ul>";
@@ -241,6 +241,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
