@@ -75,89 +75,102 @@
     const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
     // ================== CATEGORÍAS ===================
-    const categoriasHex = ["bancos", "supermercados", "escuelas", "hoteles"];
+   // ================== HEXAGONOS ===================
+const categoriasHex = ["bancos", "supermercados", "escuelas", "hoteles"];
 
-    function getIconoCategoria(cat){
-      switch(cat){
-        case "Bancos": return '<i class="bi bi-bank"></i>';
-        case "Supermercados": return '<i class="bi bi-basket3-fill"></i>';
-        case "Escuelas": return '<i class="bi bi-mortarboard-fill"></i>';
-        case "Hoteles": return '<i class="bi bi-building"></i>';
-        default: return '<i class="bi bi-geo-alt-fill"></i>';
-      }
-    }
+function getIconoCategoria(cat){
+  switch(cat){
+    case "Bancos": return '<i class="bi bi-bank"></i>';
+    case "Supermercados": return '<i class="bi bi-basket3-fill"></i>';
+    case "Escuelas": return '<i class="bi bi-mortarboard-fill"></i>';
+    case "Hoteles": return '<i class="bi bi-building"></i>';
+    default: return '<i class="bi bi-geo-alt-fill"></i>';
+  }
+}
 
-    async function buscarEnHexagono(bounds, categorias) {
-      let resultados = [];
-      const centro = bounds.getCenter();
-      for (const cat of categorias) {
-        const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${centro.lat},${centro.lng}/1000/${token}`;
-        try {
-          const resp = await fetch(url);
-          if (!resp.ok) continue;
-          const data = await resp.json();
-          const dentro = data.filter(d => {
-            const lat = parseFloat(d.Latitud), lon = parseFloat(d.Longitud);
-            return !isNaN(lat) && !isNaN(lon) && bounds.contains([lat, lon]);
-          });
-          resultados.push(...dentro);
-        } catch (err) {
-          console.error("Error en consulta hexágono:", err);
-        }
-      }
-      return resultados;
-    }
+async function buscarEnHexagono(bounds, categorias) {
+  let resultados = [];
+  const centro = bounds.getCenter();
+  for (const cat of categorias) {
+    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${centro.lat},${centro.lng}/1000/${token}`;
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) continue;
+      const data = await resp.json();
 
-    function onEachFeature(feature, layer) {
-      layer.on("click", async () => {
-        const props = feature.properties || {};
-        let html = `<h3>${props.nomgeo||'Zona'}</h3>
-                    <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
-					<p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
-					<p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
-					<p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
-					
-					<p><b>Incidencia delicitiva municipal relacionada a extorsión:</b> ${props["extorsión"] || 0}</p>
-					<p><b>Incidencia delicitiva municipal relacionada a narcomenudeo:</b> ${props.narcomenud || 0}</p>
-					<p><b>Incidencia delicitiva municipal relacionada a robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
-					
-					<p><b>Total de créditos personales a nivel municipal:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
-					<p><b>Total de créditos vía nómina a nivel municipal:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
-					<p><b>Total de créditos hipotecarios a nivel municipal:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
-					<p><b>Total de créditos automotrices a nivel municipal:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
-					<p><b>Total créditos a nivel municipal:</b> ${props.TC?.toLocaleString() || 0}</p><hr>
-		   
-					<p><b>Tasa de créditos hipotecarios por cada 10 mil adultos:</b> ${props.T_C_HIP || 0}</p>
-					<p><b>Tasa de créditos automotrices por cada 10 mil adultos:</b> ${props.T_C_AUTO || 0}</p>
-					<p><b>Tasa de tarjetas crédito por cada 10 mil adultos:</b> ${props.T_TC || 0}</p><hr>
-                    <hr><h2>🔎 Buscando establecimientos...</h2>`;
-        mostrarEnSidebar(html);
-
-        const bounds = layer.getBounds();
-        const resultados = await buscarEnHexagono(bounds, categoriasHex);
-
-        // AGRUPADO
-        const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
-        for (const item of resultados) {
-          const c = (item.Clase_actividad || "").toLowerCase();
-          if (c.includes("banco")) resumen.Bancos++;
-          else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
-          else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
-          else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
-        }
-
-        let listado = "<h1>🏬 Elementos urbanos dentro del área:</h5><ul style='list-style:none;padding:0;'>";
-        for (const [cat, num] of Object.entries(resumen)) {
-          listado += `<li style="margin-bottom:12px; display:flex; align-items:center;">
-                        <span style="margin-right:8px;">${getIconoCategoria(cat)}</span>
-                        <b>${cat}:</b> ${num}
-                      </li>`;
-        }
-        listado += "</ul>";
-
-        mostrarEnSidebar(`<h2>${props.nomgeo||'Zona'}</h3>` + listado);
+      // Filtrado básico por bounding box del hex
+      const dentro = data.filter(d => {
+        const lat = parseFloat(d.Latitud), lon = parseFloat(d.Longitud);
+        return !isNaN(lat) && !isNaN(lon) && bounds.contains([lat, lon]);
       });
+      resultados.push(...dentro);
+    } catch (err) {
+      console.error("Error en consulta hexágono:", err);
     }
+  }
+  return resultados;
+}
+
+function onEachFeature(feature, layer) {
+  layer.on("click", async () => {
+    const props = feature.properties || {};
+
+    // ----- Info fija (no se borra después) -----
+    let htmlFija = `
+      <div id="info-fija">
+        <h4>${props.nomgeo || 'Zona'}</h4>
+        	<b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
+            <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
+            <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
+            <p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
+			
+            <p><b>Incidencia delicitiva municipal relacionada a extorsión:</b> ${props["extorsión"] || 0}</p>
+            <p><b>Incidencia delicitiva municipal relacionada a narcomenudeo:</b> ${props.narcomenud || 0}</p>
+            <p><b>Incidencia delicitiva municipal relacionada a robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
+            
+            <p><b>Total de créditos personales a nivel municipal:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
+            <p><b>Total de créditos vía nómina a nivel municipal:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
+            <p><b>Total de créditos hipotecarios a nivel municipal:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
+            <p><b>Total de créditos automotrices a nivel municipal:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
+			<p><b>Total créditos a nivel municipal:</b> ${props.TC?.toLocaleString() || 0}</p><hr>
+   
+            <p><b>Tasa de créditos hipotecarios por cada 10 mil adultos:</b> ${props.T_C_HIP || 0}</p>
+            <p><b>Tasa de créditos automotrices por cada 10 mil adultos:</b> ${props.T_C_AUTO || 0}</p>
+            <p><b>Tasa de tarjetas crédito por cada 10 mil adultos:</b> ${props.T_TC || 0}</p><hr>
+        <hr>
+        <h5>🔎 Buscando establecimientos...</h5>
+      </div>
+      <div id="info-dinamica"></div>
+    `;
+    mostrarEnSidebar(htmlFija);
+
+    const bounds = layer.getBounds();
+    const resultados = await buscarEnHexagono(bounds, categoriasHex);
+
+    // AGRUPAR resultados
+    const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
+    for (const item of resultados) {
+      const c = (item.Clase_actividad || "").toLowerCase();
+      if (c.includes("banco")) resumen.Bancos++;
+      else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
+      else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
+      else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
+    }
+
+    // Contenido dinámico (sólo cambia esta parte)
+    let listado = "<h5>🏬 Elementos urbanos dentro del área:</h5><ul style='list-style:none;padding:0;'>";
+    for (const [cat, num] of Object.entries(resumen)) {
+      listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
+                    <span style="margin-right:6px;">${getIconoCategoria(cat)}</span>
+                    <b>${cat}:</b> ${num}
+                  </li>`;
+    }
+    listado += "</ul>";
+
+    // Reemplaza solo #info-dinamica
+    document.getElementById("info-dinamica").innerHTML = listado;
+  });
+}
 
     // ================== HEXÁGONOS ===================
 
@@ -230,6 +243,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
