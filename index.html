@@ -63,13 +63,15 @@
         height: 90vh; /* crece cuando se minimiza el listado */
     }
 
-    #listado { display: none; }
-        /*height: 40vh;
-        overflow-y: auto;
-        background: #181818;
-        border-top: 1px solid #333;
-        transition: height 1.0s ease;
-    }*/
+	 #listado {
+	    display: none;
+	    height: 40vh;
+	    overflow-y: auto;
+	    background: #181818;
+	    border-top: 1px solid #333;
+	    transition: height 1.0s ease;
+	}
+
 
     #listado.minimized {
         height: 30px; /* solo muestra la barra de título */
@@ -696,6 +698,7 @@ measureBtn.innerHTML = '<i class="bi bi-rulers"></i>';
 </script>
 </body>
 </html>
+
 
 
 
