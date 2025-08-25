@@ -127,7 +127,26 @@
 
     // ================== HEXÁGONOS ===================
 
-var hiveLayer09 = L.geoJson(hive_cdmx, { 
+	function getColor(d) {
+    return d > 1000000 ? '#d7191c' :
+           d > 500000  ? '#fdae61' :
+           d > 250000  ? '#ffffbf' :
+           d > 100000  ? '#abdda4' :
+                        '#2b83ba';
+}
+
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.POBADUL),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+	  
+	  var hiveLayer09 = L.geoJson(hive_cdmx, { 
     style: style, 
     onEachFeature: onEachFeature 
 }).addTo(map);
@@ -172,25 +191,9 @@ var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive CDMX": hiveLayer09, 
 var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
 
 
-	function getColor(d) {
-    return d > 1000000 ? '#d7191c' :
-           d > 500000  ? '#fdae61' :
-           d > 250000  ? '#ffffbf' :
-           d > 100000  ? '#abdda4' :
-                        '#2b83ba';
-}
 
-function style(feature) {
-    return {
-        fillColor: getColor(feature.properties.POBADUL),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
-}
 
   </script>
 </body>
 </html>
+
