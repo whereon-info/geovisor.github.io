@@ -160,7 +160,7 @@ function onEachFeature(feature, layer) {
     for (const [cat, num] of Object.entries(resumen)) {
       listado += `<li style="margin-bottom:8px; display:flex; align-items:center;">
                     <span style="margin-right:6px;">${getIconoCategoria(cat)}</span>
-                    <b><h3>${cat}:</h3></b> <h3>${num}</h3>
+                    <b><h3>${cat}: </h3></b> <h3> ${num}</h3>
                   </li>`;
     }
     listado += "</ul>";
@@ -241,6 +241,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
