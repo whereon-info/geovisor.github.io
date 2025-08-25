@@ -2,335 +2,168 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Estudio de mercado a un clic</title>
+    <title>Mapa DENUE + Hexágonos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-	<!-- Hive -->
-    <script type="text/javascript" src="js/hive_cdmx.js"></script>
-	<script type="text/javascript" src="js/hive_edomex.js"></script>
     
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-	<link rel="stylesheet" href="css/leaflet.awesome-markers.css">
-	<script src="js/leaflet.awesome-markers.js"></script>
-
-	<!-- PDF -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-	 <!-- Geocode -->
-    <link rel="stylesheet" href="css/leaflet-search.css">
-    <link rel="stylesheet" href="css/leaflet.photon.css">
-    <link rel="stylesheet" href="css/leaflet-measure.css">
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            background: #121212;
-            color: #e0e0e0;
-        }
-        #controls {padding: 10px; background: #1e1e1e; border-bottom: 1px solid #333;}
-        label { margin-right: 5px; }
-        input, button {
-            margin: 3px;
-            padding: 5px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #e0e0e0;
-        }
-        button { cursor: pointer; }
-        button:hover { background: #444; }
-
-        #map { height: 60vh; width: 100%; transition: height 1.0s ease; }
-        #map.expanded { height: 90vh; }
-
-        #listado {
-            display: none; /* oculto por defecto */
-            height: 40vh;
-            overflow-y: auto;
-            background: #181818;
-            border-top: 1px solid #333;
-            transition: height 1.0s ease;
-        }
-        #listado.minimized { height: 30px; overflow: hidden; }
-
-        #listado-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #222;
-            padding: 5px 10px;
-            border-bottom: 1px solid #333;
-            cursor: pointer;
-        }
-        #listado-header h3 { margin: 0; font-size: 14px; color: #e0e0e0; }
-        #btnToggle {
-            background: none;
-            border: none;
-            color: #e0e0e0;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        table { width: 100%; border-collapse: collapse; color: #e0e0e0; }
-        th, td { padding: 8px; border-bottom: 1px solid #333; }
-        tr:hover { background: #333; cursor: pointer; }
-        th { background: #222; position: sticky; top: 0; }
-
-        .custom-div-icon { background: transparent; border: none; }
-
-        /* Sidebar lateral */
+        body, html { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; background:#111; color:#eee;}
+        #map { width:100%; height:60vh; }
         #sidebar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 300px;
-            height: 100%;
-            background: #181818;
-            border-left: 1px solid #333;
-            overflow-y: auto;
-            transition: transform 1.0s ease;
-            z-index: 1000;
-            transform: translateX(0);
+            width: 100%; height: 40vh; overflow-y: auto;
+            background: #181818; border-top: 1px solid #333; padding: 10px;
         }
-        #sidebar.minimized { transform: translateX(100%); }
-        #sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #222;
-            padding: 10px;
-            border-bottom: 1px solid #333;
+        #listado {
+            display:none;
+            height: 40vh; overflow-y: auto;
+            background: #222; border-top: 1px solid #444; padding: 10px;
         }
-        #sidebar-header h3 { margin: 0; font-size: 16px; color: #e0e0e0; }
-        #btnSidebarToggle {
-            background: none;
-            border: none;
-            color: #e0e0e0;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        #sidebar-content { padding: 10px; font-size: 14px; color: #e0e0e0; }
-
-        .logo-leaflet { padding: 5px; }
+        table { width:100%; border-collapse: collapse; margin-top: 5px;}
+        th, td { border:1px solid #555; padding:4px; font-size:12px; color:#eee;}
     </style>
 </head>
-
 <body>
-    <div id="controls">
-        <label>Establecimiento:</label>
-        <input type="text" id="condi" value="pizzerías" />
-        <label>Latitud:</label>
-        <input type="text" id="lat" value="19.432650801677962" />
-        <label>Longitud:</label>
-        <input type="text" id="lon" value="-99.13316794583835" />
-        <label>Metros:</label>
-        <input type="number" id="mts" value="1000" />
-        <button id="btnBuscar">Buscar</button>
-		<button id="btnExportar">Exportar a PDF</button>
-    </div>
 
-    <div id="map"></div>
-	<script src="js/leaflet-measure.js"></script>
-	<script src="js/leaflet-search.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-	<!-- Sidebar -->
-	<aside>
-		<div id="sidebar">
-		    <div id="sidebar-header">
-		        <h3>Información</h3>
-		        <button id="btnSidebarToggle"><i class="bi bi-x"></i></button>
-		    </div>
-		    <div id="sidebar-content">
-		        <p>Haz clic en un marcador o en un área para ver los detalles.</p>
-		    </div>
-		</div>
-	</aside>
-
-	<!-- Ventana resultados -->
-	<footer>
-		<div id="listado">
-		    <div id="listado-header">
-		        <h3>📋 Resultados DENUE</h3>
-		        <button id="btnToggle"><i class="bi bi-dash"></i></button>
-		    </div>
-		    <table>
-		        <thead>
-		            <tr>
-		                <th>Nombre</th>
-		                <th>Dirección</th>
-		                <th>Teléfono</th>
-		                <th>Personal ocupado</th>
-		                <th>Clase</th>
-		            </tr>
-		        </thead>
-		        <tbody id="tablaResultados"></tbody>
-		    </table>
-		</div>
-	<footer>
+<div id="map"></div>
+<div id="sidebar">Haz clic en un hexágono para ver información.</div>
+<div id="listado">
+    <h4>Resultados DENUE (búsqueda manual)</h4>
+    <table id="resultsTable">
+        <thead><tr><th>Nombre</th><th>Clase</th><th>Dirección</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 <script>
-const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+// TOKEN DENUE (sustituir por el tuyo)
+const token = "TU_TOKEN_INEGI";
 
-// ================== MAPA ===================
-const map = L.map('map').setView([22.5, -100.5], 5);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    subdomains: 'abcd',
-    maxZoom: 19
-}).addTo(map);
+// Inicializar mapa
+const map = L.map("map").setView([19.4, -99.1], 10);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-map.addLayer(osm);
+let markersLayer = L.layerGroup().addTo(map);
 
-// ================== CAPAS HIVE ===================
-function getColor(d) {
-    return d > 1000000 ? '#d7191c' :
-           d > 500000  ? '#fdae61' :
-           d > 250000  ? '#ffffbf' :
-           d > 100000  ? '#abdda4' :
-                        '#2b83ba';
-}
-function style(feature) {
-    return {
-        fillColor: getColor(feature.properties.POBADUL),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
-}
-var hiveLayer09 = L.geoJson(hive_cdmx, { style: style, onEachFeature: onEachFeature }).addTo(map);
-var hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: onEachFeature }).addTo(map);
+// Categorías clave
+const categoriasHex = {
+    "bancos": {icon:"<i class='bi bi-bank2'></i>", count:0},
+    "escuela": {icon:"<i class='bi bi-mortarboard'></i>", count:0},
+    "supermercado": {icon:"<i class='bi bi-cart4'></i>", count:0},
+    "hotel": {icon:"<i class='bi bi-building'></i>", count:0}
+};
 
-// ================== ICONOS ===================
-let markersLayer = L.featureGroup().addTo(map);
-function getBootstrapIconFromActividad(clase) {
-    clase = (clase || "").toLowerCase();
-    let iconHTML;
-    if (clase.includes("hotel")) iconHTML = '<i class="bi bi-building" style="font-size:22px;color:blue"></i>';
-    else if (clase.includes("escuela")) iconHTML = '<i class="bi bi-mortarboard-fill" style="font-size:22px;color:yellow"></i>';
-    else if (clase.includes("supermercado") || clase.includes("abarrotes")) iconHTML = '<i class="bi bi-basket3-fill" style="font-size:22px;color:violet"></i>';
-    else if (clase.includes("banco")) iconHTML = '<i class="bi bi-bank" style="font-size:22px;color:green"></i>';
-    else iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size:22px;color:red"></i>';
-    return L.divIcon({ html: iconHTML, className: 'custom-div-icon', iconSize: [22,22], iconAnchor: [11,22] });
-}
-
-// ================== DENUE ===================
-async function buscarDENUE() {
-    markersLayer.clearLayers();
-    document.getElementById("tablaResultados").innerHTML = "";
-    document.getElementById("listado").style.display = "none";
-
-    let condi = document.getElementById('condi').value.trim();
-    const lat = parseFloat(document.getElementById('lat').value.trim());
-    const lon = parseFloat(document.getElementById('lon').value.trim());
-    const mts = parseInt(document.getElementById('mts').value.trim());
-
-    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
-        alert("Por favor ingresa datos válidos.");
-        return;
-    }
-
-    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
-    try {
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const data = await resp.json();
-        if (!Array.isArray(data) || data.length === 0) {
-            alert("No se encontraron resultados.");
-            return;
-        }
-
-        data.forEach(item => {
-            const latNum = parseFloat(item.Latitud);
-            const lonNum = parseFloat(item.Longitud);
-            if (isNaN(latNum) || isNaN(lonNum)) return;
-            const marker = L.marker([latNum, lonNum], { icon: getBootstrapIconFromActividad(item.Clase_actividad) })
-                .bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad||''}`).addTo(markersLayer);
-
-            const row = document.createElement("tr");
-            row.innerHTML = `<td>${item.Nombre||''}</td><td>${item.Calle||''}</td><td>${item.Telefono||''}</td><td>${item.Estrato||''}</td><td>${item.Clase_actividad||''}</td>`;
-            row.addEventListener("click", () => { map.setView([latNum, lonNum], 18); marker.openPopup(); });
-            document.getElementById("tablaResultados").appendChild(row);
-        });
-
-        const bounds = markersLayer.getBounds();
-        if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
-
-        // Mostrar tabla porque hay resultados
-        document.getElementById("listado").style.display = "block";
-
-    } catch (error) {
-        console.error("Error consultando DENUE:", error);
-        alert("Error al consultar la API.");
-    }
-}
-document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-
-// ================== HEXAGONOS ===================
-const categoriasHex = ["bancos", "supermercado", "escuela", "hotel"];
+// Auxiliar: consulta DENUE por categoría
 async function buscarEnHexagono(bounds, categorias) {
-    let resultados = [];
-    for (let cat of categorias) {
-        const centro = bounds.getCenter();
+    let conteo = {};
+    for (let c in categorias) conteo[c] = 0;
+
+    const centro = bounds.getCenter();
+
+    for (let cat in categorias) {
         const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${centro.lat},${centro.lng}/1000/${token}`;
         try {
             const resp = await fetch(url);
             if (!resp.ok) continue;
             const data = await resp.json();
-            resultados = resultados.concat(data);
-        } catch (err) { console.error("Error en consulta hexágono:", err); }
+            conteo[cat] += data.length;
+        } catch (err) {
+            console.error("Error en consulta hexágono:", err);
+        }
     }
-    return resultados;
+    return conteo;
 }
+
+// Mostrar en sidebar
+function mostrarEnSidebar(html) {
+    document.getElementById("sidebar").innerHTML = html;
+}
+
+// onEachFeature para hexágonos
 function onEachFeature(feature, layer) {
     layer.on("click", async () => {
         const props = feature.properties || {};
-        let html = `<h4>${props.nomgeo||'Zona'}</h4><p>Población: ${props.pobtot?.toLocaleString()||0}</p><hr><h5>🔎 Buscando servicios...</h5>`;
+        let html = `
+            <h4>${props.nomgeo || 'Zona'}</h4>
+            <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
+            <p><b>Población:</b> ${props.pobtot?.toLocaleString() || 0}</p>
+            <p><b>Población adulta:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
+            <hr>
+            <h5>🔎 Buscando servicios dentro...</h5>
+        `;
         mostrarEnSidebar(html);
 
         const bounds = layer.getBounds();
-        const resultados = await buscarEnHexagono(bounds, categoriasHex);
+        const conteo = await buscarEnHexagono(bounds, categoriasHex);
 
-        if (resultados.length > 0) {
-            let listado = "<h5>🏬 Servicios dentro del área:</h5><ul style='list-style:none;padding:0;'>";
-            resultados.forEach(item => {
-                const icono = getBootstrapIconFromActividad(item.Clase_actividad);
-                listado += `<li style="margin-bottom:6px;display:flex;align-items:center;">
-                    <span style="margin-right:6px;">${icono.options.html}</span>
-                    <b>${item.Nombre}</b><br><small>${item.Clase_actividad||''}</small>
-                </li>`;
-            });
-            listado += "</ul>";
-            mostrarEnSidebar(html + listado);
-        } else {
-            mostrarEnSidebar(html + "<p>⚠️ No se encontraron bancos, escuelas, hoteles o supermercados en este área.</p>");
+        let listado = "<h5>🏬 Servicios dentro del área:</h5><ul style='list-style:none;padding:0;'>";
+        for (let cat in categoriasHex) {
+            listado += `
+                <li style="margin-bottom:6px; display:flex; align-items:center;">
+                    <span style="margin-right:6px;">${categoriasHex[cat].icon}</span>
+                    <b>${cat.charAt(0).toUpperCase() + cat.slice(1)}:</b> ${conteo[cat]}
+                </li>
+            `;
         }
+        listado += "</ul>";
+        mostrarEnSidebar(html + listado);
     });
 }
 
-// ================== SIDEBAR ===================
-const sidebar = document.getElementById("sidebar");
-const sidebarContent = document.getElementById("sidebar-content");
-document.getElementById("btnSidebarToggle").addEventListener("click", () => { sidebar.classList.add("minimized"); });
-function mostrarEnSidebar(html) { sidebarContent.innerHTML = html; sidebar.classList.remove("minimized"); }
+// Ejemplo de capa GeoJSON (simulación de hexágonos)
+const ejemploHex = {
+    "type":"FeatureCollection",
+    "features":[
+        {
+            "type":"Feature",
+            "properties":{"nomgeo":"Hex 1","TIPO":"Urbano","pobtot":5000,"POBADUL":3500},
+            "geometry":{"type":"Polygon","coordinates":[[[-99.2,19.3],[-99.1,19.3],[-99.1,19.4],[-99.2,19.4],[-99.2,19.3]]]}
+        }
+    ]
+};
 
-// ================== LISTADO TOGGLE ===================
-const listado = document.getElementById("listado");
-const btnToggle = document.getElementById("btnToggle");
-btnToggle.addEventListener("click", () => {
-    listado.classList.toggle("minimized");
-    if (listado.classList.contains("minimized")) btnToggle.innerHTML = '<i class="bi bi-plus"></i>';
-    else btnToggle.innerHTML = '<i class="bi bi-dash"></i>';
-    setTimeout(() => { map.invalidateSize(); }, 310);
-});
+L.geoJSON(ejemploHex, {onEachFeature}).addTo(map);
+
+// --- Búsqueda manual DENUE ---
+async function buscarDENUE(query, lat, lng, radio=1000) {
+    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(query)}/${lat},${lng}/${radio}/${token}`;
+    try {
+        const resp = await fetch(url);
+        const data = await resp.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            alert("No se encontraron resultados.");
+            return;
+        }
+
+        markersLayer.clearLayers();
+        const tbody = document.querySelector("#resultsTable tbody");
+        tbody.innerHTML = "";
+
+        data.forEach(item => {
+            const marker = L.marker([item.Latitud, item.Longitud]).addTo(markersLayer);
+            marker.bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}`);
+            tbody.innerHTML += `<tr>
+                <td>${item.Nombre}</td>
+                <td>${item.Clase_actividad}</td>
+                <td>${item.Calle} ${item.Num_Exterior||''}, ${item.Colonia||''}</td>
+            </tr>`;
+        });
+
+        const bounds = markersLayer.getBounds();
+        if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
+
+        // Mostrar tabla de resultados
+        document.getElementById("listado").style.display = "block";
+    } catch (err) {
+        console.error("Error en búsqueda manual:", err);
+    }
+}
+
 </script>
 </body>
 </html>
