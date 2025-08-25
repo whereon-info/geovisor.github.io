@@ -47,16 +47,18 @@
 
   <script>
     // ================== MAPA ===================
-    const map = L.map('map').setView([19.4326, -99.1332], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-	});
-	
-	map.addLayer(osm);  
+		const map = L.map('map').setView([22.5, -100.5], 5);
+		L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+		    attribution: '&copy; OpenStreetMap contributors',
+		    subdomains: 'abcd',
+		    maxZoom: 19
+		}).addTo(map);
+		
+		var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+		});
+		
+		map.addLayer(osm);
 
     const sidebar = L.control.sidebar({ container:'sidebar', position:'right' }).addTo(map);
     function mostrarEnSidebar(html){ 
@@ -206,6 +208,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
