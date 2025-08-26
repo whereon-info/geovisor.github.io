@@ -158,10 +158,10 @@ function onEachFeature(feature, layer) {
     // Contenido dinámico (sólo cambia esta parte)
     let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul style='list-style:none;padding:0;'>";
     for (const [cat, num] of Object.entries(resumen)) {
-      listado += `<li style="margin-bottom:8px; display:flex; align-items:center;">
-                    <span style="margin-right:6px;">${getIconoCategoria(cat)}</span>
-                    <b><h3>${cat}: </h3></b> <h3> ${num}</h3>
-                  </li>`;
+      listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
+                    <span style="margin-right:4px;">${getIconoCategoria(cat)}</span>
+                    <h3>${cat}: </h3> <h3> ${num}</h3>
+                   </li>`;
     }
     listado += "</ul>";
 
@@ -241,6 +241,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
