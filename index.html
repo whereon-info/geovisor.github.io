@@ -33,7 +33,7 @@
 	.legend {line-height: 18px; color: #555;}
 	.legend i {width: 18px;height: 18px; float: left;margin-right: 8px;opacity: 0.7;}
 	.leaflet-sidebar-header {height: 40px;line-height: 40px; font-size: 10pt; color: rgb(254, 254, 254);background-color: rgb(0, 0, 0);margin: -10px -20px 0px; padding: 0px 20px;}
-	.leaflet-sidebar-content {position: absolute; top: 0; bottom: 0; background-color: rgba(0,0,0, .95); overflow-x: hidden; overflow-y: auto;}
+	<!--.leaflet-sidebar-content {position: absolute; top: 0; bottom: 0; background-color: rgba(0,0,0, .95); overflow-x: hidden; overflow-y: auto;}-->
 	.info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: red; background: rgba(186,186,186,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
 	.info h2 {margin: 0 0 5px;color: #404040;}
 	#listado {height: 40vh; overflow-y: auto; background: #181818; border-top: 1px solid #333; transition: height 1.0s ease;}
@@ -43,7 +43,30 @@
 	table {width: 90%; border-collapse: collapse; color: #e0e0e0;}
     th, td {padding: 8px; border-bottom: 1px solid #333;}
     tr:hover {background: #333; cursor: pointer;}
-    th {background: #222; position: sticky; top: 0;}  
+    th {background: #222; position: sticky; top: 0;}
+	/* Sidebar */
+	.leaflet-sidebar-content, 
+	.leaflet-sidebar-pane, 
+	#sidebar-content, 
+	#info-fija, 
+	#info-dinamica {
+	  color: #e0e0e0;   /* Texto gris claro */
+	}
+	
+	/* Títulos dentro del sidebar */
+	.leaflet-sidebar-content h2, 
+	.leaflet-sidebar-content h3, 
+	.leaflet-sidebar-content b {
+	  color: #ffffff;   /* Texto blanco */
+	}
+	
+	/* Tabla de resultados */
+	#listado h3, 
+	#listado th, 
+	#listado td {
+	  color: #f5f5f5;   /* Gris casi blanco */
+	}
+	  
   </style>
 </head>
 
@@ -373,111 +396,98 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
 
 // ================== INEGI ========================
 
-// Grupo para los marcadores
-let markersLayer = L.featureGroup().addTo(map);
+	let markersLayer = L.featureGroup().addTo(map);
 
-// Función para obtener icono según la clase de actividad
-function getBootstrapIconFromActividad(clase) {
-    clase = (clase || "").toLowerCase();
-    let iconHTML;
+	function getBootstrapIconFromActividad(clase) {
+	    clase = (clase || "").toLowerCase();
+	    let iconHTML;
+	    if (clase.includes("restaurante")) {
+	        iconHTML = '<i class="bi bi-shop" style="font-size: 26px; color: orange;"></i>';
+	    } else if (clase.includes("hotel")) {
+	        iconHTML = '<i class="bi bi-building" style="font-size: 26px; color: blue;"></i>';
+	    } else {
+	        iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 26px; color: red;"></i>';
+	    }
+	    return L.divIcon({ html: iconHTML, className: 'custom-div-icon', iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -26] });
+	} 
 
-    if (clase.includes("restaurante") || clase.includes("cafetería") || clase.includes("taquería")) {
-        iconHTML = '<i class="bi bi-shop" style="font-size: 26px; color: orange;"></i>';
-    } else if (clase.includes("hotel") || clase.includes("motel") || clase.includes("alojamiento")) {
-        iconHTML = '<i class="bi bi-building" style="font-size: 26px; color: blue;"></i>';
-    } else if (clase.includes("escuela") || clase.includes("colegio") || clase.includes("universidad") || clase.includes("capacitación")) {
-        iconHTML = '<i class="bi bi-mortarboard-fill" style="font-size: 26px; color: yellow;"></i>';
-    } else if (clase.includes("farmacia") || clase.includes("medicinas") || clase.includes("botica")) {
-        iconHTML = '<i class="bi bi-capsule-pill" style="font-size: 26px; color: green;"></i>';
-    } else if (clase.includes("abarrotes") || clase.includes("supermercado") || clase.includes("tienda de autoservicio")) {
-        iconHTML = '<i class="bi bi-basket3-fill" style="font-size: 26px; color: violet;"></i>';
-    } else if (clase.includes("hospital") || clase.includes("clínica") || clase.includes("consultorio")) {
-        iconHTML = '<i class="bi bi-hospital" style="font-size: 26px; color: pink;"></i>';
-    } else {
-        iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 26px; color: red;"></i>';
-    }
+	// Buscar datos DENUE	
+	async function buscarDENUE() {
+	    markersLayer.clearLayers();
+	    document.getElementById("tablaResultados").innerHTML = "";
 
-    return L.divIcon({
-        html: iconHTML,
-        className: 'custom-div-icon',
-        iconSize: [26, 26],
-        iconAnchor: [13, 26],
-        popupAnchor: [0, -26]
-    });
-} 
+	    let condi = document.getElementById('condi').value.trim();
+	    const lat = parseFloat(document.getElementById('lat').value.trim());
+	    const lon = parseFloat(document.getElementById('lon').value.trim());
+	    const mts = parseInt(document.getElementById('mts').value.trim());
 
-// Buscar datos DENUE	
-async function buscarDENUE() {
-    markersLayer.clearLayers();
-    document.getElementById("tablaResultados").innerHTML = "";
+	    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
+	        alert("Por favor ingresa datos válidos.");
+	        return;
+	    }
 
-    let condi = document.getElementById('condi').value.trim();
-    const lat = parseFloat(document.getElementById('lat').value.trim());
-    const lon = parseFloat(document.getElementById('lon').value.trim());
-    const mts = parseInt(document.getElementById('mts').value.trim());
+	    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
-    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
-        alert("Por favor ingresa datos válidos.");
-        return;
-    }
+	    try {
+	        const resp = await fetch(url);
+	        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+	        const data = await resp.json();
 
-    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+	        if (!Array.isArray(data) || data.length === 0) {
+	            alert("No se encontraron resultados.");
+	            return;
+	        }
 
-    try {
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        const data = await resp.json();
+	        // Para el Sidebar
+	        let htmlDENUE = "<h3>📍 Resultados de DENUE</h3><ul style='list-style:none;padding:0;'>";
 
-        if (!Array.isArray(data) || data.length === 0) {
-            alert("No se encontraron resultados.");
-            return;
-        }
+	        data.forEach(item => {
+	            const latNum = parseFloat(item.Latitud);
+	            const lonNum = parseFloat(item.Longitud);
+	            if (isNaN(latNum) || isNaN(lonNum)) return;
 
-        data.forEach(item => {
-            const latNum = parseFloat(item.Latitud);
-            const lonNum = parseFloat(item.Longitud);
-            if (isNaN(latNum) || isNaN(lonNum)) return;
+	            const popupContent = `<b>${item.Nombre || ''}</b><br><small>${item.Clase_actividad || ''}</small>`;
 
-            const popupContent = `
-                <b>${item.Nombre || ''}</b><br>
-                <small>${item.Clase_actividad || ''}</small><br>
-                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
-                ${item.Colonia || ''}, ${item.CP || ''}<br>
-                ${item.Telefono || ''}
-            `;
+	            const icono = getBootstrapIconFromActividad(item.Clase_actividad);
+	            const marker = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
+	            markersLayer.addLayer(marker);
 
-            // Icono basado en la Clase_actividad real
-            const icono = getBootstrapIconFromActividad(item.Clase_actividad);
+	            // Tabla
+	            const row = document.createElement("tr");
+	            row.innerHTML = `
+	                <td>${item.Nombre || ''}</td>
+	                <td>${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}</td>
+	                <td>${item.Telefono || ''}</td>
+	                <td>${item.Estrato || ''}</td>
+	                <td>${item.Clase_actividad || ''}</td>
+	            `;
+	            row.addEventListener("click", () => {
+	                map.setView([latNum, lonNum], 18);
+	                marker.openPopup();
+	            });
+	            document.getElementById("tablaResultados").appendChild(row);
 
-            const marker = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
-            markersLayer.addLayer(marker);
+	            // Sidebar
+	            htmlDENUE += `
+	              <li style="margin-bottom:8px; padding:6px; border-bottom:1px solid #333;">
+	                <b>${item.Nombre || ''}</b><br>
+	                <small>${item.Clase_actividad || ''}</small><br>
+	                ${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}<br>
+	                ${item.Telefono || ''}
+	              </li>`;
+	        });
 
-            // Agregar a tabla
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${item.Nombre || ''}</td>
-                <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
-                <td>${item.Telefono || ''}</td>
-                <td>${item.Estrato || ''}</td>
-                <td>${item.Clase_actividad || ''}</td>
-            `;
-            row.addEventListener("click", () => {
-                map.setView([latNum, lonNum], 18);
-                marker.openPopup();
-            });
-            document.getElementById("tablaResultados").appendChild(row);
-        });
+	        htmlDENUE += "</ul>";
+	        mostrarEnSidebar(htmlDENUE);
 
-        const bounds = markersLayer.getBounds();
-        if (bounds.isValid()) {
-            map.fitBounds(bounds.pad(0.1));
-        }
+	        const bounds = markersLayer.getBounds();
+	        if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
 
-    } catch (error) {
-        console.error("Error consultando DENUE:", error);
-        alert("Error al consultar la API.");
-    }
-}
+	    } catch (error) {
+	        console.error("Error consultando DENUE:", error);
+	        alert("Error al consultar la API.");
+	    }
+	}
 
 	document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
@@ -486,35 +496,3 @@ async function buscarDENUE() {
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
