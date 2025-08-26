@@ -33,16 +33,11 @@
 	.legend {line-height: 18px; color: #555;}
 	.legend i {width: 18px;height: 18px; float: left;margin-right: 8px;opacity: 0.7;}
 	.leaflet-sidebar-header {height: 40px;line-height: 40px; font-size: 10pt; color: rgb(254, 254, 254);background-color: rgb(0, 0, 0);margin: -10px -20px 0px; padding: 0px 20px;}
-	.leaflet-sidebar-content {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0, .95);
-    overflow-x: hidden;
-    overflow-y: auto;
-}
+	.leaflet-sidebar-content {position: absolute; top: 0; bottom: 0; background-color: rgba(0,0,0, .95); overflow-x: hidden; overflow-y: auto;}
 	.info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: red; background: rgba(186,186,186,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
 	.info h2 {margin: 0 0 5px;color: #404040;}
+	#listado {height: 40vh; overflow-y: auto; background: #181818; border-top: 1px solid #333; transition: height 1.0s ease;}
+    #listado.minimized {height: 30px; overflow: hidden;}
   </style>
 </head>
 
@@ -80,7 +75,7 @@
 	<footer>
 		<div id="listado">
 		    <div id="listado-header">
-		        <h3>📋 Resultados DENUE</h3>
+		        <h3>📋 Tabla de resultados de establecimientos económicos </h3>
 		        <button id="btnToggle"><i class="bi bi-dash"></i></button>
 		    </div>
 		    <table>
@@ -97,7 +92,6 @@
 		    </table>
 		</div>		
 		
-	// ================== BUSCADORES ===================	
 	<script src="js/leaflet.photon.js"></script>
     <script src="js/leaflet-measure.js"></script>
 	<script src="js/leaflet-search.js"></script>
@@ -485,6 +479,7 @@ async function buscarDENUE() {
   </script>
 </body>
 </html>
+
 
 
 
