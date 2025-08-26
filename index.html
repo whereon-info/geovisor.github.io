@@ -6,459 +6,178 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
   <!-- Leaflet Sidebar -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-sidebar-v2/css/leaflet-sidebar.min.css" />
-  <script src="https://unpkg.com/leaflet-sidebar-v2/js/leaflet-sidebar.min.js"></script>
-
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
- <!-- Hive -->
-  <script type="text/javascript" src="js/hive_cdmx.js"></script>
-  <script type="text/javascript" src="js/hive_edomex.js"></script>
-
-<!-- Buscadores -->
-	<link rel="stylesheet" href="css/leaflet-search.css">
-	<link rel="stylesheet" href="css/L.Control.Locate.min.css"
-	<link rel="stylesheet" href="css/leaflet.photon.css">
-	<link rel="stylesheet" href="css/leaflet-measure.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-sidebar-v2/css/leaflet-sidebar.css">
+  <script src="https://unpkg.com/leaflet-sidebar-v2/js/leaflet-sidebar.js"></script>
 
   <style>
-    body,html { margin:0; padding:0; height:100%; }
-    #map { width:100%; height:60%; }
-    .leaflet-sidebar { z-index:1000; }
-	.legend {line-height: 18px; color: #555;}
-	.legend i {width: 18px;height: 18px; float: left;margin-right: 8px;opacity: 0.7;}
-	.leaflet-sidebar-header {height: 40px;line-height: 40px; font-size: 10pt; color: rgb(254, 254, 254);background-color: rgb(0, 0, 0);margin: -10px -20px 0px; padding: 0px 20px;}
-	<!--.leaflet-sidebar-content {position: absolute; top: 0; bottom: 0; background-color: rgba(0,0,0, .95); overflow-x: hidden; overflow-y: auto;}-->
-	.info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: red; background: rgba(186,186,186,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
-	.info h2 {margin: 0 0 5px;color: #404040;}
-	#listado {height: 40vh; overflow-y: auto; background: #181818; border-top: 1px solid #333; transition: height 1.0s ease;}
-    #listado.minimized {height: 30px; overflow: hidden;}
-	#controls {padding: 10px; background: #1e1e1e; border-bottom: 1px solid #333;}
-	label {color: white;}
-	table {width: 90%; border-collapse: collapse; color: #e0e0e0;}
-    th, td {padding: 8px; border-bottom: 1px solid #333;}
-    tr:hover {background: #333; cursor: pointer;}
-    th {background: #222; position: sticky; top: 0;}
-	/* Sidebar */
-	.leaflet-sidebar-content, 
-	.leaflet-sidebar-pane, 
-	#sidebar-content, 
-	#info-fija, 
-	#info-dinamica {
-	  color: #e0e0e0;   /* Texto gris claro */
-	}
-	
-	/* Títulos dentro del sidebar */
-	.leaflet-sidebar-content h2, 
-	.leaflet-sidebar-content h3, 
-	.leaflet-sidebar-content b {
-	  color: #ffffff;   /* Texto blanco */
-	}
-	
-	/* Tabla de resultados */
-	#listado h3, 
-	#listado th, 
-	#listado td {
-	  color: #f5f5f5;   /* Gris casi blanco */
-	}
-	  
+    #map { width: 100%; height: 100vh; }
+    .sidebar-content { padding: 15px; font-family: Arial, sans-serif; }
+    .sidebar-content h2 { margin-top: 0; }
+    .bloque { margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #ccc; }
   </style>
 </head>
-
-	<body>
-	<div id="controls">
-        <label>Establecimiento:</label>
-        <input type="text" id="condi" value="pizzerías" />
-        <label>Latitud:</label>
-        <input type="text" id="lat" value="19.432650801677962" />
-        <label>Longitud:</label>
-        <input type="text" id="lon" value="-99.13316794583835" />
-        <label>Metros:</label>
-        <input type="number" id="mts" value="1000" />
-        <button id="btnBuscar">Buscar</button>
-		<button id="btnExportar">Exportar a PDF</button>
-    </div>	
+<body>
   <div id="map"></div>
+
+  <!-- Sidebar -->
   <div id="sidebar" class="leaflet-sidebar collapsed">
     <div class="leaflet-sidebar-tabs">
       <ul role="tablist">
-        <li><a href="#info" role="tab"><i class="bi bi-info-circle"></i></a></li>
+        <li><a href="#info" role="tab"><i class="fa fa-info"></i></a></li>
       </ul>
     </div>
     <div class="leaflet-sidebar-content">
       <div class="leaflet-sidebar-pane" id="info">
-        <h4 class="leaflet-sidebar-header">
-          Ficha de información urbano social y económica de la zona
-          <span class="leaflet-sidebar-close"><i class="bi bi-x-lg"></i></span>
-        </h4>
-        <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
+        <h2 class="sidebar-header">📊 Información del hexágono</h2>
+        <div id="info-dinamica" class="sidebar-content"></div>
       </div>
     </div>
   </div>
 
-	<footer>
-		<div id="listado">
-		    <div id="listado-header">
-		        <h3>📋 Tabla de resultados de establecimientos económicos </h3>
-		        <button id="btnToggle"><i class="bi bi-dash"></i></button>
-		    </div>
-		    <table>
-		        <thead>
-		            <tr>
-		                <th>Nombre</th>
-		                <th>Dirección</th>
-		                <th>Teléfono</th>
-		                <th>Personal ocupado</th>
-		                <th>Clase</th>
-		            </tr>
-		        </thead>
-		        <tbody id="tablaResultados"></tbody>
-		    </table>
-		</div>		
-		
-	<script src="js/leaflet.photon.js"></script>
-    <script src="js/leaflet-measure.js"></script>
-	<script src="js/leaflet-search.js"></script>
-	<script src="js/L.Control.Locate.min.js"></script>
- 
-	<script>
-    // ================== MAPA ===================
-		const map = L.map('map').setView([22.5, -100.5], 5);
-		L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-		    attribution: '&copy; OpenStreetMap contributors',
-		    subdomains: 'abcd',
-		    maxZoom: 19
-		}).addTo(map);
-		
-		var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-		});
-		
-		map.addLayer(osm);
+  <!-- Input de búsqueda DENUE -->
+  <div style="position:absolute; top:10px; left:10px; z-index:9999; background:#fff; padding:8px; border-radius:5px;">
+    <label><b>Búsqueda DENUE:</b></label><br>
+    <input type="text" id="denue-input" placeholder="Ej: farmacia, banco, hotel" style="width:180px;">
+  </div>
 
-	// ================== NUEVOS BOTONES ===================
-	        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
-        var measureControl = new L.Control.Measure({
-            position: 'topleft',
-            primaryLengthUnit: 'meters',
-            secondaryLengthUnit: 'kilometers',
-            primaryAreaUnit: 'sqmeters',
-            secondaryAreaUnit: 'hectares'
-        });
-        measureControl.addTo(map);
-        document.getElementsByClassName('leaflet-control-measure-toggle')[0].innerHTML = '';
-        document.getElementsByClassName('leaflet-control-measure-toggle')[0].className += ' fas fa-ruler';
-        var bounds_group = new L.featureGroup([]);
-        function setBounds() {
-        }
+  <script>
+    // === MAPA BASE ===
+    const map = L.map('map').setView([21.12, -101.68], 12);
 
-		const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&",
-        "BAN": "https://api-adresse.data.gouv.fr/search/?"}
-        var photonControl = L.control.photon({
-            url: url["Nominatim"],
-            feedbackLabel: '',
-            position: 'topleft',
-            includePosition: true,
-            initial: true,
-            // resultsHandler: myHandler,
-        }).addTo(map);
-        photonControl._container.childNodes[0].style.borderRadius="10px"
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
 
-        // Create a variable to store the geoJSON data
-        var x = null;
-        // Create a variable to store the marker
-        var marker = null;
-        // Add an event listener to the Photon control to create a marker from the returned geoJSON data
-        var z = null;
-        photonControl.on('selected', function(e) {
-            console.log(photonControl.search.resultsContainer);
-            if (x != null) {
-                map.removeLayer(obj3.marker);
-                map.removeLayer(x);
-            }
-            obj2.gcd = e.choice;
-            x = L.geoJSON(obj2.gcd).addTo(map);
-            var label = typeof obj2.gcd.properties.label === 'undefined' ? obj2.gcd.properties.display_name : obj2.gcd.properties.label;
-            obj3.marker = L.marker(x.getLayers()[0].getLatLng()).bindPopup(label).addTo(map);
-            map.setView(x.getLayers()[0].getLatLng(), 17);
-            z = typeof e.choice.properties.label === 'undefined'? e.choice.properties.display_name : e.choice.properties.label;
-            console.log(e);
-            e.target.input.value = z;
-        });
-        var search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
-        search.classList.add("leaflet-control-search")
-        search.style.display = "flex";
-        search.style.backgroundColor="rgba(255,255,255,0.5)" 
+    // Sidebar
+    const sidebar = L.control.sidebar('sidebar').addTo(map);
 
-        // Créer le nouvel élément bouton
-        var button = document.createElement("div");
-        button.id = "gcd-button-control";
-        button.className = "gcd-gl-btn fa fa-search search-button";
+    // === FUNCIÓN MOSTRAR INFO HEXÁGONO ===
+    function mostrarInfoHexagono(feature) {
+      let poblacion = feature.properties.poblacion || "N/D";
+      let delitos = feature.properties.delitos || "N/D";
 
-        // Ajouter le bouton à l'élément parent
-        search.insertBefore(button, search.firstChild);
-        last = search.lastChild;
-        last.style.display = "none";
-        button.addEventListener("click", function (e) {
-            if (last.style.display === "none") {
-                last.style.display = "block";
-            } else {
-                last.style.display = "none";
-            }
-        });
-		
-	// ================== SIDEBAR ===================	
-    const sidebar = L.control.sidebar({ container:'sidebar', position:'right' }).addTo(map);
-    function mostrarEnSidebar(html){ 
-      document.getElementById("sidebar-content").innerHTML = html; 
-      sidebar.open("info"); 
+      let html = `
+        <div class="bloque">
+          <h3>👥 Población</h3>
+          <p>${poblacion}</p>
+        </div>
+        <div class="bloque">
+          <h3>⚖️ Delitos</h3>
+          <p>${delitos}</p>
+        </div>
+        <div class="bloque">
+          <h3>🏦 Bancos</h3>
+          <p>${feature.properties.bancos || 0}</p>
+        </div>
+        <div class="bloque">
+          <h3>🛒 Supermercados</h3>
+          <p>${feature.properties.supermercados || 0}</p>
+        </div>
+        <div class="bloque">
+          <h3>🏫 Escuelas</h3>
+          <p>${feature.properties.escuelas || 0}</p>
+        </div>
+        <div class="bloque">
+          <h3>🏨 Hoteles</h3>
+          <p>${feature.properties.hoteles || 0}</p>
+        </div>
+      `;
+
+      document.getElementById("info-dinamica").innerHTML = html;
+      sidebar.open("info");
     }
 
-    // ================== TOKEN DENUE ===================
-    const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+    // === FUNCIÓN DE BÚSQUEDA DENUE POR HEXÁGONO ===
+    function buscarDENUE(query, hexCentro) {
+      if (!query || !hexCentro) return;
 
-	//======================= Logo ======================
-	var logoControl = L.control({ position: "bottomleft" });
+      let lat = hexCentro.lat;
+      let lng = hexCentro.lng;
 
-	logoControl.onAdd = function (map) {
-	    var div = L.DomUtil.create("div", "logo-leaflet");
-	    div.innerHTML = '<img src="images/WhereOn-Logo-Color-Vrt.png" style="width:80px; opacity:0.9;">';
-	    return div;
-	};
-	
-	logoControl.addTo(map);
-	  
-    // ================== CATEGORÍAS ===================
-const categoriasHex = ["bancos", "supermercados", "escuelas", "hoteles"];
+      const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/Buscar/${query}/${lat},${lng}/1000/0/100?token=TU_TOKEN_AQUI`;
 
-function getIconoCategoria(cat){
-  switch(cat){
-    case "Bancos": return '<i class="bi bi-bank"></i>';
-    case "Supermercados": return '<i class="bi bi-basket3-fill"></i>';
-    case "Escuelas": return '<i class="bi bi-mortarboard-fill"></i>';
-    case "Hoteles": return '<i class="bi bi-building"></i>';
-    default: return '<i class="bi bi-geo-alt-fill"></i>';
-  }
-}
-
-async function buscarEnHexagono(bounds, categorias) {
-  let resultados = [];
-  const centro = bounds.getCenter();
-  for (const cat of categorias) {
-    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${centro.lat},${centro.lng}/1000/${token}`;
-    try {
-      const resp = await fetch(url);
-      if (!resp.ok) continue;
-      const data = await resp.json();
-
-      // Filtrado básico por bounding box del hex
-      const dentro = data.filter(d => {
-        const lat = parseFloat(d.Latitud), lon = parseFloat(d.Longitud);
-        return !isNaN(lat) && !isNaN(lon) && bounds.contains([lat, lon]);
-      });
-      resultados.push(...dentro);
-    } catch (err) {
-      console.error("Error en consulta:", err);
-    }
-  }
-  return resultados;
-}
-
-function onEachFeature(feature, layer) {
-  layer.on("click", async () => {
-    const props = feature.properties || {};
-
-    // ----- Info fija (no se borra después) -----
-    let htmlFija = `
-      <div id="info-fija">
-        <h2>${props.nomgeo || 'Zona'}</h2>
-        	<b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
-            <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
-            <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
-            <p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
-			
-            <p><b>Incidencia delicitiva municipal relacionada a extorsión:</b> ${props["extorsión"] || 0}</p>
-            <p><b>Incidencia delicitiva municipal relacionada a narcomenudeo:</b> ${props.narcomenud || 0}</p>
-            <p><b>Incidencia delicitiva municipal relacionada a robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
-            
-            <p><b>Total de créditos personales a nivel municipal:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
-            <p><b>Total de créditos vía nómina a nivel municipal:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
-            <p><b>Total de créditos hipotecarios a nivel municipal:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
-            <p><b>Total de créditos automotrices a nivel municipal:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
-			<p><b>Total créditos a nivel municipal:</b> ${props.TC?.toLocaleString() || 0}</p><hr>
-   
-            <p><b>Tasa de créditos hipotecarios por cada 10 mil adultos:</b> ${props.T_C_HIP || 0}</p>
-            <p><b>Tasa de créditos automotrices por cada 10 mil adultos:</b> ${props.T_C_AUTO || 0}</p>
-            <p><b>Tasa de tarjetas crédito por cada 10 mil adultos:</b> ${props.T_TC || 0}</p><hr>
-        <hr>
-      </div>
-      <div id="info-dinamica"></div>
-    `;
-    mostrarEnSidebar(htmlFija);
-
-    const bounds = layer.getBounds();
-    const resultados = await buscarEnHexagono(bounds, categoriasHex);
-
-    // AGRUPAR resultados
-    const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
-    for (const item of resultados) {
-      const c = (item.Clase_actividad || "").toLowerCase();
-      if (c.includes("banco")) resumen.Bancos++;
-      else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
-      else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
-      else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
-    }
-
-    // Contenido dinámico (sólo cambia esta parte)
-    let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul style='list-style:none;padding:0;'>";
-    for (const [cat, num] of Object.entries(resumen)) {
-      listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
-                    <span style="margin-right:4px;">${getIconoCategoria(cat)}</span>
-                    <h3>${cat}: </h3> <h3> ${num}</h3>
-                   </li>`;
-    }
-    listado += "</ul>";
-
-    // Reemplaza solo #info-dinamica
-    document.getElementById("info-dinamica").innerHTML = listado;
-  });
-}
-
-    // ================== HEXÁGONOS ===================
-
-	function getColor(d) {
-    return d > 1000000 ? '#d7191c' :
-           d > 500000  ? '#fdae61' :
-           d > 250000  ? '#ffffbf' :
-           d > 100000  ? '#abdda4' :
-                        '#2b83ba';
-}
-
-function style(feature) {
-    return {
-        fillColor: getColor(feature.properties.POBADUL),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
-}
-	  
-	  var hiveLayer09 = L.geoJson(hive_cdmx, { 
-    style: style, 
-    onEachFeature: onEachFeature 
-}).addTo(map);
-
-var hiveLayer15 = L.geoJson(hive_edomex, { 
-    style: style, 
-    onEachFeature: onEachFeature 
-}).addTo(map);
-	
-// Leyenda
-var legend = L.control({position: 'bottomright'}); 
-legend.onAdd = function (map) { 
-    var div = L.DomUtil.create('div', 'info legend'), 
-        grades = [0, 100000, 250000, 500000, 1000000]; 
-    for (var i = 0; i < grades.length; i++) { 
-        div.innerHTML += 
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + 
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'); 
-    } 
-    return div; 
-}; 
-legend.addTo(map); 
-
-// ========================TITULO=========================
-	var title = L.control();
-	title.onAdd = function (map) {
-		var div = L.DomUtil.create('div', 'info');
-		    div.innerHTML +=
-		    '<h1>Estudio de mercado</h1><h2>Análisis de entornos</h2>';
-		 return div;
-	};
-	title.addTo(map);	
-	
-	
-// ===== LAYER CONTROL =====
-var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
-var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
-map.addLayer(myMarker); 
-map.addLayer(myMarker1); 
-var baseLayers = { "Base": osm, "Ortoimagen": map }; 
-var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15 }; 
-var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
-
-// ================== INEGI ========================
-
-// === FUNCIÓN DE BÚSQUEDA DENUE ===
-function buscarDENUE() {
-    const query = document.getElementById("denue-input").value.trim();
-    if (!query) {
-        alert("Escribe un giro o palabra clave para buscar en DENUE");
-        return;
-    }
-
-	const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
-    
-    fetch(url)
+      fetch(url)
         .then(res => res.json())
         .then(data => {
-            if (!data || data.length === 0) {
-                alert("No se encontraron resultados en DENUE");
-                return;
-            }
+          let total = (data && data.length) ? data.length : 0;
 
-            // ==== Construir bloque DENUE para el sidebar ====
-            let total = data.length;
+          // Ícono dinámico
+          let icono = "📍"; 
+          if (query.toLowerCase().includes("farmacia")) icono = "💊";
+          if (query.toLowerCase().includes("escuela")) icono = "🏫";
+          if (query.toLowerCase().includes("hotel")) icono = "🏨";
+          if (query.toLowerCase().includes("banco")) icono = "🏦";
+          if (query.toLowerCase().includes("super")) icono = "🛒";
 
-            // Ícono según búsqueda
-            let icono = "📍"; 
-            if (query.toLowerCase().includes("farmacia")) icono = "💊";
-            if (query.toLowerCase().includes("escuela")) icono = "🏫";
-            if (query.toLowerCase().includes("hotel")) icono = "🏨";
-            if (query.toLowerCase().includes("banco")) icono = "🏦";
-            if (query.toLowerCase().includes("super")) icono = "🛒";
+          let htmlDENUE = `
+            <div id="denue-resultados" class="bloque">
+              <h3>${icono} "${query}"</h3>
+              <p><b>Total en el hexágono:</b> ${total}</p>
+            </div>`;
 
-            let htmlDENUE = `
-              <div id="denue-resultados" style="margin-top:20px;">
-                <h3>${icono} Resultados de "${query}"</h3>
-                <p><b>Total encontrados:</b> ${total}</p>
-                <ul style="list-style:none;padding:0;">`;
+          // Eliminar bloque previo si existe
+          let bloquePrevio = document.getElementById("denue-resultados");
+          if (bloquePrevio) bloquePrevio.remove();
 
-            data.forEach(item => {
-                htmlDENUE += `
-                  <li style="margin-bottom:8px; padding:6px; border-bottom:1px solid #333;">
-                    <b>${item.Nombre || ''}</b><br>
-                    <small>${item.Clase_actividad || ''}</small><br>
-                    ${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}<br>
-                    ${item.Telefono || ''}
-                  </li>`;
-            });
-
-            htmlDENUE += "</ul></div>";
-
-            // Agregar resultados de DENUE debajo de todo lo que ya está en el sidebar
-            document.getElementById("info-dinamica").innerHTML += htmlDENUE;
-
-            // Abrir el sidebar (no se borra lo anterior)
-            sidebar.open("info");
+          // Insertar al final
+          document.getElementById("info-dinamica").innerHTML += htmlDENUE;
         })
-        .catch(err => {
-            console.error("Error en consulta DENUE:", err);
-            alert("Error al consultar DENUE");
-        });
-}
+        .catch(err => console.error("Error en consulta DENUE:", err));
+    }
 
+    // === CAPA DE HEXÁGONOS (EJEMPLO GEOJSON) ===
+    const hexagonos = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "poblacion": 1200,
+            "delitos": 15,
+            "bancos": 2,
+            "supermercados": 1,
+            "escuelas": 3,
+            "hoteles": 0
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[
+              [-101.70, 21.12],
+              [-101.69, 21.13],
+              [-101.68, 21.13],
+              [-101.67, 21.12],
+              [-101.68, 21.11],
+              [-101.69, 21.11],
+              [-101.70, 21.12]
+            ]]
+          }
+        }
+      ]
+    };
 
+    function onEachHexagon(feature, layer) {
+      layer.on("click", function() {
+        let centro = layer.getBounds().getCenter();
 
-		
+        // 1) Info del hexágono
+        mostrarInfoHexagono(feature);
+
+        // 2) Búsqueda DENUE según input
+        let giro = document.getElementById("denue-input").value.trim();
+        if (giro) {
+          buscarDENUE(giro, centro);
+        }
+      });
+    }
+
+    L.geoJSON(hexagonos, {
+      style: { color: "blue", weight: 1, fillOpacity: 0.2 },
+      onEachFeature: onEachHexagon
+    }).addTo(map);
   </script>
 </body>
 </html>
-
