@@ -36,37 +36,16 @@
 	<!--.leaflet-sidebar-content {position: absolute; top: 0; bottom: 0; background-color: rgba(0,0,0, .95); overflow-x: hidden; overflow-y: auto;}-->
 	.info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: red; background: rgba(186,186,186,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
 	.info h2 {margin: 0 0 5px;color: #404040;}
-	#listado {height: 40vh; overflow-y: auto; background: #181818; border-top: 1px solid #333; transition: height 1.0s ease;}
-    #listado.minimized {height: 30px; overflow: hidden;}
+	#listado, #sidebar-content { transition: height 1.0s ease, padding 1.0s ease;}
+	#listado.minimized { height: 30px; overflow: hidden; }
+	#sidebar-content.minimized { height: 30px; overflow: hidden; }
 	#controls {padding: 10px; background: #1e1e1e; border-bottom: 1px solid #333;}
 	label {color: white;}
 	table {width: 90%; border-collapse: collapse; color: #e0e0e0;}
     th, td {padding: 8px; border-bottom: 1px solid #333;}
     tr:hover {background: #333; cursor: pointer;}
     th {background: #222; position: sticky; top: 0;}
-	/* Sidebar */
-	.leaflet-sidebar-content, 
-	.leaflet-sidebar-pane, 
-	#sidebar-content, 
-	#info-fija, 
-	#info-dinamica {
-	  color: #e0e0e0;   /* Texto gris claro */
-	}
-	
-	/* Títulos dentro del sidebar */
-	.leaflet-sidebar-content h2, 
-	.leaflet-sidebar-content h3, 
-	.leaflet-sidebar-content b {
-	  color: #ffffff;   /* Texto blanco */
-	}
-	
-	/* Tabla de resultados */
-	#listado h3, 
-	#listado th, 
-	#listado td {
-	  color: #f5f5f5;   /* Gris casi blanco */
-	}
-	  
+
   </style>
 </head>
 
@@ -84,41 +63,45 @@
 		<button id="btnExportar">Exportar a PDF</button>
     </div>	
   <div id="map"></div>
-  <div id="sidebar" class="leaflet-sidebar collapsed">
-    <div class="leaflet-sidebar-tabs">
-      <ul role="tablist">
-        <li><a href="#info" role="tab"><i class="bi bi-info-circle"></i></a></li>
-      </ul>
-    </div>
-    <div class="leaflet-sidebar-content">
-      <div class="leaflet-sidebar-pane" id="info">
-        <h4 class="leaflet-sidebar-header">
-          Ficha de información urbano social y económica
-          <span class="leaflet-sidebar-close"><i class="bi bi-x-lg"></i></span>
-        </h4>
-        <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
+
+	<!-- === SIDEBAR === -->
+<div id="sidebar" class="leaflet-sidebar collapsed">
+  <div class="leaflet-sidebar-tabs">
+    <ul role="tablist">
+      <li><a href="#info" role="tab"><i class="bi bi-info-circle"></i></a></li>
+    </ul>
+  </div>
+  <div class="leaflet-sidebar-content">
+    <div class="leaflet-sidebar-pane" id="info">
+      <div id="sidebar-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <h4 class="leaflet-sidebar-header" style="margin:0;">📊 Ficha de información urbano social y económica</h4>
+        <button id="btnSidebarToggle"><i class="bi bi-dash"></i></button>
       </div>
+      <div id="sidebar-content">Haz clic en una zona para conocer su información</div>
     </div>
   </div>
+</div>
 
-		<div id="listado">
-		    <div id="listado-header">
-		        <h4>📋 Tabla de resultados de establecimientos económicos </h4>
-		        <button id="btnToggle"><i class="bi bi-dash"></i></button>
-		    </div>
-		    <table>
-		        <thead>
-		            <tr>
-		                <th>Nombre</th>
-		                <th>Dirección</th>
-		                <th>Teléfono</th>
-		                <th>Personal ocupado</th>
-		                <th>Clase</th>
-		            </tr>
-		        </thead>
-		        <tbody id="tablaResultados"></tbody>
-		    </table>
-		</div>		
+<!-- === LISTADO === -->
+<div id="listado">
+  <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
+    <h4>📍 Tabla de resultados de establecimientos económicos</h4>
+    <button id="btnToggle"><i class="bi bi-dash"></i></button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Teléfono</th>
+        <th>Personal ocupado</th>
+        <th>Clase</th>
+      </tr>
+    </thead>
+    <tbody id="tablaResultados"></tbody>
+  </table>
+</div>
+
 		
 	<script src="js/leaflet.photon.js"></script>
     <script src="js/leaflet-measure.js"></script>
@@ -490,11 +473,38 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
 
 	document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
+	// Sidebar
+    var sidebar = L.control.sidebar({
+      autopan: true,
+      closeButton: true,
+      container: 'sidebar',
+      position: 'right'
+    }).addTo(map);
+
+		
+	// Toggle listado
+	document.getElementById("btnToggle").addEventListener("click", function() {
+	  const listado = document.getElementById("listado");
+	  listado.classList.toggle("minimized");
+	  this.innerHTML = listado.classList.contains("minimized") 
+	    ? '<i class="bi bi-plus"></i>' 
+	    : '<i class="bi bi-dash"></i>';
+	});
+	
+	// Toggle sidebar
+	document.getElementById("btnSidebarToggle").addEventListener("click", function() {
+	  const sidebarContent = document.getElementById("sidebar-content");
+	  sidebarContent.classList.toggle("minimized");
+	  this.innerHTML = sidebarContent.classList.contains("minimized") 
+	    ? '<i class="bi bi-plus"></i>' 
+	    : '<i class="bi bi-dash"></i>';
+	});
 
 		
   </script>
 </body>
 </html>
+
 
 
 
