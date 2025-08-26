@@ -37,7 +37,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    background-color: rgb(0,0,0 / 95%);
+    background-color: rgba(0,0,0, .95);
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -56,10 +56,10 @@
     </div>
     <div class="leaflet-sidebar-content">
       <div class="leaflet-sidebar-pane" id="info">
-        <h3 class="leaflet-sidebar-header">
+        <h4 class="leaflet-sidebar-header">
           Ficha de información urbano social y económica de la zona
           <span class="leaflet-sidebar-close"><i class="bi bi-x-lg"></i></span>
-        </h3>
+        </h4>
         <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
       </div>
     </div>
@@ -345,6 +345,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
