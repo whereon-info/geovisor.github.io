@@ -474,7 +474,8 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
 	document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 	// Sidebar
-    var sidebar = L.control.sidebar({
+    let sidebar = document.getElementById('mySidebar');
+	var sidebar = L.control.sidebar({
       autopan: true,
       closeButton: true,
       container: 'sidebar',
@@ -504,6 +505,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
