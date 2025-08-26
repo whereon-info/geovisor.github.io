@@ -396,103 +396,69 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
 
 // ================== INEGI ========================
 
-	let markersLayer = L.featureGroup().addTo(map);
+// === FUNCIÓN DE BÚSQUEDA DENUE ===
+function buscarDENUE() {
+    const query = document.getElementById("denue-input").value.trim();
+    if (!query) {
+        alert("Escribe un giro o palabra clave para buscar en DENUE");
+        return;
+    }
 
-	function getBootstrapIconFromActividad(clase) {
-	    clase = (clase || "").toLowerCase();
-	    let iconHTML;
-	    if (clase.includes("restaurante")) {
-	        iconHTML = '<i class="bi bi-shop" style="font-size: 26px; color: orange;"></i>';
-	    } else if (clase.includes("hotel")) {
-	        iconHTML = '<i class="bi bi-building" style="font-size: 26px; color: blue;"></i>';
-	    } else {
-	        iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 26px; color: red;"></i>';
-	    }
-	    return L.divIcon({ html: iconHTML, className: 'custom-div-icon', iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -26] });
-	} 
+	const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+    
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            if (!data || data.length === 0) {
+                alert("No se encontraron resultados en DENUE");
+                return;
+            }
 
-	// Buscar datos DENUE	
-	async function buscarDENUE() {
-	    markersLayer.clearLayers();
-	    document.getElementById("tablaResultados").innerHTML = "";
+            // ==== Construir bloque DENUE para el sidebar ====
+            let total = data.length;
 
-	    let condi = document.getElementById('condi').value.trim();
-	    const lat = parseFloat(document.getElementById('lat').value.trim());
-	    const lon = parseFloat(document.getElementById('lon').value.trim());
-	    const mts = parseInt(document.getElementById('mts').value.trim());
+            // Ícono según búsqueda
+            let icono = "📍"; 
+            if (query.toLowerCase().includes("farmacia")) icono = "💊";
+            if (query.toLowerCase().includes("escuela")) icono = "🏫";
+            if (query.toLowerCase().includes("hotel")) icono = "🏨";
+            if (query.toLowerCase().includes("banco")) icono = "🏦";
+            if (query.toLowerCase().includes("super")) icono = "🛒";
 
-	    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
-	        alert("Por favor ingresa datos válidos.");
-	        return;
-	    }
+            let htmlDENUE = `
+              <div id="denue-resultados" style="margin-top:20px;">
+                <h3>${icono} Resultados de "${query}"</h3>
+                <p><b>Total encontrados:</b> ${total}</p>
+                <ul style="list-style:none;padding:0;">`;
 
-	    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+            data.forEach(item => {
+                htmlDENUE += `
+                  <li style="margin-bottom:8px; padding:6px; border-bottom:1px solid #333;">
+                    <b>${item.Nombre || ''}</b><br>
+                    <small>${item.Clase_actividad || ''}</small><br>
+                    ${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}<br>
+                    ${item.Telefono || ''}
+                  </li>`;
+            });
 
-	    try {
-	        const resp = await fetch(url);
-	        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-	        const data = await resp.json();
+            htmlDENUE += "</ul></div>";
 
-	        if (!Array.isArray(data) || data.length === 0) {
-	            alert("No se encontraron resultados.");
-	            return;
-	        }
+            // Agregar resultados de DENUE debajo de todo lo que ya está en el sidebar
+            document.getElementById("info-dinamica").innerHTML += htmlDENUE;
 
-	        // Para el Sidebar
-	        let htmlDENUE = "<h3>📍 Resultados de DENUE</h3><ul style='list-style:none;padding:0;'>";
+            // Abrir el sidebar (no se borra lo anterior)
+            sidebar.open("info");
+        })
+        .catch(err => {
+            console.error("Error en consulta DENUE:", err);
+            alert("Error al consultar DENUE");
+        });
+}
 
-	        data.forEach(item => {
-	            const latNum = parseFloat(item.Latitud);
-	            const lonNum = parseFloat(item.Longitud);
-	            if (isNaN(latNum) || isNaN(lonNum)) return;
-
-	            const popupContent = `<b>${item.Nombre || ''}</b><br><small>${item.Clase_actividad || ''}</small>`;
-
-	            const icono = getBootstrapIconFromActividad(item.Clase_actividad);
-	            const marker = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
-	            markersLayer.addLayer(marker);
-
-	            // Tabla
-	            const row = document.createElement("tr");
-	            row.innerHTML = `
-	                <td>${item.Nombre || ''}</td>
-	                <td>${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}</td>
-	                <td>${item.Telefono || ''}</td>
-	                <td>${item.Estrato || ''}</td>
-	                <td>${item.Clase_actividad || ''}</td>
-	            `;
-	            row.addEventListener("click", () => {
-	                map.setView([latNum, lonNum], 18);
-	                marker.openPopup();
-	            });
-	            document.getElementById("tablaResultados").appendChild(row);
-
-	            // Sidebar
-	            htmlDENUE += `
-	              <li style="margin-bottom:8px; padding:6px; border-bottom:1px solid #333;">
-	                <b>${item.Nombre || ''}</b><br>
-	                <small>${item.Clase_actividad || ''}</small><br>
-	                ${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}<br>
-	                ${item.Telefono || ''}
-	              </li>`;
-	        });
-
-	        htmlDENUE += "</ul>";
-	        mostrarEnSidebar(htmlDENUE);
-
-	        const bounds = markersLayer.getBounds();
-	        if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
-
-	    } catch (error) {
-	        console.error("Error consultando DENUE:", error);
-	        alert("Error al consultar la API.");
-	    }
-	}
-
-	document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 
 		
   </script>
 </body>
 </html>
+
