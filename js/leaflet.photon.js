@@ -50,7 +50,7 @@ L.PhotonBase = L.Class.extend({
 
 L.PhotonBaseSearch = L.PhotonBase.extend({
 
-    includes: ((typeof L.Evented !== 'undefined' && L.Evented.prototype) || L.Mixin.Events),
+    includes: ((typeof L.Evented !== 'undefined' && L.Evented.prototype) || L.Evented),
 
     options: {
         url: 'https://api-adresse.data.gouv.fr/search/?',
@@ -402,7 +402,7 @@ L.PhotonSearch = L.PhotonBaseSearch.extend({
 
 L.Control.Photon = L.Control.extend({
 
-    includes: ((typeof L.Evented !== 'undefined' && L.Evented.prototype) || L.Mixin.Events),
+    includes: ((typeof L.Evented !== 'undefined' && L.Evented.prototype) || L.Evented),
 
     onAdd: function (map, options) {
         this.map = map;
@@ -442,7 +442,7 @@ L.Map.addInitHook(function () {
 
 L.PhotonReverse = L.PhotonBase.extend({
 
-    includes: ((typeof L.Evented !== 'undefined' && L.Evented.prototype) || L.Mixin.Events),
+    includes: ((typeof L.Evented !== 'undefined' && L.Evented.prototype) || L.Evented),
 
     options: {
         url: 'https://photon.komoot.de/reverse/?',
@@ -500,4 +500,5 @@ var obj3 = {
     set marker(value) {
         this.value = value;
     }
+
     }
