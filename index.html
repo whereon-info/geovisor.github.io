@@ -28,7 +28,7 @@
 
   <style>
     body,html { margin:0; padding:0; height:100%; }
-    #map { width:100%; height:100%; }
+    #map { width:100%; height:90%; }
     .leaflet-sidebar { z-index:1000; }
 
     .legend {line-height: 18px; color: #999999;}
@@ -377,7 +377,10 @@
         const latNum = parseFloat(item.Latitud), lonNum = parseFloat(item.Longitud);
         if (isNaN(latNum) || isNaN(lonNum)) return;
 
-        const popupContent = `<b>${item.Nombre || ''}</b><br><small>${item.Clase_actividad || ''}</small>`;
+        const popupContent = `<b>${item.Nombre || ''}</b><br><small>${item.Clase_actividad || ''}</small>
+                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
+                ${item.Colonia || ''}, ${item.CP || ''}<br>
+                ${item.Telefono || ''}`;
         const icono = getBootstrapIconFromActividad(item.Clase_actividad);
         const mk = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
         markersLayer.addLayer(mk);
@@ -438,6 +441,7 @@
 </script>
 </body>
 </html>
+
 
 
 
