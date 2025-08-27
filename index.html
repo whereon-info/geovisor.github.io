@@ -413,17 +413,17 @@
   document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
   // ========== TOGGLES: listado y sidebar ==========
-  document.getElementById("btnToggle").addEventListener("click", function() {
-    const listado = document.getElementById("listado");
-    listado.classList.toggle("minimized");
-    this.innerHTML = listado.classList.contains("minimized") ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-dash"></i>';
-  });
+  //document.getElementById("btnToggle").addEventListener("click", function() {
+    //const listado = document.getElementById("listado");
+    //listado.classList.toggle("minimized");
+    //this.innerHTML = listado.classList.contains("minimized") ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-dash"></i>';
+  //});
 
-  document.getElementById("btnSidebarToggle").addEventListener("click", function() {
-    const sidebarContent = document.getElementById("sidebar-content");
-    sidebarContent.classList.toggle("minimized");
-    this.innerHTML = sidebarContent.classList.contains("minimized") ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-dash"></i>';
-  });
+  //document.getElementById("btnSidebarToggle").addEventListener("click", function() {
+    //const sidebarContent = document.getElementById("sidebar-content");
+    //sidebarContent.classList.toggle("minimized");
+    //this.innerHTML = sidebarContent.classList.contains("minimized") ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-dash"></i>';
+  //});
 
   // Utilidad: getIconoCategoria (usa tu función original)
   function getIconoCategoria(cat){
@@ -438,6 +438,7 @@
 </script>
 </body>
 </html>
+
 
 
 
