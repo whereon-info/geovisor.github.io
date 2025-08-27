@@ -118,7 +118,7 @@ const map = L.map('map').setView([22.5, -100.5], 5);
 		}).addTo(map);
 const osm  = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-const baseLayers = { "Carto Dark": dark, "OSM": osm };
+const baseLayers = { "Carto Dark": map, "OSM": osm };
 L.control.layers(baseLayers, { "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15 }, { collapsed: true }).addTo(map);
 
 
@@ -482,6 +482,7 @@ legend.addTo(map);
   </script>
 </body>
 </html>
+
 
 
 
