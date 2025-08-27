@@ -22,7 +22,7 @@
 
 <!-- Buscadores -->
 	<link rel="stylesheet" href="css/leaflet-search.css">
-	<link rel="stylesheet" href="css/L.Control.Locate.min.css"
+	<link rel="stylesheet" href="css/L.Control.Locate.min.css">
 	<link rel="stylesheet" href="css/leaflet.photon.css">
 	<link rel="stylesheet" href="css/leaflet-measure.css">
 
@@ -33,7 +33,7 @@
 	.legend {line-height: 18px; color: #555;}
 	.legend i {width: 18px;height: 18px; float: left;margin-right: 8px;opacity: 0.7;}
 	.leaflet-sidebar-header {height: 40px;line-height: 40px; font-size: 10pt; color: rgb(254, 254, 254);background-color: rgb(0, 0, 0);margin: -10px -20px 0px; padding: 0px 20px;}
-	<!--.leaflet-sidebar-content {position: absolute; top: 0; bottom: 0; background-color: rgba(0,0,0, .95); overflow-x: hidden; overflow-y: auto;}-->
+	/*leaflet-sidebar-content {position: absolute; top: 0; bottom: 0; background-color: rgba(0,0,0, .95); overflow-x: hidden; overflow-y: auto;}*/
 	.info {padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;background: red; background: rgba(186,186,186,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2);border-radius: 5px;}
 	.info h2 {margin: 0 0 5px;color: #404040;}
 	#listado, #sidebar-content { transition: height 1.0s ease, padding 1.0s ease;}
@@ -110,18 +110,12 @@
  
 	<script>
     // ================== MAPA ===================
-		const map = L.map('map').setView([22.5, -100.5], 5);
-		L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-		    attribution: '&copy; OpenStreetMap contributors',
-		    subdomains: 'abcd',
-		    maxZoom: 19
-		}).addTo(map);
-		
-		var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-		});
-		
-		map.addLayer(osm);
+const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+const osm  = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+const baseLayers = { "Carto Dark": dark, "OSM": osm };
+L.control.layers(baseLayers, { "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15 }, { collapsed: true }).addTo(map);
+
 
 	// ================== NUEVOS BOTONES ===================
 	        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
@@ -149,29 +143,26 @@
             initial: true,
             // resultsHandler: myHandler,
         }).addTo(map);
-        photonControl._container.childNodes[0].style.borderRadius="10px"
 
-        // Create a variable to store the geoJSON data
-        var x = null;
-        // Create a variable to store the marker
-        var marker = null;
-        // Add an event listener to the Photon control to create a marker from the returned geoJSON data
-        var z = null;
-        photonControl.on('selected', function(e) {
-            console.log(photonControl.search.resultsContainer);
-            if (x != null) {
-                map.removeLayer(obj3.marker);
-                map.removeLayer(x);
-            }
-            obj2.gcd = e.choice;
-            x = L.geoJSON(obj2.gcd).addTo(map);
-            var label = typeof obj2.gcd.properties.label === 'undefined' ? obj2.gcd.properties.display_name : obj2.gcd.properties.label;
-            obj3.marker = L.marker(x.getLayers()[0].getLatLng()).bindPopup(label).addTo(map);
-            map.setView(x.getLayers()[0].getLatLng(), 17);
-            z = typeof e.choice.properties.label === 'undefined'? e.choice.properties.display_name : e.choice.properties.label;
-            console.log(e);
-            e.target.input.value = z;
-        });
+
+		//======================================================================
+		photonControl.on('selected', function(e) {
+		  try {
+		    if (x) { map.removeLayer(x); }
+		    if (marker) { map.removeLayer(marker); }
+		
+		    x = L.geoJSON(e.choice).addTo(map);
+		    const ll = x.getLayers()[0].getLatLng();
+		    marker = L.marker(ll).addTo(map);
+		    map.setView(ll, 17);
+		
+		    const label = (e.choice.properties?.label ?? e.choice.properties?.display_name) || '';
+		    e.target.input.value = label;
+		  } catch(err) {
+		    console.error('Error en selección Photon:', err);
+		  }
+		});
+//======================================================================
         var search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
         search.classList.add("leaflet-control-search")
         search.style.display = "flex";
@@ -365,16 +356,6 @@ legend.addTo(map);
 		 return div;
 	};
 	title.addTo(map);	
-	
-	
-// ===== LAYER CONTROL =====
-var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
-var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
-map.addLayer(myMarker); 
-map.addLayer(myMarker1); 
-var baseLayers = { "Base": osm, "Ortoimagen": map }; 
-var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15 }; 
-var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); control.addTo(map);
 
 // ================== INEGI ========================
 
@@ -473,15 +454,6 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
 
 	document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
-	// Sidebar
-    let sidebar = document.getElementById('.sidebar');
-	var sidebar = L.control.sidebar({
-      autopan: true,
-      closeButton: true,
-      container: 'sidebar',
-      position: 'right'
-    }).addTo(map);
-	sidebar = document.getElementById('.listado');
 		
 	// Toggle listado
 	document.getElementById("btnToggle").addEventListener("click", function() {
@@ -505,6 +477,7 @@ var control = new L.control.layers(baseLayers, overlays, {collapsed:true}); cont
   </script>
 </body>
 </html>
+
 
 
 
