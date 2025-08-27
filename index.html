@@ -110,7 +110,12 @@
  
 	<script>
     // ================== MAPA ===================
-const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+const map = L.map('map').setView([22.5, -100.5], 5);
+		L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+		    attribution: '&copy; OpenStreetMap contributors',
+		    subdomains: 'abcd',
+		    maxZoom: 19
+		}).addTo(map);
 const osm  = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
 const baseLayers = { "Carto Dark": dark, "OSM": osm };
@@ -477,6 +482,7 @@ legend.addTo(map);
   </script>
 </body>
 </html>
+
 
 
 
