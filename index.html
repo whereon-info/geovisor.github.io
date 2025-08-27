@@ -273,28 +273,61 @@
 
       // Agrupar
       const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
+      const extras = {}; // aquí se guardan categorías nuevas
+      
       for (const item of resultados) {
         const c = (item.Clase_actividad || "").toLowerCase();
+      
         if (c.includes("banco")) resumen.Bancos++;
         else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
         else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
         else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
+      
+        // 🔹 si no entra en las fijas, lo mando a extras
+        else {
+          const nombre = item.Clase_actividad.trim();
+          if (!extras[nombre]) extras[nombre] = 0;
+          extras[nombre]++;
+        }
       }
 
+
       let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul style='list-style:none;padding:0;'>";
-      for (const [cat,num] of Object.entries(resumen)) {
-        listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
-                      <span style="margin-right:8px;">${getIconoCategoria(cat)}</span>
-                      <strong style="margin-right:6px;">${cat}:</strong> ${num}
-                    </li><hr>`;
+       for (const [cat,num] of Object.entries(resumen)) {
+          listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
+                        <span style="margin-right:8px;">${getEmojiCategoria(cat)}</span>
+                        <strong style="margin-right:6px;">${cat}:</strong> ${num}
+                      </li>`;
+                          }
+          listado += "</ul>";
+
+            if (Object.keys(extras).length > 0) {
+        listado += "<h3>🔍 Otros establecimientos:</h3><ul style='list-style:none;padding:0;'>";
+        for (const [cat,num] of Object.entries(extras)) {
+          listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
+                        <span style="margin-right:8px;">📍</span>
+                        <strong style="margin-right:6px;">${cat}:</strong> ${num}
+                      </li>`;
+        }
+        listado += "</ul>";
       }
-      listado += "</ul>";
+      
+      function getEmojiCategoria(cat) {
+          const emojis = {
+            "Bancos": "🏦",
+            "Supermercados": "🛒",
+            "Escuelas": "🏫",
+            "Hoteles": "🏨"
+          };
+          return emojis[cat] || "📍";
+        }
 
       // Reemplaza #info-dinamica
       const cont = document.getElementById("info-dinamica");
       if (cont) cont.innerHTML = listado;
     });
   }
+  <hr>
   // ========== AGRUPAR =====================================
 
   
@@ -444,6 +477,7 @@
 </script>
 </body>
 </html>
+
 
 
 
