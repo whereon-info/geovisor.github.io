@@ -262,7 +262,7 @@
           <p><b>Créditos personales:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
           <p><b>Créditos nómina:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
           <p><b>Créditos hipotecarios:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
-          <p><b>Créditos automotrices:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
+          <p><b>Créditos automotrices:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p><hr>
         </div>
         <div id="info-dinamica">Cargando...</div>
       `;
@@ -286,7 +286,7 @@
         listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
                       <span style="margin-right:8px;">${getIconoCategoria(cat)}</span>
                       <strong style="margin-right:6px;">${cat}:</strong> ${num}
-                    </li>`;
+                    </li><hr>`;
       }
       listado += "</ul>";
 
@@ -295,7 +295,10 @@
       if (cont) cont.innerHTML = listado;
     });
   }
+  // ========== AGRUPAR =====================================
 
+  
+  
   // ========== ESTILO / LAYERS (crear HIVE primero) ==========
   function getColor(d) {
     return d > 1000000 ? '#d7191c' :
@@ -441,6 +444,7 @@
 </script>
 </body>
 </html>
+
 
 
 
