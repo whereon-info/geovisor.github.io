@@ -329,7 +329,19 @@
   
   // ========== AGRUPAR =====================================
 
-  
+
+
+
+  //======================= LOGO ================================
+	var logoControl = L.control({ position: "bottomleft" });
+
+logoControl.onAdd = function (map) {
+    var div = L.DomUtil.create("div", "logo-leaflet");
+    div.innerHTML = '<img src="images/WhereOn-Logo-Color-Vrt.png" style="width:80px; opacity:0.9;">';
+    return div;
+};
+
+logoControl.addTo(map);
   
   // ========== ESTILO / LAYERS (crear HIVE primero) ==========
   function getColor(d) {
@@ -476,6 +488,7 @@
 </script>
 </body>
 </html>
+
 
 
 
