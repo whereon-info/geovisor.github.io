@@ -81,7 +81,7 @@
         <h4 class="leaflet-sidebar-header" style="margin:0;">📊 Ficha de información urbano social y económica</h4>
         <button id="btnSidebarToggle"><i class="bi bi-dash"></i></button>
       </div>
-      <div id="sidebar-content">Haz clic en una zona para conocer su información</div>
+      <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
     </div>
   </div>
 </div>
@@ -89,7 +89,7 @@
 <!-- LISTADO -->
 <div id="listado">
   <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
-    <h4>📍 Tabla de resultados de establecimientos económicos</h4>
+    <h3>📍 Establecimientos económicos dentro de la zona de estudio</h3>
     <button id="btnToggle"><i class="bi bi-dash"></i></button>
   </div>
   <table>
@@ -238,7 +238,7 @@
         });
         resultados.push(...dentro);
       } catch (err) {
-        console.error("Error en consulta DENUE:", err);
+        console.error("Error en consulta", err);
       }
     }
     return resultados;
@@ -343,7 +343,7 @@
   title.addTo(map);
 
   // Ahora sí agregamos control de capas
-  const baseLayers = { "Carto Dark": dark, "OSM": osm };
+  const baseLayers = { "Mapa base": dark, "Calles": osm };
   const overlays = {};
   if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
   if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
@@ -438,5 +438,6 @@
 </script>
 </body>
 </html>
+
 
 
