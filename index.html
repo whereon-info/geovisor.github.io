@@ -43,11 +43,11 @@
     #listado.minimized { height: 30px; overflow: hidden; }
     #sidebar-content.minimized { height: 30px; overflow: hidden; }
 
-    #controls { padding:10px; background:#1e1e1e; border-bottom:1px solid #333; }
-    label { color:white; }
+    #controls { padding:10px; background:#1e1e1e; border-bottom:1px solid #e00404; }
+    label { color:gray; }
 
-    table { width: 90%; border-collapse: collapse; color: #e0e0e0; }
-    th, td { padding: 8px; border-bottom: 1px solid #333; }
+    table { width: 90%; border-collapse: collapse; color: #000000; }
+    th, td { padding: 8px; border-bottom: 1px solid #e00404; }
     tr:hover { background: #333; cursor: pointer; }
     th { background: #222; position: sticky; top: 0; }
   </style>
@@ -320,12 +320,6 @@
     hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: onEachFeature }).addTo(map);
   } catch(e) { console.warn('hive_edomex no disponible o error:', e); }
 
-  // Ahora sí agregamos control de capas (ya existen hiveLayer09/15 o nulls)
-  const baseLayers = { "Carto Dark": dark, "OSM": osm };
-  const overlays = {};
-  if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
-  if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
-  L.control.layers(baseLayers, overlays, { collapsed: true }).addTo(map);
 
   // Leyenda y título
   var legend = L.control({position: 'bottomright'});
@@ -347,6 +341,13 @@
     return div;
   };
   title.addTo(map);
+
+  // Ahora sí agregamos control de capas
+  const baseLayers = { "Carto Dark": dark, "OSM": osm };
+  const overlays = {};
+  if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
+  if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
+  L.control.layers(baseLayers, overlays, { collapsed: true }).addTo(map);
 
   // ========== BÚSQUEDA DENUE (botón) ==========
   async function buscarDENUE() {
@@ -437,3 +438,4 @@
 </script>
 </body>
 </html>
+
