@@ -31,7 +31,7 @@
     #map { width:100%; height:95%; }
     .leaflet-sidebar { z-index:1000; }
     .title {font family: Roboto; background-color:#15f20a}
-    .legend {line-height: 18px; color: #15f20a;}
+    .legend {line-height: 18px; color: #000000;} /*TEXTO DE LA SIMBOLOGÍA*/
     .legend i {width: 18px;height: 18px; float: left;margin-right: 8px;opacity: 0.7;}
     .leaflet-sidebar-header {height: 40px;line-height: 40px; font-size: 10pt; color:#999999; background-color:#000000; margin:-10px -20px 0; padding:0 20px;}
     .leaflet-sidebar-content {position:absolute; top:0; bottom:0; background-color:rgba(153, 153, 153,.95); overflow-x:hidden; overflow-y:auto;}
@@ -43,12 +43,12 @@
     #listado.minimized { height: 30px; overflow: hidden; }
     #sidebar-content.minimized { height: 30px; overflow: hidden; }
 
-    #controls { padding:10px; background:#000000; border-bottom:1px solid #15f20a }
+    #controls { padding:10px; background:#f15a29; border-bottom:1px solid #15f20a }
     label { color:gray; }
 
     table { width: 100%; border-collapse: collapse; color: #999999; background-color:#FFFFFF; }
     th, td { padding: 8px; border-bottom: 1px solid #15f20a; }
-    tr:hover { background: #000000; cursor: pointer; }
+    tr:hover { background: #99ca3c; cursor: pointer; }
     th { background: #15f20a; position: sticky; top: 0; }
   </style>
 </head>
@@ -488,6 +488,7 @@ logoControl.addTo(map);
 </script>
 </body>
 </html>
+
 
 
 
