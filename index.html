@@ -88,7 +88,7 @@
 <!-- LISTADO -->
 <div id="listado">
   <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
-    <h5>📍 Establecimientos económicos dentro de la zona de estudio</h5>
+    <h4>📍 Establecimientos económicos dentro de la zona de estudio</h4>
     <button id="btnToggle"><i class="bi bi-dash"></i></button>
   </div>
   <table>
@@ -112,13 +112,13 @@
   const map = L.map('map').setView([22.5, -100.5], 5);
 
   // tile layers (defínelas y agrégalas a control después)
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
     subdomains: 'abcd',
     maxZoom: 19
   }).addTo(map);
 
-  const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
 
   // ========== VARIABLES COMPARTIDAS (evita ReferenceError) ==========
@@ -391,7 +391,7 @@ logoControl.addTo(map);
   title.addTo(map);
 
   // Ahora sí agregamos control de capas
-  const baseLayers = { "Mapa base": osm, "Oscuro": dark };
+  const baseLayers = { "Oscuro": dark, "Calles": osm };
   const overlays = {};
   if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
   if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
@@ -489,6 +489,7 @@ logoControl.addTo(map);
 </script>
 </body>
 </html>
+
 
 
 
