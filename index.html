@@ -119,6 +119,10 @@
   }).addTo(map);
 
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	attribution: '&copy; OpenStreetMap contributors; DENUE,INEGI',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
 
   // ========== VARIABLES COMPARTIDAS (evita ReferenceError) ==========
   var x = null;            // geojson temporal usado por photon
@@ -390,7 +394,7 @@ logoControl.addTo(map);
   title.addTo(map);
 
   // Ahora sí agregamos control de capas
-  const baseLayers = { "Mapa base": dark, "Calles": osm };
+  const baseLayers = { "Mapa base": osm, "Oscuro": dark };
   const overlays = {};
   if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
   if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
@@ -488,6 +492,7 @@ logoControl.addTo(map);
 </script>
 </body>
 </html>
+
 
 
 
