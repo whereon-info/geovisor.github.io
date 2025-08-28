@@ -24,7 +24,6 @@
   <link rel="stylesheet" href="css/leaflet-search.css">
   <link rel="stylesheet" href="css/L.Control.Locate.min.css">
   <link rel="stylesheet" href="css/leaflet.photon.css">
-  <link rel="stylesheet" href="css/leaflet-measure.css">
 
   <!-- GOOGLGE FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
@@ -129,7 +128,6 @@
 
 <!-- plugins local JS -->
 <script src="js/leaflet.photon.js"></script>
-<script src="js/leaflet-measure.js"></script>
 <script src="js/leaflet-search.js"></script>
 <script src="js/L.Control.Locate.min.js"></script>
 
@@ -152,24 +150,8 @@
   var marker = null;       // marcador temporal usado por photon
   var last = null;
 
-  // ========== CONTROLES (locate, measure) ==========
+  // ========== CONTROLES (locate) ======================
   L.control.locate({ locateOptions: { maxZoom: 15 } }).addTo(map);
-
-  var measureControl = new L.Control.Measure({
-    position: 'topleft',
-    primaryLengthUnit: 'meters',
-    secondaryLengthUnit: 'kilometers',
-    primaryAreaUnit: 'sqmeters',
-    secondaryAreaUnit: 'hectares'
-  });
-  measureControl.addTo(map);
-
-  // Protege acceso si elemento no existe aún
-  const measureToggleEls = document.getElementsByClassName('leaflet-control-measure-toggle');
-  if (measureToggleEls.length) {
-    measureToggleEls[0].innerHTML = '';
-    measureToggleEls[0].className += ' fas fa-ruler';
-  }
 
   // ========== PLUGIN PHOTON (si está cargado) ==========
   const url = {
@@ -524,6 +506,7 @@ logoControl.addTo(map);
 </script>
 </body>
 </html>
+
 
 
 
