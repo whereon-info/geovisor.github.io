@@ -31,9 +31,9 @@
 	
 
   <style>
-    /*body,html { margin:0; padding:0; height:90%; font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }*/
+    body,html { margin:0; padding:0; height:90%; font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     #map { width:100%; height:95%; }
-    /*.leaflet-sidebar { z-index:1000; }*/
+    .leaflet-sidebar { z-index:1000; }
     /*.title {font family: Roboto; background-color:#15f20a}*/
     /*.legend {line-height: 18px; color: #000000;} /*TEXTO DE LA SIMBOLOGÍA*/*/
     /*.legend i {width: 10px;height: 10px; float: left;margin-right: 8px; opacity: 0.5;}*/
@@ -57,41 +57,15 @@
     /*th { background: #99ca3c; position: sticky; top: 0; } /*BARRA NOMBRE DIRECCION TELEFONO ETC*/*/
 
 	/* 🎨 Fuente uniforme en todo el mapa */
-	  body, html, .leaflet-control, .leaflet-popup-content, #sidebar, #listado {
-	  font-family: 'Poppins', sans-serif;
-	  font-size: 14px;
-	  color: #f1f1f1;
-	}
+	.leaflet-control, .leaflet-popup-content, #sidebar, #listado {font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1;}
 	
 	/* 🗂 Control de capas */
-	.leaflet-control-layers {
-	  background: rgba(40, 40, 40, 0.9);
-	  border-radius: 8px;
-	  padding: 6px;
-	  color: #ffffff;
-	  font-family: 'Poppins', sans-serif;
-	}
-	
-	.leaflet-control-layers label {
-	  color: #ffffff !important;
-	  font-weight: 500;
-	  cursor: pointer;
-	}
+	.leaflet-control-layers {background: rgba(40, 40, 40, 0.9);border-radius: 8px;padding: 6px;color: #ffffff;font-family: 'Poppins', sans-serif;}
+	.leaflet-control-layers label { color: #ffffff; font-weight: 500; cursor: pointer;}
 	
 	/* 📑 Sidebar y tabla de resultados */
-	#sidebar, #listado {
-	  background: #2c2c2c;
-	  color: #ffffff;
-	  font-family: 'Poppins', sans-serif;
-	  font-size: 14px;
-	  line-height: 1.5;
-	}
-	
-	#sidebar h3, #listado h3 {
-	  font-weight: 600;
-	  font-size: 16px;
-	  margin-bottom: 8px;
-	}
+	#sidebar, #listado {background: #2c2c2c;color: #ffffff;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 1.5;}
+	#sidebar h3, #listado h3 { font-weight: 600; font-size: 16px; margin-bottom: 8px;}
 
 	  
   </style>
@@ -533,4 +507,5 @@ logoControl.addTo(map);
 </script>
 </body>
 </html>
+
 
