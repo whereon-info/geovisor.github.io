@@ -158,9 +158,34 @@
   var last = null;
 
   // ========== CONTROLES (locate) ======================
-  L.control.locate({ locateOptions: { maxZoom: 15 } }).addTo(map);
+	  L.control.locate({ locateOptions: { maxZoom: 15 } }).addTo(map);
+	  var draggableMarker;
+		map.on("locationfound", function (e) {
+	  if (draggableMarker) {
+	    draggableMarker.setLatLng(e.latlng);
+	  } else {
+	    draggableMarker = L.marker(e.latlng, { draggable: true }).addTo(map);
+	
+	    // Cuando se arrastra, actualizamos inputs
+	    draggableMarker.on("dragend", function (ev) {
+	      var pos = ev.target.getLatLng();
+	      document.getElementById("lat").value = pos.lat.toFixed(6);
+	      document.getElementById("lon").value = pos.lng.toFixed(6);
+	    });
+	  }
+	
+	  // Guardar coordenadas iniciales en los inputs
+	  document.getElementById("lat").value = e.latlng.lat.toFixed(6);
+	  document.getElementById("lon").value = e.latlng.lng.toFixed(6);
+	  map.setView(e.latlng, 15);
+	});
+	
+	// Si falla la localización
+	map.on("locationerror", function () {
+	  alert("No se pudo obtener tu ubicación");
+	});
 
-  // ========== PLUGIN PHOTON (si está cargado) ==========
+// ========== PLUGIN PHOTON (si está cargado) ==========
   const url = {
     "Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&",
     "BAN": "https://api-adresse.data.gouv.fr/search/?"
@@ -516,6 +541,7 @@ logoControl.addTo(map);
 </script>
 </body>
 </html>
+
 
 
 
