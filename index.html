@@ -29,7 +29,11 @@
   <!-- GOOGLGE FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
 	
+	<!-- GEOSEARCH -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch/dist/geosearch.css" />
+	<script src="https://unpkg.com/leaflet-geosearch/dist/geosearch.umd.js"></script>
 
+	
   <style>
     body,html { margin:0; padding:0; height:90%; font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     #map { width:100%; height:100%; }
@@ -505,22 +509,16 @@ logoControl.addTo(map);
       default: return '<i class="bi bi-geo-alt-fill"></i>';
     }
   }
+
+		const search = new GeoSearch.GeoSearchControl({
+		  provider: new GeoSearch.OpenStreetMapProvider(),
+		  style: 'bar', // barra de búsqueda elegante
+		  autoComplete: true,
+		  autoCompleteDelay: 250
+		});
+		map.addControl(search);
+
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
