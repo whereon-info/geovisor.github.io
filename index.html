@@ -33,7 +33,8 @@
 	<script src="https://unpkg.com/leaflet-geosearch/dist/geosearch.umd.js"></script>
 
 	<!-- Font Awesome para que funcionen los iconos de locate y search -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
   <style>
     body,html { margin:0; padding:0; height:100%; font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
@@ -214,15 +215,7 @@
     console.warn("L.control.photon no está disponible (archivo leaflet.photon.js no cargado?)");
   }
 
-var searchControl = new L.Control.Search({
-	layer: markersLayer,
-	propertyName: 'name',
-	initial: false,
-	zoom: 17,
-	 marker: false,
-	});
-	searchControl._container.querySelector('a').innerHTML = "🔍";
-	map.addControl(searchControl);
+
 
 	
   // ========== SIDEBAR ==========
@@ -521,6 +514,7 @@ logoControl.addTo(map);
 </script>
 </body>
 </html>
+
 
 
 
