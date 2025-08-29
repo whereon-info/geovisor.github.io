@@ -477,14 +477,15 @@ logoControl.addTo(map);
     }
   }
 
+
+const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&", "BAN": "https://api-adresse.data.gouv.fr/search/?"}	
  var photonControl;
 if (L.control.photon) {
   photonControl = L.control.photon({
-    url: "https://photon.komoot.io/api",  // servidor Photon
-    feedbackLabel: '',
+    url: url["Nominatim"]
     position: 'topleft',
     includePosition: true,
-    placeholder: "Buscar dirección...",   // texto dentro del input
+    placeholder: "Buscar dirección...",
     initial: true
   }).addTo(map);
 
@@ -549,6 +550,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
