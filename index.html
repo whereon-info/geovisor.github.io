@@ -396,7 +396,8 @@ logoControl.addTo(map);
       alert("Por favor ingresa datos válidos.");
       return;
     }
-
+  }
+	
     const urlApi = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
   document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
@@ -498,6 +499,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
