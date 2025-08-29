@@ -84,7 +84,11 @@
 	#gcd-button-control:hover {  background: #f0f0f0;}
 	.leaflet-sidebar-tabs>li.active, .leaflet-sidebar-tabs>ul>li.active {color: #FFFFFF; background-color: #2c2c2c;}  
 
-	  
+	#resultadosBusqueda .resultado-personalizado {  display: flex;  align-items: center;  margin: 4px 0;  padding: 4px 6px;  background: rgba(200,230,255,0.5);  border-radius: 6px;}
+	#resultadosBusqueda .icono {  font-size: 18px;  margin-right: 6px;}
+	#resultadosBusqueda .nombre {  flex: 1;  font-weight: bold;  text-transform: capitalize;}
+	#resultadosBusqueda .conteo {  color: #333;}
+ 
   </style>
 </head>
 <body>
@@ -118,6 +122,9 @@
       <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
     </div>
   </div>
+	<h3>Búsquedas personalizadas</h3>
+  <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE -->
+      </div>
 </div>
 
 <!-- LISTADO -->
@@ -427,6 +434,61 @@ logoControl.addTo(map);
     }
   }
 
+// ============================== RESUMEN DENUE ======================================
+	fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (!data || data.length === 0) {
+        alert("No se encontraron resultados para " + categoria);
+        return;
+      }
+
+      // --- Muestra los puntos en el mapa ---
+      if (window.resultadosPersonalizados) {
+        map.removeLayer(window.resultadosPersonalizados);
+      }
+
+      window.resultadosPersonalizados = L.geoJSON(data, {
+        pointToLayer: function (feature, latlng) {
+          return L.marker(latlng, {
+            icon: L.divIcon({
+              className: "denue-marker",
+              html: "📌"  // Icono único para búsquedas
+            })
+          }).bindPopup(feature.properties.Nombre);
+        }
+      }).addTo(map);
+
+      // --- Muestra resumen independiente ---
+      mostrarResultadosBusqueda(categoria, data.length);
+    })
+    .catch(err => console.error("Error en la búsqueda DENUE:", err));
+}
+
+
+// --- Función para mostrar resumen en sección independiente ---
+function mostrarResultadosBusqueda(categoria, total) {
+  let contenedor = document.getElementById("resultadosBusqueda");
+  if (!contenedor) {
+    console.warn("No existe el contenedor con id=resultadosBusqueda");
+    return;
+  }
+
+  // Limpia siempre los resultados anteriores (opcional)
+  contenedor.innerHTML = "";
+
+  // Crea un bloque
+  const div = document.createElement("div");
+  div.className = "resultado-personalizado";
+  div.innerHTML = `
+    <span class="icono">📌</span>
+    <span class="nombre">${categoria}</span>
+    <span class="conteo">(${total})</span>
+  `;
+
+  contenedor.appendChild(div);
+}
+	
 	// ========== PLUGIN PHOTON (si está cargado) ==========
 const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&", "BAN": "https://api-adresse.data.gouv.fr/search/?"}	
  var photonControl;
@@ -500,41 +562,3 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
