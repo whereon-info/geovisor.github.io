@@ -321,11 +321,6 @@
     });
   }
   
-  // ========== AGRUPAR =====================================
-
-
-
-
   //======================= LOGO ================================
 	var logoControl = L.control({ position: "bottomleft" });
 
@@ -390,82 +385,55 @@ logoControl.addTo(map);
   if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
   L.control.layers(baseLayers, overlays, { collapsed: true }).addTo(map);
 
-  // ========== BÚSQUEDA DENUE (botón) ==========
-  async function buscarDENUE() {
-    markersLayer.clearLayers();
-    document.getElementById("tablaResultados").innerHTML = "";
+// ============================== RESUMEN DENUE ======================================
+async function buscarDENUE() {
+  markersLayer.clearLayers();
+  document.getElementById("tablaResultados").innerHTML = "";
 
-    let condi = document.getElementById('condi').value.trim();
-    const lat = parseFloat(document.getElementById('lat').value.trim());
-    const lon = parseFloat(document.getElementById('lon').value.trim());
-    const mts = parseInt(document.getElementById('mts').value.trim());
+  let categoria = document.getElementById('condi').value.trim();
+  const lat = parseFloat(document.getElementById('lat').value.trim());
+  const lon = parseFloat(document.getElementById('lon').value.trim());
+  const mts = parseInt(document.getElementById('mts').value.trim());
 
-    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
-      alert("Por favor ingresa datos válidos.");
+  if (!categoria || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
+    alert("Por favor ingresa datos válidos.");
+    return;
+  }
+
+  const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(categoria)}/${lat},${lon}/${mts}/${token}`;
+
+  try {
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    if (!data || data.length === 0) {
+      alert("No se encontraron resultados para " + categoria);
       return;
     }
-  }
-	
-    const urlApi = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
-  document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
-
-  // ========== TOGGLES: listado y sidebar ==========
-  //document.getElementById("btnToggle").addEventListener("click", function() {
-    //const listado = document.getElementById("listado");
-    //listado.classList.toggle("minimized");
-    //this.innerHTML = listado.classList.contains("minimized") ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-dash"></i>';
-  //});
-
-  //document.getElementById("btnSidebarToggle").addEventListener("click", function() {
-    //const sidebarContent = document.getElementById("sidebar-content");
-    //sidebarContent.classList.toggle("minimized");
-    //this.innerHTML = sidebarContent.classList.contains("minimized") ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-dash"></i>';
-  //});
-
-  // Utilidad: getIconoCategoria (usa tu función original)
-  function getIconoCategoria(cat){
-    switch(cat){
-      case "Bancos": return '<i class="bi bi-bank"></i>';
-      case "Supermercados": return '<i class="bi bi-basket3-fill"></i>';
-      case "Escuelas": return '<i class="bi bi-mortarboard-fill"></i>';
-      case "Hoteles": return '<i class="bi bi-building"></i>';
-      default: return '<i class="bi bi-geo-alt-fill"></i>';
+    // --- Muestra los puntos en el mapa ---
+    if (window.resultadosPersonalizados) {
+      map.removeLayer(window.resultadosPersonalizados);
     }
+
+    window.resultadosPersonalizados = L.geoJSON(data, {
+      pointToLayer: function (feature, latlng) {
+        return L.marker(latlng, {
+          icon: L.divIcon({
+            className: "denue-marker",
+            html: "📌"  // Icono único para búsquedas
+          })
+        }).bindPopup(feature.Nombre || feature.properties?.Nombre || "Establecimiento");
+      }
+    }).addTo(map);
+
+    // --- Muestra resumen independiente ---
+    mostrarResultadosBusqueda(categoria, data.length);
+
+  } catch (err) {
+    console.error("Error en la búsqueda DENUE:", err);
+    alert("Error en la búsqueda DENUE (ver consola).");
   }
-
-// ============================== RESUMEN DENUE ======================================
-	function buscarDENUE(categoria, lat, lon, radio) {
-  let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/Buscar/${categoria}/${lat},${lon}/${radio}/?token=TU_TOKEN`;
-
-	fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      if (!data || data.length === 0) {
-        alert("No se encontraron resultados para " + categoria);
-        return;
-      }
-
-      // --- Muestra los puntos en el mapa ---
-      if (window.resultadosPersonalizados) {
-        map.removeLayer(window.resultadosPersonalizados);
-      }
-
-      window.resultadosPersonalizados = L.geoJSON(data, {
-        pointToLayer: function (feature, latlng) {
-          return L.marker(latlng, {
-            icon: L.divIcon({
-              className: "denue-marker",
-              html: "📌"  // Icono único para búsquedas
-            })
-          }).bindPopup(feature.properties.Nombre);
-        }
-      }).addTo(map);
-
-      // --- Muestra resumen independiente ---
-      mostrarResultadosBusqueda(categoria, data.length);
-    })
-    .catch(err => console.error("Error en la búsqueda DENUE:", err));
 }
 
 
@@ -491,6 +459,21 @@ function mostrarResultadosBusqueda(categoria, total) {
 
   contenedor.appendChild(div);
 }
+
+// Conectar el botón
+document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+
+
+  // Utilidad: getIconoCategoria (usa tu función original)
+  function getIconoCategoria(cat){
+    switch(cat){
+      case "Bancos": return '<i class="bi bi-bank"></i>';
+      case "Supermercados": return '<i class="bi bi-basket3-fill"></i>';
+      case "Escuelas": return '<i class="bi bi-mortarboard-fill"></i>';
+      case "Hoteles": return '<i class="bi bi-building"></i>';
+      default: return '<i class="bi bi-geo-alt-fill"></i>';
+    }
+  }
 	
 	// ========== PLUGIN PHOTON (si está cargado) ==========
 const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&", "BAN": "https://api-adresse.data.gouv.fr/search/?"}	
@@ -565,4 +548,5 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
