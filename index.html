@@ -411,21 +411,32 @@ async function buscarDENUE() {
       return;
     }
 
-    // --- Muestra los puntos en el mapa ---
-    if (window.resultadosPersonalizados) {
-      map.removeLayer(window.resultadosPersonalizados);
-    }
+	// --- Muestra los puntos en el mapa ---
+	if (window.resultadosPersonalizados) {
+	  map.removeLayer(window.resultadosPersonalizados);
+	}
+	window.resultadosPersonalizados = L.featureGroup().addTo(map);
+	
+	data.forEach(item => {
+	  const lat = parseFloat(item.Latitud);
+	  const lon = parseFloat(item.Longitud);
+	  if (isNaN(lat) || isNaN(lon)) return;
+	
+	  const marker = L.marker([lat, lon], {
+	    icon: L.divIcon({
+	      className: "denue-marker",
+	      html: "📌"
+	    })
+	  }).bindPopup(`
+	    <b>${item.Nombre}</b><br>
+	    ${item.Clase_actividad || ""}<br>
+	    ${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}<br>
+	    Tel: ${item.Telefono || "N/D"}
+	  `);
+	
+	  window.resultadosPersonalizados.addLayer(marker);
+	});
 
-    window.resultadosPersonalizados = L.geoJSON(data, {
-      pointToLayer: function (feature, latlng) {
-        return L.marker(latlng, {
-          icon: L.divIcon({
-            className: "denue-marker",
-            html: "📌"  // Icono único para búsquedas
-          })
-        }).bindPopup(feature.Nombre || feature.properties?.Nombre || "Establecimiento");
-      }
-    }).addTo(map);
 
     // --- Muestra resumen independiente ---
     mostrarResultadosBusqueda(categoria, data.length);
@@ -548,5 +559,6 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
