@@ -208,6 +208,85 @@
   const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
   let markersLayer = L.featureGroup().addTo(map);
 
+  window.resultadosPersonalizados = null;
+
+    // Buscar en DENUE
+    async function buscarDENUE() {
+      markersLayer.clearLayers();
+
+      let categoria = document.getElementById('condi').value.trim();
+      const lat = parseFloat(document.getElementById('lat').value.trim());
+      const lon = parseFloat(document.getElementById('lon').value.trim());
+      const mts = parseInt(document.getElementById('mts').value.trim());
+
+      if (!categoria || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
+        alert("Por favor ingresa datos válidos.");
+        return;
+      }
+
+      const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(categoria)}/${lat},${lon}/${mts}/${token}`;
+
+      try {
+        const resp = await fetch(url);
+        const data = await resp.json();
+
+        if (!data || data.length === 0) {
+          alert("No se encontraron resultados para " + categoria);
+          return;
+        }
+
+        // --- Mostrar marcadores en el mapa ---
+        if (window.resultadosPersonalizados) {
+          map.removeLayer(window.resultadosPersonalizados);
+        }
+        window.resultadosPersonalizados = L.featureGroup().addTo(map);
+
+        data.forEach(item => {
+          const lat = parseFloat(item.Latitud);
+          const lon = parseFloat(item.Longitud);
+          if (isNaN(lat) || isNaN(lon)) return;
+
+          const marker = L.marker([lat, lon], {
+            icon: L.divIcon({
+              className: "denue-marker",
+              html: "📌"
+            })
+          }).bindPopup(`
+            <b>${item.Nombre}</b><br>
+            ${item.Clase_actividad || ""}<br>
+            ${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}<br>
+            Tel: ${item.Telefono || "N/D"}
+          `);
+
+          window.resultadosPersonalizados.addLayer(marker);
+        });
+
+        // --- Mostrar resumen en sidebar ---
+        mostrarResultadosBusqueda(categoria, data.length);
+
+      } catch (err) {
+        console.error("Error en la búsqueda DENUE:", err);
+        alert("Error en la búsqueda DENUE (ver consola).");
+      }
+    }
+
+    // Mostrar en el sidebar los resultados acumulados
+    function mostrarResultadosBusqueda(categoria, total) {
+      let contenedor = document.getElementById("resultadosBusqueda");
+      if (!contenedor) return;
+
+      const div = document.createElement("div");
+      div.className = "resultado-personalizado";
+      div.innerHTML = `
+        <span class="icono">📌</span>
+        <span class="nombre">${categoria}</span>
+        <span class="conteo">(${total})</span>
+      `;
+
+      contenedor.appendChild(div);	
+
+
+	
   // ====== Íconos y funciones DENUE ======
   function getBootstrapIconFromActividad(clase) {
     clase = (clase || "").toLowerCase();
@@ -388,66 +467,8 @@ logoControl.addTo(map);
   L.control.layers(baseLayers, overlays, { collapsed: true }).addTo(map);
 
 // ============================== RESUMEN DENUE ======================================
-// ============================== RESUMEN DENUE ======================================
-async function buscarDENUE() {
-  markersLayer.clearLayers();
-  document.getElementById("tablaResultados").innerHTML = "";
 
-  let categoria = document.getElementById('condi').value.trim();
-  const lat = parseFloat(document.getElementById('lat').value.trim());
-  const lon = parseFloat(document.getElementById('lon').value.trim());
-  const mts = parseInt(document.getElementById('mts').value.trim());
-
-  if (!categoria || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
-    alert("Por favor ingresa datos válidos.");
-    return;
-  }
-
-  const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(categoria)}/${lat},${lon}/${mts}/${token}`;
-
-  try {
-    const resp = await fetch(url);
-    const data = await resp.json();
-
-    if (!data || data.length === 0) {
-      alert("No se encontraron resultados para " + categoria);
-      return;
-    }
-
-    // --- Muestra los puntos en el mapa ---
-    if (window.resultadosPersonalizados) {
-      map.removeLayer(window.resultadosPersonalizados);
-    }
-    window.resultadosPersonalizados = L.featureGroup().addTo(map);
-
-    data.forEach(item => {
-      const lat = parseFloat(item.Latitud);
-      const lon = parseFloat(item.Longitud);
-      if (isNaN(lat) || isNaN(lon)) return;
-
-      const marker = L.marker([lat, lon], {
-        icon: L.divIcon({
-          className: "denue-marker",
-          html: "📌"
-        })
-      }).bindPopup(`
-        <b>${item.Nombre}</b><br>
-        ${item.Clase_actividad || ""}<br>
-        ${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}<br>
-        Tel: ${item.Telefono || "N/D"}
-      `);
-
-      window.resultadosPersonalizados.addLayer(marker);
-    });
-
-    // 🔹 Aquí actualizamos el sidebar con la categoría y el número encontrado
-    mostrarResultadosBusqueda(categoria, data.length);
-
-  } catch (err) {
-    console.error("Error en la búsqueda DENUE:", err);
-    alert("Error en la búsqueda DENUE (ver consola).");
-  }
-}
+	
 
 
 // Conectar el botón
@@ -538,6 +559,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
