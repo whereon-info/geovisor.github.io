@@ -28,12 +28,14 @@
   <!-- GOOGLGE FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
 	
-	<!-- GEOSEARCH -->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch/dist/geosearch.css" />
-	<script src="https://unpkg.com/leaflet-geosearch/dist/geosearch.umd.js"></script>
-
 	<!-- Font Awesome para que funcionen los iconos de locate y search -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+		<!-- Photon CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet.photon/leaflet.photon.css" />
+	
+	<!-- Photon JS -->
+	<script src="https://unpkg.com/leaflet.photon/leaflet.photon.js"></script>
 
 
   <style>
@@ -135,7 +137,6 @@
 
 <!-- plugins local JS -->
 <script src="js/leaflet.photon.js"></script>
-<script src="js/leaflet-search.js"></script>
 <script src="js/L.Control.Locate.min.js"></script>
 
 <script>
@@ -191,60 +192,6 @@
     "BAN": "https://api-adresse.data.gouv.fr/search/?"
   };
 
-  var photonControl;
-  if (L.control.photon) {
-    photonControl = L.control.photon({
-      url: url["Nominatim"],
-      feedbackLabel: '',
-      position: 'topleft',
-      includePosition: true,
-      initial: true
-    }).addTo(map);
-
-    // Manejar selección de Photon (usa x y marker ya declarados)
-    photonControl.on('selected', function(e) {
-      try {
-        if (x) { map.removeLayer(x); x = null; }
-        if (marker) { map.removeLayer(marker); marker = null; }
-
-        x = L.geoJSON(e.choice).addTo(map);
-        const ll = x.getLayers()[0].getLatLng();
-        marker = L.marker(ll).addTo(map);
-        map.setView(ll, 17);
-
-        const label = (e.choice.properties && (e.choice.properties.label || e.choice.properties.display_name)) || '';
-        if (e.target && e.target.input) e.target.input.value = label;
-      } catch (err) {
-        console.error('Error en selección Photon:', err);
-      }
-    });
-
-    // Ajustes visuales del control photon (si existe)
-    const search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
-    if (search) {
-      search.classList.add("leaflet-control-search");
-      search.style.display = "flex";
-      search.style.backgroundColor = "rgba(255,255,255,0.5)";
-
-      // botón extra (opcional)
-      var button = document.createElement("div");
-		button.id = "gcd-button-control";
-		button.className = "search-button";  
-		button.innerHTML = "🔍";             
-      last = search.lastChild;
-      if (last) last.style.display = "none";
-      button.addEventListener("click", function () {
-        if (!last) return;
-        last.style.display = (last.style.display === "none") ? "block" : "none";
-      });
-    }
-  } else {
-    console.warn("L.control.photon no está disponible (archivo leaflet.photon.js no cargado?)");
-  }
-
-
-
-	
   // ========== SIDEBAR ==========
   const sidebar = L.control.sidebar({ container:'sidebar', position:'right' }).addTo(map);
   function mostrarEnSidebar(html){
@@ -530,17 +477,79 @@ logoControl.addTo(map);
     }
   }
 
-		const search = new GeoSearch.GeoSearchControl({
-		  provider: new GeoSearch.OpenStreetMapProvider(),
-		  style: 'bar', // barra de búsqueda elegante
-		  autoComplete: true,
-		  autoCompleteDelay: 250
-		});
-		map.addControl(search);
+ var photonControl;
+if (L.control.photon) {
+  photonControl = L.control.photon({
+    url: "https://photon.komoot.io/api",  // servidor Photon
+    feedbackLabel: '',
+    position: 'topleft',
+    includePosition: true,
+    placeholder: "Buscar dirección...",   // texto dentro del input
+    initial: true
+  }).addTo(map);
+
+  // Manejar selección de Photon
+  photonControl.on('selected', function(e) {
+    try {
+      if (x) { map.removeLayer(x); x = null; }
+      if (marker) { map.removeLayer(marker); marker = null; }
+
+      // Dibujar geometría si viene en respuesta
+      x = L.geoJSON(e.choice).addTo(map);
+      const ll = x.getLayers()[0].getLatLng();
+      marker = L.marker(ll).addTo(map);
+      map.setView(ll, 17);
+
+      // Texto en input
+      const label = (e.choice.properties && (e.choice.properties.label || e.choice.properties.display_name)) || '';
+      if (e.target && e.target.input) e.target.input.value = label;
+
+      // Si quieres guardar coordenadas en inputs lat/lon
+      if (document.getElementById("lat")) document.getElementById("lat").value = ll.lat;
+      if (document.getElementById("lon")) document.getElementById("lon").value = ll.lng;
+    } catch (err) {
+      console.error('Error en selección Photon:', err);
+    }
+  });
+
+  // --- Ajustes visuales del control Photon ---
+  const search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
+  if (search) {
+    search.classList.add("leaflet-control-search");
+    search.style.display = "flex";
+    search.style.alignItems = "center";
+    search.style.backgroundColor = "rgba(255,255,255,0.9)";
+    search.style.padding = "2px 6px";
+    search.style.borderRadius = "6px";
+    search.style.fontFamily = "Poppins, Arial, sans-serif";
+    search.style.fontSize = "14px";
+
+    // Botón 🔍 centrado
+    var button = document.createElement("div");
+    button.id = "gcd-button-control";
+    button.innerHTML = "🔍"; 
+    button.style.fontSize = "18px";
+    button.style.cursor = "pointer";
+    button.style.marginRight = "6px";
+    search.insertBefore(button, search.firstChild);
+
+    // Input visible/invisible al dar clic en 🔍
+    let last = search.lastChild;
+    if (last) last.style.display = "none";
+    button.addEventListener("click", function () {
+      if (!last) return;
+      last.style.display = (last.style.display === "none") ? "block" : "none";
+    });
+  }
+} else {
+  console.warn("L.control.photon no está disponible (¿falta cargar leaflet.photon.js?)");
+}
+
 
 </script>
 </body>
 </html>
+
 
 
 
