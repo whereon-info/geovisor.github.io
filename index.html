@@ -477,7 +477,7 @@ const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geo
  var photonControl;
 if (L.control.photon) {
   photonControl = L.control.photon({
-    url: url["Nominatim"]
+    url: url["Nominatim"],
     position: 'topleft',
     includePosition: true,
     placeholder: "Buscar dirección...",
@@ -545,6 +545,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
