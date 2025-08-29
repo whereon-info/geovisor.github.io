@@ -388,6 +388,7 @@ logoControl.addTo(map);
   L.control.layers(baseLayers, overlays, { collapsed: true }).addTo(map);
 
 // ============================== RESUMEN DENUE ======================================
+// ============================== RESUMEN DENUE ======================================
 async function buscarDENUE() {
   markersLayer.clearLayers();
   document.getElementById("tablaResultados").innerHTML = "";
@@ -413,58 +414,41 @@ async function buscarDENUE() {
       return;
     }
 
-	// --- Muestra los puntos en el mapa ---
-	if (window.resultadosPersonalizados) {
-	  map.removeLayer(window.resultadosPersonalizados);
-	}
-	window.resultadosPersonalizados = L.featureGroup().addTo(map);
-	
-	data.forEach(item => {
-	  const lat = parseFloat(item.Latitud);
-	  const lon = parseFloat(item.Longitud);
-	  if (isNaN(lat) || isNaN(lon)) return;
-	
-	  const marker = L.marker([lat, lon], {
-	    icon: L.divIcon({
-	      className: "denue-marker",
-	      html: "📍"
-	    })
-	  }).bindPopup(`
-	    <b>${item.Nombre}</b><br>
-	    ${item.Clase_actividad || ""}<br>
-	    ${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}<br>
-	    Tel: ${item.Telefono || "N/D"}
-	  `);
-	
-	  window.resultadosPersonalizados.addLayer(marker);
-	});
+    // --- Muestra los puntos en el mapa ---
+    if (window.resultadosPersonalizados) {
+      map.removeLayer(window.resultadosPersonalizados);
+    }
+    window.resultadosPersonalizados = L.featureGroup().addTo(map);
 
-// --- Muestra los puntos en el mapa ---
-if (window.resultadosPersonalizados) {
-  map.removeLayer(window.resultadosPersonalizados);
-}
-window.resultadosPersonalizados = L.featureGroup().addTo(map);
+    data.forEach(item => {
+      const lat = parseFloat(item.Latitud);
+      const lon = parseFloat(item.Longitud);
+      if (isNaN(lat) || isNaN(lon)) return;
 
+      const marker = L.marker([lat, lon], {
+        icon: L.divIcon({
+          className: "denue-marker",
+          html: "📌"
+        })
+      }).bindPopup(`
+        <b>${item.Nombre}</b><br>
+        ${item.Clase_actividad || ""}<br>
+        ${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}<br>
+        Tel: ${item.Telefono || "N/D"}
+      `);
 
-// 🔹 Aquí actualizamos el sidebar con la categoría y el número encontrado
-mostrarResultadosBusqueda(categoria, data.length);
+      window.resultadosPersonalizados.addLayer(marker);
+    });
 
-	  
-	  // --- Muestra los puntos en el mapa ---
-if (window.resultadosPersonalizados) {
-  map.removeLayer(window.resultadosPersonalizados);
-}
-window.resultadosPersonalizados = L.featureGroup().addTo(map);
-
-// 🔹 Aquí actualizamos el sidebar con la categoría y el número encontrado
-mostrarResultadosBusqueda(categoria, data.length);
-
+    // 🔹 Aquí actualizamos el sidebar con la categoría y el número encontrado
+    mostrarResultadosBusqueda(categoria, data.length);
 
   } catch (err) {
     console.error("Error en la búsqueda DENUE:", err);
     alert("Error en la búsqueda DENUE (ver consola).");
   }
 }
+
 
 // Conectar el botón
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
@@ -554,6 +538,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
