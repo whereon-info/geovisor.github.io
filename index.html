@@ -76,7 +76,7 @@
   	
 	/* 📑 Sidebar y tabla de resultados */
 	#controls {background: #2c2c2c;color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 2.0;}
-	#listado {background: #000000;color: #2c2c2c;font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
+	#listado {background: #000000;color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 	#sidebar {background: #2c2c2c;color: #000000;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 1.0;}  
 	 table { width: 100%;} 
 	#sidebar h3, #listado h3, { font-weight: 150; font-size: 12px; margin-bottom: 8px;}
@@ -399,53 +399,6 @@ logoControl.addTo(map);
 
     const urlApi = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
-    try {
-      const resp = await fetch(urlApi);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const data = await resp.json();
-      if (!Array.isArray(data) || data.length === 0) { alert("No se encontraron resultados."); return; }
-
-      let htmlDENUE = "<h3>📍 Resultados de DENUE</h3><ul style='list-style:none;padding:0;'>";
-      data.forEach(item => {
-        const latNum = parseFloat(item.Latitud), lonNum = parseFloat(item.Longitud);
-        if (isNaN(latNum) || isNaN(lonNum)) return;
-
-        const popupContent = `<b>${item.Nombre || ''}</b><br><small>${item.Clase_actividad || ''}</small>
-                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
-                ${item.Colonia || ''}, ${item.CP || ''}<br>
-                ${item.Telefono || ''}`;
-        const icono = getBootstrapIconFromActividad(item.Clase_actividad);
-        const mk = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
-        markersLayer.addLayer(mk);
-
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${item.Nombre || ''}</td>
-                         <td>${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}</td>
-                         <td>${item.Telefono || ''}</td>
-                         <td>${item.Estrato || ''}</td>
-                         <td>${item.Clase_actividad || ''}</td>`;
-        row.addEventListener("click", () => { map.setView([latNum, lonNum], 18); mk.openPopup(); });
-        document.getElementById("tablaResultados").appendChild(row);
-
-        htmlDENUE += `<li style="margin-bottom:8px;padding:6px;border-bottom:1px solid #333;">
-                        <b>${item.Nombre || ''}</b><br>
-                        <small>${item.Clase_actividad || ''}</small><br>
-                        ${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}<br>
-                        ${item.Telefono || ''}
-                      </li>`;
-      });
-
-      htmlDENUE += "</ul>";
-      mostrarEnSidebar(htmlDENUE);
-
-      const bounds = markersLayer.getBounds();
-      if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
-    } catch (error) {
-      console.error("Error consultando DENUE:", error);
-      alert("Error al consultar la API.");
-    }
-  }
-
   document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
   // ========== TOGGLES: listado y sidebar ==========
@@ -545,6 +498,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
