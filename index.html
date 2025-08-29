@@ -186,11 +186,6 @@
 	  alert("No se pudo obtener tu ubicación");
 	});
 
-// ========== PLUGIN PHOTON (si está cargado) ==========
-  const url = {
-    "Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&",
-    "BAN": "https://api-adresse.data.gouv.fr/search/?"
-  };
 
   // ========== SIDEBAR ==========
   const sidebar = L.control.sidebar({ container:'sidebar', position:'right' }).addTo(map);
@@ -477,7 +472,7 @@ logoControl.addTo(map);
     }
   }
 
-
+	// ========== PLUGIN PHOTON (si está cargado) ==========
 const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&", "BAN": "https://api-adresse.data.gouv.fr/search/?"}	
  var photonControl;
 if (L.control.photon) {
@@ -550,6 +545,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
