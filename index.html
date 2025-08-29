@@ -339,7 +339,7 @@ logoControl.addTo(map);
   }
   function style(feature) {
     return {
-      fillColor: getColor(feature.properties?.CRED_AUTOM),
+      fillColor: getColor(feature.properties?."robo a neg"),
       weight: 2, opacity: 1, color: 'white', dashArray: '3', fillOpacity: 0.7
     };
   }
@@ -545,6 +545,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
