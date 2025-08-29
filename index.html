@@ -435,6 +435,9 @@ logoControl.addTo(map);
   }
 
 // ============================== RESUMEN DENUE ======================================
+	function buscarDENUE(categoria, lat, lon, radio) {
+  let url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/Buscar/${categoria}/${lat},${lon}/${radio}/?token=TU_TOKEN`;
+
 	fetch(url)
     .then(response => response.json())
     .then(data => {
@@ -562,3 +565,4 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
