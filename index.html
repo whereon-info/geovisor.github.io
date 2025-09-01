@@ -250,34 +250,49 @@
       }
       window.resultadosPersonalizados[categoria] = L.featureGroup().addTo(map);
 
-      data.forEach(item => {
-        const lat = parseFloat(item.Latitud);
-        const lon = parseFloat(item.Longitud);
-        if (isNaN(lat) || isNaN(lon)) return;
+    // Limpia el tbody ANTES de iterar
+const tbody = document.getElementById("tablaResultados");
+tbody.innerHTML = "";
 
-        const marker = L.marker([lat, lon], {
-          icon: L.divIcon({
-            className: "denue-marker",
-            html: "📍"
-          })
-        }).bindPopup(`
-          <b>${item.Nombre}</b><br>
-          ${item.Clase_actividad || ""}<br>
-          ${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}<br>
-          Tel: ${item.Telefono || "N/D"}
-        `);
+data.forEach(item => {
+  const latNum = parseFloat(item.Latitud);
+  const lonNum = parseFloat(item.Longitud);
+  if (isNaN(latNum) || isNaN(lonNum)) return;
 
-        window.resultadosPersonalizados[categoria].addLayer(marker);
-      });
+  // 1) Crea el marcador con su popup
+  const mk = L.marker([latNum, lonNum], {
+    icon: L.divIcon({ className: "denue-marker", html: "📍" })
+  }).bindPopup(`
+    <b>${item.Nombre || ""}</b><br>
+    ${item.Clase_actividad || ""}<br>
+    ${(item.Calle || "")} ${(item.Num_Exterior || "")}, ${(item.Colonia || "")}<br>
+    Tel: ${item.Telefono || "N/D"}
+  `);
 
-      // --- Mostrar resumen en sidebar ---
-      mostrarResultadosBusqueda(categoria, data.length);
+  window.resultadosPersonalizados[categoria].addLayer(mk);
 
-    } catch (err) {
-      console.error("Error en la búsqueda DENUE:", err);
-      alert("Error en la búsqueda DENUE (ver consola).");
-    }
-  }
+  // 2) Crea la fila de tabla
+  const row = document.createElement("tr");
+  const direccion = `${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}`.trim();
+
+  row.innerHTML = `
+    <td>${item.Nombre || ""}</td>
+    <td>${direccion}</td>
+    <td>${item.Telefono || ""}</td>
+    <td>${item.Personal_ocupado || ""}</td>
+    <td>${item.Clase_actividad || ""}</td>
+  `;
+
+  // 3) Al hacer click en la fila → centrar y abrir popup
+  row.addEventListener("click", () => {
+    map.setView([latNum, lonNum], 18);
+    mk.openPopup();
+  });
+
+  // 4) Agrega la fila al tbody
+  tbody.appendChild(row);
+});
+
 
   // Mostrar en el sidebar los resultados acumulados
   function mostrarResultadosBusqueda(categoria, total) {
@@ -575,4 +590,5 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
