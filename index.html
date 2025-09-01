@@ -293,19 +293,28 @@ data.forEach(item => {
   tbody.appendChild(row);
 });
 
-// --- Mostrar resumen en sidebar --- 
-mostrarResultadosBusqueda(categoria, data.length); } 
-	catch (err) { console.error("Error en la búsqueda DENUE:", err); 
-				alert("Error en la búsqueda DENUE (ver consola)."); } } // Mostrar en el sidebar los resultados acumulados function mostrar
-	ResultadosBusqueda(categoria, total) { let contenedor = document.getElementById("resultadosBusqueda"); 
-	if (!contenedor) return; // Crear o actualizar bloque de categoría 
-	let existente = document.getElementById("res-" + categoria); if (existente) { existente.querySelector(".conteo").textContent = (${total}); return; } 
-	const div = document.createElement("div"); div.className = "resultado-personalizado"; div.id = "res-" + categoria; 
-	   div.innerHTML = 
-		   <span class="icono">📍</span> 
-		   <span class="nombre">${categoria}</span> 
-		   <span class="conteo">(${total})</span> ; 
-		   contenedor.appendChild(div); }
+function mostrarResultadosBusqueda(categoria, total) {
+  const cont = document.getElementById("resultadosBusqueda");
+  
+  // Si ya existe un resultado previo de la misma categoría, lo reemplazamos
+  let divExistente = cont.querySelector(`[data-cat="${categoria}"]`);
+  if (divExistente) divExistente.remove();
+
+  // Creamos el bloque
+  const div = document.createElement("div");
+  div.className = "resultado-personalizado";
+  div.dataset.cat = categoria;
+
+  // Ícono genérico (puedes mejorarlo según categoría)
+  div.innerHTML = `
+    <span class="icono">📍</span>
+    <span class="nombre">${categoria}</span>
+    <span class="conteo">${total} encontrados</span>
+  `;
+
+  cont.appendChild(div);
+}
+
 		
   // ====== Íconos y funciones DENUE ======
   function getBootstrapIconFromActividad(clase) {
@@ -579,6 +588,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
