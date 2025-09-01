@@ -570,10 +570,27 @@ if (L.control.photon) {
   console.warn("L.control.photon no está disponible (¿falta cargar leaflet.photon.js?)");
 }
 
+// ========== TABLA ==========	
+const row = document.createElement("tr");
+row.innerHTML = `
+	<td>${item.Nombre || ''}</td>
+	<td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
+	<td>${item.Telefono || ''}</td>
+	<td>${item.Estrato || ''}</td>
+	<td>${item.Clase_actividad || ''}</td>
+`;
+row.addEventListener("click", () => {
+	map.setView([latNum, lonNum], 18);
+	marker.openPopup();
+});
+document.getElementById("tablaResultados").appendChild(row);
+});
 
+	
 </script>
 </body>
 </html>
+
 
 
 
