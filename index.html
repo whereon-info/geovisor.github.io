@@ -224,7 +224,7 @@
       alert("Por favor ingresa datos válidos.");
       return;
     }
-
+  }
     const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(categoria)}/${lat},${lon}/${mts}/${token}`;
 
     try {
@@ -588,6 +588,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
