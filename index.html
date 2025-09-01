@@ -31,7 +31,7 @@
 	<!-- Font Awesome para que funcionen los iconos de locate y search -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-		<!-- Photon CSS -->
+	<!-- Photon CSS -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet.photon/leaflet.photon.css" />
 	
 	<!-- Photon JS -->
@@ -65,7 +65,7 @@
     th { background: #2c2c2c; position: sticky; top: 0; } /*BARRA NOMBRE DIRECCION TELEFONO ETC*/
 
 	/* 🎨 Fuente uniforme en todo el mapa */
-	.leaflet-control, .leaflet-popup-content, {font-family: 'Poppins', sans-serif; font-size: 14px; color: #999999;}
+	.leaflet-control, .leaflet-popup-content {font-family: 'Poppins', sans-serif; font-size: 14px; color: #999999;}
 	
 	/* 🗂 Control de capas */
 	.leaflet-control-layers {background: rgba(44, 44, 44, 0.8);border-radius: 8px;padding: 6px;color: #ffffff;font-family: 'Poppins', sans-serif;}
@@ -80,7 +80,7 @@
 	#listado {background: #00793a;color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 	#sidebar {background: #2c2c2c;color: #000000;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 1.0;}  
 	 table { width: 100%;} 
-	#sidebar h3, #listado h3, { font-weight: 150; font-size: 12px; margin-bottom: 8px;}
+	#sidebar h3, #listado h3 { font-weight: 150; font-size: 12px; margin-bottom: 8px;}
 	#gcd-button-control {  display: flex;  align-items: center;  justify-content: center;  font-size: 8px;   /* tamaño del emoji */  width: 28px;  height: 28px;   border-radius: 2px;  cursor: pointer;}
 	#gcd-button-control:hover {  background: #f0f0f0;}
 	.leaflet-sidebar-tabs>li.active, .leaflet-sidebar-tabs>ul>li.active {color: #FFFFFF; background-color: #2c2c2c;}  
@@ -97,7 +97,7 @@
 <body>
 <div id="controls">
   <label>Establecimiento:</label>
-  <input type="text" id="condi" value="pizzerías" />
+  <input type="text" id="condi" value="pizzerias" />
   <label>Latitud:</label>
   <input type="text" id="lat" value="19.432650801677962" />
   <label>Longitud:</label>
@@ -147,7 +147,7 @@
 </div>
 
 <!-- plugins local JS -->
-<script src="js/leaflet.photon.js"></script>
+<!-- <script src="js/leaflet.photon.js"></script>-->
 <script src="js/L.Control.Locate.min.js"></script>
 
 <script>
@@ -213,6 +213,7 @@
 
   async function buscarDENUE() {
     markersLayer.clearLayers();
+	document.getElementById("tablaResultados").innerHTML = "";  
 
     let categoria = document.getElementById('condi').value.trim();
     const lat = parseFloat(document.getElementById('lat').value.trim());
@@ -570,50 +571,8 @@ if (L.control.photon) {
   console.warn("L.control.photon no está disponible (¿falta cargar leaflet.photon.js?)");
 }
 
-// ========== TABLA ==========	
-data.forEach(item => {
-  const row = document.createElement("tr");
-  row.innerHTML = `
-    <td>${item.Nombre || ''}</td>
-    <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
-    <td>${item.Telefono || ''}</td>
-    <td>${item.Estrato || ''}</td>
-    <td>${item.Clase_actividad || ''}</td>
-  `;
-
-const latNum = parseFloat(item.Latitud); // Adjust property names as needed
-const lonNum = parseFloat(item.Longitud); // Adjust property names as needed
-	
-  row.addEventListener("click", () => {
-    // Ensure map and marker are accessible in this scope
-    if (map && marker) { // Add checks if map and marker might not be defined
-      map.setView([latNum, lonNum], 18);
-      marker.openPopup();
-    }
-  });
-  document.getElementById("tablaResultados").appendChild(row);
-});
-
 	
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
