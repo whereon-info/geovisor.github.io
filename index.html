@@ -292,31 +292,6 @@ data.forEach(item => {
   // 4) Agrega la fila al tbody
   tbody.appendChild(row);
 });
-
-
-  // Mostrar en el sidebar los resultados acumulados
-  function mostrarResultadosBusqueda(categoria, total) {
-    let contenedor = document.getElementById("resultadosBusqueda");
-    if (!contenedor) return;
-
-    // Crear o actualizar bloque de categoría
-    let existente = document.getElementById("res-" + categoria);
-    if (existente) {
-      existente.querySelector(".conteo").textContent = `(${total})`;
-      return;
-    }
-
-    const div = document.createElement("div");
-    div.className = "resultado-personalizado";
-    div.id = "res-" + categoria;
-    div.innerHTML = `
-      <span class="icono">📍</span>
-      <span class="nombre">${categoria}</span>
-      <span class="conteo">(${total})</span>
-    `;
-
-    contenedor.appendChild(div);
-  }
 	
   // ====== Íconos y funciones DENUE ======
   function getBootstrapIconFromActividad(clase) {
@@ -590,5 +565,6 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
