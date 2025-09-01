@@ -571,24 +571,34 @@ if (L.control.photon) {
 }
 
 // ========== TABLA ==========	
-const row = document.createElement("tr");
-row.innerHTML = `
-	<td>${item.Nombre || ''}</td>
-	<td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
-	<td>${item.Telefono || ''}</td>
-	<td>${item.Estrato || ''}</td>
-	<td>${item.Clase_actividad || ''}</td>
-`;
-row.addEventListener("click", () => {
-	map.setView([latNum, lonNum], 18);
-	marker.openPopup();
+data.forEach(item => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${item.Nombre || ''}</td>
+    <td>${(item.Calle || '') + ' ' + (item.Num_Exterior || '') + ', ' + (item.Colonia || '')}</td>
+    <td>${item.Telefono || ''}</td>
+    <td>${item.Estrato || ''}</td>
+    <td>${item.Clase_actividad || ''}</td>
+  `;
+
+const latNum = parseFloat(item.Latitud); // Adjust property names as needed
+const lonNum = parseFloat(item.Longitud); // Adjust property names as needed
+	
+  row.addEventListener("click", () => {
+    // Ensure map and marker are accessible in this scope
+    if (map && marker) { // Add checks if map and marker might not be defined
+      map.setView([latNum, lonNum], 18);
+      marker.openPopup();
+    }
+  });
+  document.getElementById("tablaResultados").appendChild(row);
 });
-document.getElementById("tablaResultados").appendChild(row);
 
 	
 </script>
 </body>
 </html>
+
 
 
 
