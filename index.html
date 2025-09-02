@@ -342,7 +342,26 @@ function mostrarResultadosBusqueda(categoria, total) {
       }
     }
     return resultados;
-  }
+ 	 }
+	}
+
+	// === Y AQUÍ YA VA LA FUNCIÓN GLOBAL ===
+		function mostrarResultadosBusqueda(categoria, total) {
+		  const cont = document.getElementById("resultadosBusqueda");
+		  let divExistente = cont.querySelector(`[data-cat="${categoria}"]`);
+		  if (divExistente) divExistente.remove();
+		
+		  const div = document.createElement("div");
+		  div.className = "resultado-personalizado";
+		  div.dataset.cat = categoria;
+		
+		  div.innerHTML = `
+		    <span class="icono">📍</span>
+		    <span class="nombre">${categoria}</span>
+		    <span class="conteo">${total} encontrados</span>
+		  `;
+		  cont.appendChild(div);
+		}
 
   // ========== FUNCIONES DE HEXÁGONOS ==========
   function onEachFeature(feature, layer) {
@@ -585,6 +604,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
