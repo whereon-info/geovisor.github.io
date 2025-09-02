@@ -224,7 +224,7 @@
       alert("Por favor ingresa datos válidos.");
       return;
     }
-  }
+  
     const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(categoria)}/${lat},${lon}/${mts}/${token}`;
 
     try {
@@ -292,7 +292,8 @@ data.forEach(item => {
   // 4) Agrega la fila al tbody
   tbody.appendChild(row);
 });
-
+	}
+	  
 function mostrarResultadosBusqueda(categoria, total) {
   const cont = document.getElementById("resultadosBusqueda");
   
@@ -311,10 +312,6 @@ function mostrarResultadosBusqueda(categoria, total) {
     <span class="nombre">${categoria}</span>
     <span class="conteo">${total} encontrados</span>
   `;
-
-  cont.appendChild(div);
-}
-
 		
   // ====== Íconos y funciones DENUE ======
   function getBootstrapIconFromActividad(clase) {
@@ -588,6 +585,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
