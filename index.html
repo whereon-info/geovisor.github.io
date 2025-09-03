@@ -251,23 +251,23 @@
       window.resultadosPersonalizados[categoria] = L.featureGroup().addTo(map);
 
     // Limpia el tbody ANTES de iterar
-const tbody = document.getElementById("tablaResultados");
-tbody.innerHTML = "";
-
-data.forEach(item => {
-  const latNum = parseFloat(item.Latitud);
-  const lonNum = parseFloat(item.Longitud);
-  if (isNaN(latNum) || isNaN(lonNum)) return;
-
-  // 1) Crea el marcador con su popup
-  const mk = L.marker([latNum, lonNum], {
-    icon: L.divIcon({ className: "denue-marker", html: "📍" })
-  }).bindPopup(`
-    <b>${item.Nombre || ""}</b><br>
-    ${item.Clase_actividad || ""}<br>
-    ${(item.Calle || "")} ${(item.Num_Exterior || "")}, ${(item.Colonia || "")}<br>
-    Tel: ${item.Telefono || "N/D"}
-  `);
+	const tbody = document.getElementById("tablaResultados");
+	tbody.innerHTML = "";
+	
+	data.forEach(item => {
+	  const latNum = parseFloat(item.Latitud);
+	  const lonNum = parseFloat(item.Longitud);
+	  if (isNaN(latNum) || isNaN(lonNum)) return;
+	
+	  // 1) Crea el marcador con su popup
+	  const mk = L.marker([latNum, lonNum], {
+	    icon: L.divIcon({ className: "denue-marker", html: "📍" })
+	  }).bindPopup(`
+	    <b>${item.Nombre || ""}</b><br>
+	    ${item.Clase_actividad || ""}<br>
+	    ${(item.Calle || "")} ${(item.Num_Exterior || "")}, ${(item.Colonia || "")}<br>
+	    Tel: ${item.Telefono || "N/D"}
+	  `);
 
   window.resultadosPersonalizados[categoria].addLayer(mk);
 
@@ -294,24 +294,24 @@ data.forEach(item => {
 });
 	}
 	  
-function mostrarResultadosBusqueda(categoria, total) {
-  const cont = document.getElementById("resultadosBusqueda");
-  
-  // Si ya existe un resultado previo de la misma categoría, lo reemplazamos
-  let divExistente = cont.querySelector(`[data-cat="${categoria}"]`);
-  if (divExistente) divExistente.remove();
+	function mostrarResultadosBusqueda(categoria, total) {
+	  const cont = document.getElementById("resultadosBusqueda");
+	  if (!cont) return;
+	
+	  // Limpia el contenedor antes de agregar el nuevo
+	  cont.innerHTML = "";
+	
+	  const div = document.createElement("div");
+	  div.className = "resultado-personalizado";
+	  div.dataset.cat = categoria;
+	  div.innerHTML = `
+	    <span class="icono">📍</span>
+	    <span class="nombre">${categoria}</span>
+	    <span class="conteo">${total} encontrados</span>
+	  `;
+	  cont.appendChild(div);
+	}
 
-  // Creamos el bloque
-  const div = document.createElement("div");
-  div.className = "resultado-personalizado";
-  div.dataset.cat = categoria;
-
-  // Ícono genérico (puedes mejorarlo según categoría)
-  div.innerHTML = `
-    <span class="icono">📍</span>
-    <span class="nombre">${categoria}</span>
-    <span class="conteo">${total} encontrados</span>
-  `;
 		
   // ====== Íconos y funciones DENUE ======
   function getBootstrapIconFromActividad(clase) {
@@ -604,6 +604,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
