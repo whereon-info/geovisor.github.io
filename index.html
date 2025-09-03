@@ -205,60 +205,11 @@
     sidebar.open("info");
   }
 
-  // token y markersLayer
+  // ======================= DENUE =============================================
   const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-  let markersLayer = L.featureGroup().addTo(map);
 
- window.resultadosPersonalizados = {};
+	let markersLayer = L.featureGroup().addTo(map);
 
-  async function buscarDENUE() {
-    markersLayer.clearLayers();
-	document.getElementById("tablaResultados").innerHTML = "";  
-
-    let categoria = document.getElementById('condi').value.trim();
-    const lat = parseFloat(document.getElementById('lat').value.trim());
-    const lon = parseFloat(document.getElementById('lon').value.trim());
-    const mts = parseInt(document.getElementById('mts').value.trim());
-
-    if (!categoria || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
-      alert("Por favor ingresa datos válidos.");
-      return;
-    }
-  
-    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(categoria)}/${lat},${lon}/${mts}/${token}`;
-
- fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        if (!Array.isArray(data) || data.length === 0) {
-          alert("No se encontraron resultados para " + categoria);
-          mostrarResultadosBusqueda(categoria, 0);
-          return;
-        }
-
-        data.forEach(item => {
-          const lat = parseFloat(item.Latitud);
-          const lon = parseFloat(item.Longitud);
-          if (isNaN(lat) || isNaN(lon)) return;
-
-          // Crear marcador
-          const marker = L.marker([lat, lon], {
-            icon: L.divIcon({
-              className: "custom-div-icon",
-              html: `<div style="font-size:24px;">📍</div>`,
-              iconSize: [30, 42],
-              iconAnchor: [15, 42]
-            })
-          }).bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}`);
-          marker.addTo(map);
-          markersBusqueda.push(marker);
-        });
-
-        mostrarResultadosBusqueda(categoria, data.length);
-      })
-      .catch(err => console.error("Error en buscarDENUE:", err));
-  }
-	  		
   // ====== Íconos y funciones DENUE ======
   function getBootstrapIconFromActividad(clase) {
     clase = (clase || "").toLowerCase();
@@ -288,31 +239,8 @@
       }
     }
     return resultados;
- 	 }
-	};
-
-	// === Y AQUÍ YA VA LA FUNCIÓN GLOBAL ===
-		function mostrarResultadosBusqueda(categoria, total) {
-		  const cont = document.getElementById("resultadosBusqueda");
-		  if (!cont) return;
-		
-		  // Limpia cualquier resultado previo
-		  cont.innerHTML = "";
-		
-		  // Crea un nuevo bloque
-		  const div = document.createElement("div");
-		  div.className = "resultado-personalizado";
-		  div.dataset.cat = categoria;
-		
-		  div.innerHTML = `
-		    <span class="icono">📍</span>
-		    <span class="nombre">${categoria}</span>
-		    <span class="conteo">${total} encontrados</span>
-		  `;
-		  cont.appendChild(div);
-		}
-
-
+  }
+	
   // ========== FUNCIONES DE HEXÁGONOS ==========
   function onEachFeature(feature, layer) {
     layer.on("click", async () => {
@@ -359,7 +287,6 @@
           extras[nombre]++;
         }
       }
-
 
       let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul style='list-style:none;padding:0;'>";
        for (const [cat,num] of Object.entries(resumen)) {
@@ -466,7 +393,6 @@ logoControl.addTo(map);
 	
 
 
-// Conectar el botón
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 
@@ -554,6 +480,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
