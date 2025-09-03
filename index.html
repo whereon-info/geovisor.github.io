@@ -294,9 +294,12 @@
 	// === Y AQUÍ YA VA LA FUNCIÓN GLOBAL ===
 		function mostrarResultadosBusqueda(categoria, total) {
 		  const cont = document.getElementById("resultadosBusqueda");
-		  let divExistente = cont.querySelector(`[data-cat="${categoria}"]`);
-		  if (divExistente) divExistente.remove();
+		  if (!cont) return;
 		
+		  // Limpia cualquier resultado previo
+		  cont.innerHTML = "";
+		
+		  // Crea un nuevo bloque
 		  const div = document.createElement("div");
 		  div.className = "resultado-personalizado";
 		  div.dataset.cat = categoria;
@@ -308,6 +311,7 @@
 		  `;
 		  cont.appendChild(div);
 		}
+
 
   // ========== FUNCIONES DE HEXÁGONOS ==========
   function onEachFeature(feature, layer) {
@@ -550,6 +554,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
