@@ -184,17 +184,7 @@
 			// 👀 Agregar el mapa base por defecto (ejemplo: OSM claro)
 			osm.addTo(map);
 			
-			// 📌 Definir los mapas base
-			const baseMaps = {
-			  "Claro (OSM)": osm,
-			  "Oscuro (Carto)": dark,
-			  "Light (Carto)": light,
-			  "Satélite (Esri)": esriSat,
-			  "B/N (Stamen)": stamenToner
-			};
-			
-			// 🎛️ Agregar control de capas al mapa
-			L.control.layers(baseMaps).addTo(map);
+
 
 	
   // ========== VARIABLES COMPARTIDAS (evita ReferenceError) ==========
@@ -460,12 +450,20 @@ logoControl.addTo(map);
   };
   title.addTo(map);
 
-  // Ahora sí agregamos control de capas
-  const baseLayers = { "Oscuro": dark, "Calles": osm };
+  // 🎛️ Ahora sí agregamos control de capas
+	// 📌 Definir los mapas base
+	const baseMaps = {
+	  "Claro (OSM)": osm,
+	  "Oscuro (Carto)": dark,
+	  "Light (Carto)": light,
+	  "Satélite (Esri)": esriSat,
+	  "B/N (Stamen)": stamenToner
+	};
   const overlays = {};
   if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
   if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
-  L.control.layers(baseLayers, overlays, { collapsed: true }).addTo(map);
+  L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
+	
 
 // ============================== RESUMEN DENUE ======================================
 
@@ -559,6 +557,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
