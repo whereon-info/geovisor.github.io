@@ -208,40 +208,10 @@
   // ======================= DENUE =============================================
   const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
-	let markersLayer = L.featureGroup().addTo(map);
+	// Variable global para los marcadores de búsqueda
+let markersLayer = L.layerGroup().addTo(map);
 
-  // ====== Íconos y funciones DENUE ======
-  function getBootstrapIconFromActividad(clase) {
-    clase = (clase || "").toLowerCase();
-    let iconHTML;
-    if (clase.includes("restaurante")) iconHTML = '<i class="bi bi-shop" style="font-size:26px;color:orange"></i>';
-    else if (clase.includes("hotel")) iconHTML = '<i class="bi bi-building" style="font-size:26px;color:blue"></i>';
-    else iconHTML = '<i class="bi bi-geo-alt-fill" style="font-size:26px;color:red"></i>';
-    return L.divIcon({ html: iconHTML, className: 'custom-div-icon', iconSize:[26,26], iconAnchor:[13,26], popupAnchor:[0,-26] });
-  }
-
-  async function buscarEnHexagono(bounds, categorias) {
-    let resultados = [];
-    const centro = bounds.getCenter();
-    for (const cat of categorias) {
-      const urlApi = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${centro.lat},${centro.lng}/1000/${token}`;
-      try {
-        const resp = await fetch(urlApi);
-        if (!resp.ok) continue;
-        const data = await resp.json();
-        const dentro = data.filter(d => {
-          const lat = parseFloat(d.Latitud), lon = parseFloat(d.Longitud);
-          return !isNaN(lat) && !isNaN(lon) && bounds.contains([lat, lon]);
-        });
-        resultados.push(...dentro);
-      } catch (err) {
-        console.error("Error en consulta", err);
-      }
-    }
-    return resultados;
-  }
-
-	async function buscarDENUE() {
+async function buscarDENUE() {
   const condi = document.getElementById("condi").value.trim();
   const lat = document.getElementById("lat").value;
   const lon = document.getElementById("lon").value;
@@ -262,12 +232,17 @@
     const tbody = document.getElementById("tablaResultados");
     tbody.innerHTML = "";
 
+    // limpiar marcadores previos
+    markersLayer.clearLayers();
+
     if (!Array.isArray(data) || data.length === 0) {
       tbody.innerHTML = `<tr><td colspan="5">No se encontraron resultados</td></tr>`;
       return;
     }
 
-    // llenar tabla
+    const bounds = [];
+
+    // llenar tabla y crear marcadores
     data.forEach(item => {
       const row = `<tr>
         <td>${item.Nombre || ""}</td>
@@ -277,7 +252,28 @@
         <td>${item.Clase_actividad || ""}</td>
       </tr>`;
       tbody.insertAdjacentHTML("beforeend", row);
+
+      const lat = parseFloat(item.Latitud);
+      const lon = parseFloat(item.Longitud);
+      if (!isNaN(lat) && !isNaN(lon)) {
+        const marker = L.marker([lat, lon], {
+          icon: L.divIcon({
+            className: "custom-pin",
+            html: "📍",
+            iconSize: [24, 24],
+            iconAnchor: [12, 24]
+          })
+        }).bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}`);
+
+        markersLayer.addLayer(marker);
+        bounds.push([lat, lon]);
+      }
     });
+
+    // ajustar mapa a los resultados
+    if (bounds.length > 0) {
+      map.fitBounds(bounds);
+    }
 
   } catch (err) {
     console.error("Error en buscarDENUE:", err);
@@ -527,6 +523,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
