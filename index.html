@@ -453,11 +453,11 @@ logoControl.addTo(map);
   // 🎛️ Ahora sí agregamos control de capas
 	// 📌 Definir los mapas base
 	const baseMaps = {
-	  "Claro (OSM)": osm,
-	  "Oscuro (Carto)": dark,
-	  "Light (Carto)": light,
-	  "Satélite (Esri)": esriSat,
-	  "B/N (Stamen)": stamenToner
+	  "Claro": osm,
+	  "Oscuro": dark,
+	  "Light": light,
+	  "Satélite": esriSat,
+	  "B/N": stamenToner
 	};
   const overlays = {};
   if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
@@ -466,9 +466,6 @@ logoControl.addTo(map);
 	
 
 // ============================== RESUMEN DENUE ======================================
-
-	
-
 
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
@@ -557,6 +554,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
