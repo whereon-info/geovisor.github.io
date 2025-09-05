@@ -156,14 +156,46 @@
   // ========== MAPA + CAPAS ==========
   const map = L.map('map').setView([22.5, -100.5], 5);
 
-  // tile layers (defínelas y agrégalas a control después)
-  const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    subdomains: 'abcd',
-    maxZoom: 19
-  }).addTo(map);
+			// 🌍 Mapa claro (OSM estándar)
+			const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+			});
+			
+			// 🌃 Mapa oscuro (Carto Dark)
+			const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+			  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://www.carto.com/">CARTO</a>'
+			});
+			
+			// ☀️ Carto Light
+			const light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+			  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://www.carto.com/">CARTO</a>'
+			});
+			
+			// 🛰️ Esri Satélite
+			const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+			  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+			});
+			
+			// ⚫ Stamen Toner (Blanco y negro)
+			const stamenToner = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+			  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="https://www.openstreetmap.org">OpenStreetMap</a>'
+			});
+			
+			// 👀 Agregar el mapa base por defecto (ejemplo: OSM claro)
+			osm.addTo(map);
+			
+			// 📌 Definir los mapas base
+			const baseMaps = {
+			  "Claro (OSM)": osm,
+			  "Oscuro (Carto)": dark,
+			  "Light (Carto)": light,
+			  "Satélite (Esri)": esriSat,
+			  "B/N (Stamen)": stamenToner
+			};
+			
+			// 🎛️ Agregar control de capas al mapa
+			L.control.layers(baseMaps).addTo(map);
 
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 	
   // ========== VARIABLES COMPARTIDAS (evita ReferenceError) ==========
   var x = null;            // geojson temporal usado por photon
@@ -527,6 +559,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
