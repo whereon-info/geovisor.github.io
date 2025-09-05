@@ -90,7 +90,9 @@
 	#resultadosBusqueda .nombre {  flex: 1;  font-weight: bold;  text-transform: capitalize;}
 	#resultadosBusqueda .conteo {  color: #333;}
 
-	.leaflet-marker-icon {width: 30px; height: 30px;}  
+	.leaflet-marker-icon {width: 30px; height: 30px;}
+	.custom-pin {  font-size: 22px;  text-align: center;  line-height: 22px;}
+  
  
   </style>
 </head>
@@ -244,32 +246,34 @@ async function buscarDENUE() {
     const bounds = [];
 
     // llenar tabla y crear marcadores
-    data.forEach(item => {
-      const row = `<tr>
-        <td>${item.Nombre || ""}</td>
-        <td>${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}</td>
-        <td>${item.Telefono || ""}</td>
-        <td>${item.Personal_Ocupado || ""}</td>
-        <td>${item.Clase_actividad || ""}</td>
-      </tr>`;
-      tbody.insertAdjacentHTML("beforeend", row);
+		data.forEach(item => {
+		  const row = `<tr>
+		    <td>${item.Nombre || ""}</td>
+		    <td>${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}</td>
+		    <td>${item.Telefono || ""}</td>
+		    <td>${item.Personal_Ocupado || ""}</td>
+		    <td>${item.Clase_actividad || ""}</td>
+		  </tr>`;
+		  tbody.insertAdjacentHTML("beforeend", row);
+		
+		  const latEst = parseFloat(item.Latitud);
+		  const lonEst = parseFloat(item.Longitud);
+		
+		  if (!isNaN(latEst) && !isNaN(lonEst)) {
+		    const marker = L.marker([latEst, lonEst], {
+		      icon: L.divIcon({
+		        className: "custom-pin",
+		        html: "📍",
+		        iconSize: [24, 24],
+		        iconAnchor: [12, 24]
+		      })
+		    }).bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}`);
+		
+		    markersLayer.addLayer(marker);
+		    bounds.push([latEst, lonEst]);
+		  }
+		});
 
-      const lat = parseFloat(item.Latitud);
-      const lon = parseFloat(item.Longitud);
-      if (!isNaN(lat) && !isNaN(lon)) {
-        const marker = L.marker([lat, lon], {
-          icon: L.divIcon({
-            className: "custom-pin",
-            html: "📍",
-            iconSize: [24, 24],
-            iconAnchor: [12, 24]
-          })
-        }).bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}`);
-
-        markersLayer.addLayer(marker);
-        bounds.push([lat, lon]);
-      }
-    });
 
     // ajustar mapa a los resultados
     if (bounds.length > 0) {
@@ -524,6 +528,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
