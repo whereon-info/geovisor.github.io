@@ -240,6 +240,51 @@
     }
     return resultados;
   }
+
+	async function buscarDENUE() {
+  const condi = document.getElementById("condi").value.trim();
+  const lat = document.getElementById("lat").value;
+  const lon = document.getElementById("lon").value;
+  const mts = document.getElementById("mts").value;
+
+  if (!condi || !lat || !lon || !mts) {
+    alert("Completa todos los campos de búsqueda");
+    return;
+  }
+
+  const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+
+  try {
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    // limpiar tabla
+    const tbody = document.getElementById("tablaResultados");
+    tbody.innerHTML = "";
+
+    if (!Array.isArray(data) || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5">No se encontraron resultados</td></tr>`;
+      return;
+    }
+
+    // llenar tabla
+    data.forEach(item => {
+      const row = `<tr>
+        <td>${item.Nombre || ""}</td>
+        <td>${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}</td>
+        <td>${item.Telefono || ""}</td>
+        <td>${item.Personal_Ocupado || ""}</td>
+        <td>${item.Clase_actividad || ""}</td>
+      </tr>`;
+      tbody.insertAdjacentHTML("beforeend", row);
+    });
+
+  } catch (err) {
+    console.error("Error en buscarDENUE:", err);
+    alert("Ocurrió un error al consultar el DENUE");
+  }
+}
+
 	
   // ========== FUNCIONES DE HEXÁGONOS ==========
   function onEachFeature(feature, layer) {
@@ -323,6 +368,8 @@
       if (cont) cont.innerHTML = listado;
     });
   }
+
+	
   
   //======================= LOGO ================================
 	var logoControl = L.control({ position: "bottomleft" });
@@ -480,6 +527,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
