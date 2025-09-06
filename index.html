@@ -255,27 +255,34 @@ async function buscarDENUE() {
     const resultados = Array.isArray(data) ? data : (data.denue || []);
 
     // limpiar tabla y pines
-    const tbody = document.getElementById("tablaResultados");
-    tbody.innerHTML = "";
-    markersLayer.clearLayers();
+function mostrarElementosUrbanos(elementos) {
+  const tbody = document.getElementById("tablaResultados");
+  tbody.innerHTML = "";
 
-    if (resultados.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5">No se encontraron resultados</td></tr>`;
-      return;
-    }
-
-    const bounds = [];
-
-    resultados.forEach(item => {
-      // === TABLA ===
-      const row = `<tr>
+  elementos.forEach(e => {
+    const row = `<tr>
         <td>${item.Nombre || ""}</td>
         <td>${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}</td>
         <td>${item.Telefono || ""}</td>
         <td>${item.Personal_Ocupado || ""}</td>
         <td>${item.Clase_actividad || ""}</td>
-      </tr>`;
-      tbody.insertAdjacentHTML("beforeend", row);
+    </tr>`;
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+}
+
+
+
+
+
+
+        <td>${item.Nombre || ""}</td>
+        <td>${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}</td>
+        <td>${item.Telefono || ""}</td>
+        <td>${item.Personal_Ocupado || ""}</td>
+        <td>${item.Clase_actividad || ""}</td>
+
+		
 
       // === PINES ===
       const latEst = parseFloat(item.Latitud || item.latitud);
@@ -554,6 +561,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
