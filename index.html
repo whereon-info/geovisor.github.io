@@ -258,73 +258,76 @@
   }
 
   // ======================= DENUE =============================================
-  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+ //const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
-	// Variable global para los marcadores de búsqueda
-	let markersLayer = L.layerGroup().addTo(map);
+// 🔹 Función auxiliar para asignar íconos según la actividad
+function getBootstrapIconFromActividad(actividad) {
+  if (!actividad) return L.divIcon({ className: "custom-pin", html: "📍" });
 
- 	async function buscarDENUE() {
-    markersLayer.clearLayers();
-    document.getElementById("tablaResultados").innerHTML = "";
-
-    let condi = document.getElementById('condi').value.trim();
-    const lat = parseFloat(document.getElementById('lat').value.trim());
-    const lon = parseFloat(document.getElementById('lon').value.trim());
-    const mts = parseInt(document.getElementById('mts').value.trim());
-
-    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
-      alert("Por favor ingresa datos válidos.");
-      return;
-    }
-
-    const urlApi = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
-
-    try {
-      const resp = await fetch(urlApi);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const data = await resp.json();
-      if (!Array.isArray(data) || data.length === 0) { alert("No se encontraron resultados."); return; }
-
-      let htmlDENUE = "<h3>📍 Resultados de DENUE</h3><ul style='list-style:none;padding:0;'>";
-      data.forEach(item => {
-        const latNum = parseFloat(item.Latitud), lonNum = parseFloat(item.Longitud);
-        if (isNaN(latNum) || isNaN(lonNum)) return;
-
-        const popupContent = `<b>${item.Nombre || ''}</b><br><small>${item.Clase_actividad || ''}</small>
-                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
-                ${item.Colonia || ''}, ${item.CP || ''}<br>
-                ${item.Telefono || ''}`;
-        const icono = getBootstrapIconFromActividad(item.Clase_actividad);
-        const mk = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
-        markersLayer.addLayer(mk);
-
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${item.Nombre || ''}</td>
-                         <td>${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}</td>
-                         <td>${item.Telefono || ''}</td>
-                         <td>${item.Estrato || ''}</td>
-                         <td>${item.Clase_actividad || ''}</td>`;
-        row.addEventListener("click", () => { map.setView([latNum, lonNum], 18); mk.openPopup(); });
-        document.getElementById("tablaResultados").appendChild(row);
-
-        htmlDENUE += `<li style="margin-bottom:8px;padding:6px;border-bottom:1px solid #333;">
-                        <b>${item.Nombre || ''}</b><br>
-                        <small>${item.Clase_actividad || ''}</small><br>
-                        ${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}<br>
-                        ${item.Telefono || ''}
-                      </li>`;
-      });
-
-      htmlDENUE += "</ul>";
-      mostrarEnSidebar(htmlDENUE);
-
-      const bounds = markersLayer.getBounds();
-      if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
-    } catch (error) {
-      console.error("Error consultando DENUE:", error);
-      alert("Error al consultar la API.");
-    }
+  actividad = actividad.toLowerCase();
+  if (actividad.includes("pizza") || actividad.includes("pizzería")) {
+    return L.divIcon({ className: "custom-pin", html: "🍕" });
+  } else if (actividad.includes("escuela") || actividad.includes("colegio") || actividad.includes("universidad")) {
+    return L.divIcon({ className: "custom-pin", html: "🏫" });
+  } else if (actividad.includes("banco")) {
+    return L.divIcon({ className: "custom-pin", html: "🏦" });
+  } else if (actividad.includes("hotel") || actividad.includes("motel") || actividad.includes("hostal")) {
+    return L.divIcon({ className: "custom-pin", html: "🏨" });
+  } else if (actividad.includes("super") || actividad.includes("bodega") || actividad.includes("abarrotes")) {
+    return L.divIcon({ className: "custom-pin", html: "🛒" });
   }
+
+  // valor por defecto
+  return L.divIcon({ className: "custom-pin", html: "📍" });
+}
+
+// 🔹 Función principal para buscar en DENUE
+async function buscarDENUE(condi, lat, lon, mts = 1000) {
+  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e"; // ⚠️ reemplaza con tu token de INEGI
+  const urlApi = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
+
+  try {
+    const resp = await fetch(urlApi);
+    if (!resp.ok) throw new Error("Error en la petición a DENUE");
+
+    const data = await resp.json();
+
+    // Si no hay resultados
+    if (!Array.isArray(data) || data.length === 0) {
+      mostrarResultadosBusqueda(condi, 0); // actualiza sidebar con "0 encontrados"
+      return [];
+    }
+
+    // Eliminar marcadores previos
+    if (window.ultimaCapaBusqueda) {
+      map.removeLayer(window.ultimaCapaBusqueda);
+    }
+
+    // Crear grupo nuevo
+    const capa = L.layerGroup().addTo(map);
+    window.ultimaCapaBusqueda = capa;
+
+    data.forEach(item => {
+      if (!item.Latitud || !item.Longitud) return;
+      const marker = L.marker([item.Latitud, item.Longitud], {
+        icon: getBootstrapIconFromActividad(item.Clase_actividad)
+      }).addTo(capa);
+
+      marker.bindPopup(`<strong>${item.Nombre}</strong><br>${item.Clase_actividad}<br>${item.Razon_social || ""}`);
+    });
+
+    // Mostrar en sidebar
+    mostrarResultadosBusqueda(condi, data.length);
+
+    return data;
+
+  } catch (err) {
+    console.error("❌ Error en buscarDENUE:", err);
+    mostrarResultadosBusqueda(condi, 0);
+    return [];
+  }
+}
+
 
   document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
@@ -599,6 +602,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
