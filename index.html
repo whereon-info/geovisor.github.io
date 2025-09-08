@@ -500,7 +500,15 @@ logoControl.addTo(map);
 
 // ============================== RESUMEN DENUE ======================================
 
-document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+document.getElementById('btnBuscar').addEventListener('click', () => {
+  const condi = document.getElementById("condi").value;
+  const lat = document.getElementById("lat").value;
+  const lon = document.getElementById("lon").value;
+  const mts = document.getElementById("mts").value;
+
+  buscarDENUE(condi, lat, lon, mts);
+});
+
 
 // ================= FUNCION buscarEnHexagono ===================
 	async function buscarEnHexagono(bounds, categorias) {
@@ -631,6 +639,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
