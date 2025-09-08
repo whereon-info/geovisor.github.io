@@ -261,9 +261,9 @@
   const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 
 	// Variable global para los marcadores de búsqueda
-let markersLayer = L.layerGroup().addTo(map);
+	let markersLayer = L.layerGroup().addTo(map);
 
-  async function buscarDENUE() {
+ 	async function buscarDENUE() {
     markersLayer.clearLayers();
     document.getElementById("tablaResultados").innerHTML = "";
 
@@ -353,9 +353,32 @@ let markersLayer = L.layerGroup().addTo(map);
       `;
       mostrarEnSidebar(htmlFija);
 
-const bounds = layer.getBounds();
+	  const bounds = layer.getBounds();
       const resultados = await buscarEnHexagono(bounds, ["bancos","supermercados","escuelas","hoteles"]);
 
+	  // ================= FUNCION buscarEnHexagono ===================
+		async function buscarEnHexagono(bounds, categorias) {
+		  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+		  const bbox = `${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()}`;
+		  let resultados = [];
+		
+		  for (const cat of categorias) {
+		    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${bbox}/0/${token}`;
+		    try {
+		      const resp = await fetch(url);
+		      if (resp.ok) {
+		        const data = await resp.json();
+		        if (Array.isArray(data)) resultados = resultados.concat(data);
+		      }
+		    } catch (e) {
+		      console.error("Error consultando categoría", cat, e);
+		    }
+		  }
+		
+		  return resultados;
+		}
+
+		
       // Agrupar
       const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
       const extras = {}; // aquí se guardan categorías nuevas
@@ -576,6 +599,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
