@@ -282,49 +282,45 @@ function getBootstrapIconFromActividad(actividad) {
 }
 
 // 🔹 Función principal para buscar en DENUE
-async function buscarDENUE(condi, lat, lon, mts = 1000) {
-  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e"; // ⚠️ reemplaza con tu token de INEGI
-  const urlApi = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
-
+async function buscarDENUE() {
   try {
-    const resp = await fetch(urlApi);
-    if (!resp.ok) throw new Error("Error en la petición a DENUE");
+    // Assuming urlDENUE is defined elsewhere and holds the correct URL
+    const response = await fetch(urlDENUE);
 
-    const data = await resp.json();
-
-    // Si no hay resultados
-    if (!Array.isArray(data) || data.length === 0) {
-      mostrarResultadosBusqueda(condi, 0); // actualiza sidebar con "0 encontrados"
-      return [];
+    if (!response.ok) {
+      // Handle non-HTTP success responses (e.g., 404, 500)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Eliminar marcadores previos
-    if (window.ultimaCapaBusqueda) {
-      map.removeLayer(window.ultimaCapaBusqueda);
+    const resultados = await response.json();
+
+    // Your existing grouping logic goes here
+    const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
+    const extras = {}; // aquí se guardan categorías nuevas
+
+    for (const item of resultados) {
+      const c = (item.Clase_actividad || "").toLowerCase();
+
+      if (c.includes("banco")) resumen.Bancos++;
+      else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
+      else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
+      else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
+
+      // 🔹 si no entra en las fijas, lo mando a extras
+      else {
+        const nombre = item.Clase_actividad.trim();
+        if (!extras[nombre]) extras[nombre] = 0;
+        extras[nombre]++;
+      }
     }
 
-    // Crear grupo nuevo
-    const capa = L.layerGroup().addTo(map);
-    window.ultimaCapaBusqueda = capa;
+    // Process resumen and extras as needed
+    console.log("Resumen:", resumen);
+    console.log("Extras:", extras);
 
-    data.forEach(item => {
-      if (!item.Latitud || !item.Longitud) return;
-      const marker = L.marker([item.Latitud, item.Longitud], {
-        icon: getBootstrapIconFromActividad(item.Clase_actividad)
-      }).addTo(capa);
-
-      marker.bindPopup(`<strong>${item.Nombre}</strong><br>${item.Clase_actividad}<br>${item.Razon_social || ""}`);
-    });
-
-    // Mostrar en sidebar
-    mostrarResultadosBusqueda(condi, data.length);
-
-    return data;
-
-  } catch (err) {
-    console.error("❌ Error en buscarDENUE:", err);
-    mostrarResultadosBusqueda(condi, 0);
-    return [];
+  } catch (error) {
+    console.error("Error en buscarDENUE:", error);
+    // You might want to display a user-friendly message on the UI here
   }
 }
 
@@ -622,3 +618,4 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
