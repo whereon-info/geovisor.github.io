@@ -360,39 +360,10 @@ async function buscarDENUE(condi, lat, lon, mts) {
       mostrarEnSidebar(htmlFija);
 
 	  const bounds = layer.getBounds();
-      const resultados = await buscarEnHexagono(bounds, ["bancos","supermercados","escuelas","hoteles"]);
-	 console.log("👉 Resultados del hexágono:", resultados);
+      const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
+      console.log("👉 Resultados del hexágono:", resultados);
 
-	  // ================= FUNCION buscarEnHexagono ===================
-	async function buscarEnHexagono(bounds, categorias) {
-	  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
 	
-	  // 👉 Tomamos el centro del hexágono
-	  const center = bounds.getCenter();
-	
-	  // 👉 Aproximamos un radio en metros (diagonal menor del bounding box)
-	  const latDiff = bounds.getNorth() - bounds.getSouth();
-	  const lonDiff = bounds.getEast() - bounds.getWest();
-	  const approxKm = Math.max(latDiff, lonDiff) * 111; // 1° ≈ 111 km
-	  const radius = Math.round(approxKm * 1000 / 2); // en metros
-	
-	  let resultados = [];
-	
-	  for (const cat of categorias) {
-	    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${center.lng},${center.lat}/${radius}/${token}`;
-	    try {
-	      const resp = await fetch(url);
-	      if (resp.ok) {
-	        const data = await resp.json();
-	        if (Array.isArray(data)) resultados = resultados.concat(data);
-	      }
-	    } catch (e) {
-	      console.error("Error consultando categoría", cat, e);
-	    }
-	  }
-	
-	  return resultados;
-	}
 
 		
       // Agrupar
@@ -531,6 +502,37 @@ logoControl.addTo(map);
 
 document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
+// ================= FUNCION buscarEnHexagono ===================
+	async function buscarEnHexagono(bounds, categorias) {
+	  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+	
+	  // 👉 Tomamos el centro del hexágono
+	  const center = bounds.getCenter();
+	
+	  // 👉 Aproximamos un radio en metros (diagonal menor del bounding box)
+	  const latDiff = bounds.getNorth() - bounds.getSouth();
+	  const lonDiff = bounds.getEast() - bounds.getWest();
+	  const approxKm = Math.max(latDiff, lonDiff) * 111; // 1° ≈ 111 km
+	  const radius = Math.round(approxKm * 1000 / 2); // en metros
+	
+	  let resultados = [];
+	
+	  for (const cat of categorias) {
+	    const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(cat)}/${center.lng},${center.lat}/${radius}/${token}`;
+	    try {
+	      const resp = await fetch(url);
+	      if (resp.ok) {
+	        const data = await resp.json();
+	        if (Array.isArray(data)) resultados = resultados.concat(data);
+	      }
+	    } catch (e) {
+	      console.error("Error consultando categoría", cat, e);
+	    }
+	  }
+	
+	  return resultados;
+	}
+
 
   // Utilidad: getIconoCategoria (usa tu función original)
   function getIconoCategoria(cat){
@@ -628,6 +630,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
