@@ -487,9 +487,6 @@ logoControl.addTo(map);
   try {
     hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: onEachFeature }).addTo(map);
   } catch(e) { console.warn('hive_edomex no disponible o error:', e); }
-  try {
-    mza06 = L.geoJson(06_pob_mza, { style: style, onEachFeature: onEachFeature }).addTo(map);
-  } catch(e) { console.warn('hive_edomex no disponible o error:', e); }	
 
 
   // Leyenda y título
@@ -524,8 +521,7 @@ logoControl.addTo(map);
 	};
   const overlays = {};
   if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
-  if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
-  if (mza_06) overlays["Manzanas"] = mza_06;	
+  if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;	
   L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
 	
 
@@ -630,6 +626,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
