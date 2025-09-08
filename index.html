@@ -353,7 +353,7 @@ let markersLayer = L.layerGroup().addTo(map);
       `;
       mostrarEnSidebar(htmlFija);
 
-      const bounds = layer.getBounds();
+const bounds = layer.getBounds();
       const resultados = await buscarEnHexagono(bounds, ["bancos","supermercados","escuelas","hoteles"]);
 
       // Agrupar
@@ -375,6 +375,7 @@ let markersLayer = L.layerGroup().addTo(map);
           extras[nombre]++;
         }
       }
+
 
       let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul style='list-style:none;padding:0;'>";
        for (const [cat,num] of Object.entries(resumen)) {
@@ -502,7 +503,7 @@ document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
     }
   }
 	
-	// ========== PLUGIN PHOTON (si está cargado) ==========
+	// ========== PLUGIN PHOTON ==========
 const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&", "BAN": "https://api-adresse.data.gouv.fr/search/?"}	
  var photonControl;
 if (L.control.photon) {
@@ -575,6 +576,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
