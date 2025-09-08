@@ -92,7 +92,12 @@
 
 	.leaflet-marker-icon {width: 30px; height: 30px;}
 	.custom-pin {  font-size: 22px;  text-align: center;  line-height: 22px;}
-  
+
+	#welcomeBox {  position: absolute;  top: 20px;  left: 50%;  transform: translateX(-50%);  background: white;  padding: 15px 20px;  border-radius: 12px;  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+  z-index: 1000;  max-width: 300px;  font-family: Arial, sans-serif;}
+	#welcomeContent {  position: relative;}
+	#closeWelcome {  position: absolute;  top: 5px;  right: 10px;  cursor: pointer;  font-size: 18px;  color: #333;}
+
  
   </style>
 </head>
@@ -148,6 +153,16 @@
   </table>
 </div>
 
+
+	<div id="welcomeBox">
+  <div id="welcomeContent">
+    <span id="closeWelcome">&times;</span>
+    <h3>👋 Bienvenido</h3>
+    <p>Este es un WebMap interactivo.<br>
+    Haz clic en los hexágonos para explorar los datos.</p>
+  </div>
+</div>
+
 <!-- plugins local JS -->
 <!-- <script src="js/leaflet.photon.js"></script>-->
 <script src="js/L.Control.Locate.min.js"></script>
@@ -185,6 +200,15 @@
 			osm.addTo(map);
 			
 
+		// ================== Cerrar con la X ====================
+		document.getElementById("closeWelcome").addEventListener("click", () => {
+		  document.getElementById("welcomeBox").style.display = "none";
+		});
+		
+		// Cerrar haciendo clic en el mapa
+		map.on("click", () => {
+		  document.getElementById("welcomeBox").style.display = "none";
+		});
 
 	
   // ========== VARIABLES COMPARTIDAS (evita ReferenceError) ==========
@@ -546,6 +570,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
