@@ -282,57 +282,54 @@ function getBootstrapIconFromActividad(actividad) {
 }
 
 // 🔹 Función principal para buscar en DENUE
-async function buscarDENUE() {
-  try {
-    // Assuming urlDENUE is defined elsewhere and holds the correct URL
-    const response = await fetch(urlDENUE);
+// 🔹 Función principal para buscar en DENUE
+async function buscarDENUE(condi, lat, lon, mts) {
+  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e"; // tu token DENUE
+  const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lon},${lat}/${mts}/${token}`;
 
-    if (!response.ok) {
-      // Handle non-HTTP success responses (e.g., 404, 500)
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const resultados = await response.json();
 
-    // Your existing grouping logic goes here
-    const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
-    const extras = {}; // aquí se guardan categorías nuevas
-
-    for (const item of resultados) {
-      const c = (item.Clase_actividad || "").toLowerCase();
-
-      if (c.includes("banco")) resumen.Bancos++;
-      else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
-      else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
-      else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
-
-      // 🔹 si no entra en las fijas, lo mando a extras
-      else {
-        const nombre = item.Clase_actividad.trim();
-        if (!extras[nombre]) extras[nombre] = 0;
-        extras[nombre]++;
-      }
+    // 📍 Limpiar tabla y pines anteriores
+    document.getElementById("tablaResultados").innerHTML = "";
+    if (window.denueLayer) {
+      map.removeLayer(window.denueLayer);
     }
+    window.denueLayer = L.layerGroup().addTo(map);
 
-    // Process resumen and extras as needed
-    console.log("Resumen:", resumen);
-    console.log("Extras:", extras);
+    // 📊 Procesar resultados
+    resultados.forEach(item => {
+      // --- Agregar fila en la tabla ---
+      const row = `
+        <tr>
+          <td>${item.Nombre || "Sin nombre"}</td>
+          <td>${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}, ${item.Municipio || ""}</td>
+          <td>${item.Telefono || "N/D"}</td>
+          <td>${item.Personal_ocupado || "N/D"}</td>
+          <td>${item.Clase_actividad || "N/D"}</td>
+        </tr>
+      `;
+      document.getElementById("tablaResultados").insertAdjacentHTML("beforeend", row);
+
+      // --- Agregar marcador en el mapa ---
+      const marker = L.marker([item.Latitud, item.Longitud], {
+        icon: getBootstrapIconFromActividad(item.Clase_actividad)
+      }).bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}<br>${item.Calle || ""}, ${item.Colonia || ""}`);
+      marker.addTo(window.denueLayer);
+    });
+
+    // 📌 Mostrar en el sidebar un resumen
+    mostrarResultadosBusqueda(condi, resultados.length);
 
   } catch (error) {
     console.error("Error en buscarDENUE:", error);
-    // You might want to display a user-friendly message on the UI here
+    alert("❌ No se pudieron obtener resultados del DENUE.");
   }
 }
 
-
-	 document.getElementById('btnBuscar').addEventListener('click', () => {
-	  const condi = document.getElementById("condi").value.trim();
-	  const lat = parseFloat(document.getElementById("lat").value);
-	  const lon = parseFloat(document.getElementById("lon").value);
-	  const mts = parseInt(document.getElementById("mts").value, 10) || 1000;
-	
-	  buscarDENUE(condi, lat, lon, mts);
-	});
 
 	
 	
@@ -618,4 +615,5 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
