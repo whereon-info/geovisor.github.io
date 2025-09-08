@@ -329,8 +329,16 @@ async function buscarDENUE(condi, lat, lon, mts = 1000) {
 }
 
 
-  document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
+	 document.getElementById('btnBuscar').addEventListener('click', () => {
+	  const condi = document.getElementById("condi").value.trim();
+	  const lat = parseFloat(document.getElementById("lat").value);
+	  const lon = parseFloat(document.getElementById("lon").value);
+	  const mts = parseInt(document.getElementById("mts").value, 10) || 1000;
+	
+	  buscarDENUE(condi, lat, lon, mts);
+	});
 
+	
 	
   // ========== FUNCIONES DE HEXÁGONOS ==========
   function onEachFeature(feature, layer) {
@@ -598,40 +606,19 @@ if (L.control.photon) {
   console.warn("L.control.photon no está disponible (¿falta cargar leaflet.photon.js?)");
 }
 
+function mostrarResultadosBusqueda(condi, total) {
+  const cont = document.getElementById("resultadosBusqueda");
+  cont.innerHTML = `
+    <div class="resultado-personalizado">
+      <span class="icono">📊</span>
+      <span class="nombre">${condi}</span>
+      <span class="conteo">(${total} encontrados)</span>
+    </div>
+  `;
+}
+
+
 	
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
