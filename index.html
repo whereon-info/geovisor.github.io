@@ -373,7 +373,7 @@ async function buscarDENUE(condi, lat, lon, mts) {
       for (const item of resultados) {
         const c = (item.Clase_actividad || "").toLowerCase();
       
-		if (c.includes("banco") || c.includes("financ")) resumen.Bancos++;
+		if (c.includes("banco") || c.includes("banca multiple")) resumen.Bancos++;
 		else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad") || c.includes("educac")) resumen.Escuelas++;
 		else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes") || c.includes("comercio")) resumen.Supermercados++;
 		else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal") || c.includes("hospedaje")) resumen.Hoteles++;
@@ -639,6 +639,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
