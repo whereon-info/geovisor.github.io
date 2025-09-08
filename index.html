@@ -234,73 +234,70 @@
 	// Variable global para los marcadores de búsqueda
 let markersLayer = L.layerGroup().addTo(map);
 
-async function buscarDENUE() {
-  const condi = document.getElementById("condi").value.trim();
-  const lat = document.getElementById("lat").value;
-  const lon = document.getElementById("lon").value;
-  const mts = document.getElementById("mts").value;
+  async function buscarDENUE() {
+    markersLayer.clearLayers();
+    document.getElementById("tablaResultados").innerHTML = "";
 
-  if (!condi || !lat || !lon || !mts) {
-    alert("Completa todos los campos de búsqueda");
-    return;
-  }
+    let condi = document.getElementById('condi').value.trim();
+    const lat = parseFloat(document.getElementById('lat').value.trim());
+    const lon = parseFloat(document.getElementById('lon').value.trim());
+    const mts = parseInt(document.getElementById('mts').value.trim());
 
-  const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
-
-  try {
-    const resp = await fetch(url);
-    const data = await resp.json();
-
-    // 🔹 Asegurar que sea array
-    const resultados = Array.isArray(data) ? data : (data.denue || []);
-
-    // limpiar tabla y pines
-function mostrarElementosUrbanos(elementos) {
-  const tbody = document.getElementById("tablaResultados");
-  tbody.innerHTML = "";
-
-  elementos.forEach(e => {
-    const row = `<tr>
-        <td>${item.Nombre || ""}</td>
-        <td>${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}</td>
-        <td>${item.Telefono || ""}</td>
-        <td>${item.Personal_Ocupado || ""}</td>
-        <td>${item.Clase_actividad || ""}</td>
-    </tr>`;
-    tbody.insertAdjacentHTML("beforeend", row);
-  });
-}
-		
-
-      // === PINES ===
-      const latEst = parseFloat(item.Latitud || item.latitud);
-      const lonEst = parseFloat(item.Longitud || item.longitud);
-
-      if (!isNaN(latEst) && !isNaN(lonEst)) {
-        const marker = L.marker([latEst, lonEst], {
-          icon: L.divIcon({
-            className: "custom-pin",
-            html: "📍",
-            iconSize: [24, 24],
-            iconAnchor: [12, 24]
-          })
-        }).bindPopup(`<b>${item.Nombre}</b><br>${item.Clase_actividad}`);
-
-        markersLayer.addLayer(marker);
-        bounds.push([latEst, lonEst]);
-      }
+    if (!condi || isNaN(lat) || isNaN(lon) || isNaN(mts)) {
+      alert("Por favor ingresa datos válidos.");
+      return;
     }
 
-    // Ajustar mapa
-    if (bounds.length > 0) {
-      map.fitBounds(bounds);
-    }
+    const urlApi = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
-  } catch (err) {
-    console.error("Error en buscarDENUE:", err);
-    alert("Ocurrió un error al consultar el DENUE");
+    try {
+      const resp = await fetch(urlApi);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      if (!Array.isArray(data) || data.length === 0) { alert("No se encontraron resultados."); return; }
+
+      let htmlDENUE = "<h3>📍 Resultados de DENUE</h3><ul style='list-style:none;padding:0;'>";
+      data.forEach(item => {
+        const latNum = parseFloat(item.Latitud), lonNum = parseFloat(item.Longitud);
+        if (isNaN(latNum) || isNaN(lonNum)) return;
+
+        const popupContent = `<b>${item.Nombre || ''}</b><br><small>${item.Clase_actividad || ''}</small>
+                ${item.Calle || ''} ${item.Num_Exterior || ''}<br>
+                ${item.Colonia || ''}, ${item.CP || ''}<br>
+                ${item.Telefono || ''}`;
+        const icono = getBootstrapIconFromActividad(item.Clase_actividad);
+        const mk = L.marker([latNum, lonNum], { icon: icono }).bindPopup(popupContent);
+        markersLayer.addLayer(mk);
+
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${item.Nombre || ''}</td>
+                         <td>${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}</td>
+                         <td>${item.Telefono || ''}</td>
+                         <td>${item.Estrato || ''}</td>
+                         <td>${item.Clase_actividad || ''}</td>`;
+        row.addEventListener("click", () => { map.setView([latNum, lonNum], 18); mk.openPopup(); });
+        document.getElementById("tablaResultados").appendChild(row);
+
+        htmlDENUE += `<li style="margin-bottom:8px;padding:6px;border-bottom:1px solid #333;">
+                        <b>${item.Nombre || ''}</b><br>
+                        <small>${item.Clase_actividad || ''}</small><br>
+                        ${(item.Calle || '')} ${(item.Num_Exterior || '')}, ${(item.Colonia || '')}<br>
+                        ${item.Telefono || ''}
+                      </li>`;
+      });
+
+      htmlDENUE += "</ul>";
+      mostrarEnSidebar(htmlDENUE);
+
+      const bounds = markersLayer.getBounds();
+      if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
+    } catch (error) {
+      console.error("Error consultando DENUE:", error);
+      alert("Error al consultar la API.");
+    }
   }
-}
+
+  document.getElementById('btnBuscar').addEventListener('click', buscarDENUE);
 
 	
   // ========== FUNCIONES DE HEXÁGONOS ==========
@@ -549,6 +546,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
