@@ -361,6 +361,7 @@ async function buscarDENUE(condi, lat, lon, mts) {
 
 	  const bounds = layer.getBounds();
       const resultados = await buscarEnHexagono(bounds, ["bancos","supermercados","escuelas","hoteles"]);
+	 console.log("👉 Resultados del hexágono:", resultados);
 
 	  // ================= FUNCION buscarEnHexagono ===================
 	async function buscarEnHexagono(bounds, categorias) {
@@ -401,10 +402,11 @@ async function buscarDENUE(condi, lat, lon, mts) {
       for (const item of resultados) {
         const c = (item.Clase_actividad || "").toLowerCase();
       
-        if (c.includes("banco")) resumen.Bancos++;
-        else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
-        else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
-        else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
+		if (c.includes("banco") || c.includes("financ")) resumen.Bancos++;
+		else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad") || c.includes("educac")) resumen.Escuelas++;
+		else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes") || c.includes("comercio")) resumen.Supermercados++;
+		else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal") || c.includes("hospedaje")) resumen.Hoteles++;
+
       
         // 🔹 si no entra en las fijas, lo mando a extras
         else {
@@ -626,6 +628,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
