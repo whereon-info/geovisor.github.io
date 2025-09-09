@@ -467,13 +467,17 @@ logoControl.addTo(map);
   }
 
   // Crear capas HIVE
-  var hiveLayer09 = null, hiveLayer15 = null;
+  var hiveLayer09 = null, hiveLayer15 = null, mza06Layer = null;
   try {
     hiveLayer09 = L.geoJson(hive_cdmx, { style: style, onEachFeature: onEachFeature }).addTo(map);
   } catch(e) { console.warn('hive_cdmx no disponible o error:', e); }
   try {
     hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: onEachFeature }).addTo(map);
   } catch(e) { console.warn('hive_edomex no disponible o error:', e); }
+	  try {
+    mza06Layer = L.geoJson(mza06, { style: function (feature), return { color: "#3388ff", weight: 1}).addTo(map);
+  } catch(e) { console.warn('hive_edomex no disponible o error:', e); }
+
 
 
   // Leyenda y título
@@ -677,6 +681,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
