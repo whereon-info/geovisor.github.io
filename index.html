@@ -40,6 +40,12 @@
 	<!-- Photon JS -->
 	<script src="https://unpkg.com/leaflet.photon/leaflet.photon.js"></script>
 
+	<!-- html2canvas -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<!-- jsPDF -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
 
   <style>
     body,html { margin:0; padding:0; height:100%; font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
@@ -96,7 +102,7 @@
 	.leaflet-marker-icon {width: 50px; height: 50px;}
 	.custom-pin {  font-size: 22px;  text-align: center;  line-height: 22px;}
 
-	#welcomeBox {  position: absolute;  top: 100px;  left: 50%;  transform: translateX(-50%);  background: #00793a;  padding: 15px 20px;  border-radius: 12px;  box-shadow: 0px 8px 10px rgba(0,0,0,0.3);
+	#welcomeBox {  position: absolute;  top: 100px;  left: 50%;  transform: translateX(-50%);  background: #FFFFFF;  padding: 15px 20px;  border-radius: 12px;  box-shadow: 0px 8px 10px rgba(0,0,0,0.3);
   	z-index: 1000;  max-width: 800px; font-family: 'Poppins', sans-serif; font-size: 14px;}
 	#welcomeContent {  position: relative;}
 	#closeWelcome {  position: absolute;  top: 5px;  right: 10px;  cursor: pointer;  font-size: 18px;  color: #333;}
@@ -118,6 +124,7 @@
   <button id="btnExportar">Exportar a PDF</button>
 </div>
 
+<div id="mapa-contenedor" style="display:flex; height:100vh; width:100%;">	
 <div id="map"></div>
 
 <!-- SIDEBAR -->
@@ -139,7 +146,9 @@
   <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE -->
       </div>
 </div>
+</div>
 
+	
 <!-- LISTADO -->
 <div id="listado">
   <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
@@ -634,11 +643,36 @@ function mostrarResultadosBusqueda(condi, total) {
   `;
 }
 
+// ============== BOTON PDF ===================================
+id="btnExportar
+	
+  document.getElementById("btnExportar").addEventListener("click", function () {
+    const contenedor = document.getElementById("mapa-contenedor");
 
+    html2canvas(contenedor, {
+      useCORS: true, // para tiles externos
+      scale: 2       // mejor calidad
+    }).then(canvas => {
+      const imgData = canvas.toDataURL("image/png");
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("landscape", "mm", "a4");
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const imgWidth = pageWidth;
+      const imgHeight = canvas.height * pageWidth / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      pdf.save("mapa_resultados.pdf");
+    });
+  });
+	
 	
 </script>
 </body>
 </html>
+
 
 
 
