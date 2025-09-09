@@ -258,7 +258,7 @@
 	});
 
 	// ========== CAPAS ==========
-	var mza06 = L.geoJson(mza06, {
+	var mza06Layer = L.geoJson(mza06, {
 	  style: function (feature) {
 	    return { color: "#3388ff", weight: 1 };
 	  }
@@ -509,7 +509,7 @@ logoControl.addTo(map);
   const overlays = {};
   if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
   if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;	
-  if (mza06) overlays["Manzanas"] = mza06;		
+  if (mza06Layer) overlays["Manzanas"] = mza06Layer;		
   L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
 	
 
@@ -677,6 +677,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
