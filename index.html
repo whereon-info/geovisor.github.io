@@ -21,7 +21,7 @@
   <script type="text/javascript" src="js/hive_edomex.js"></script>
 
   <!-- Manzanas -->	
-  <script type="text/javascript" src="js/06_pob_mza.js"></script>
+  <script type="text/javascript" src="js/mza06.js"></script>
 
   <!-- Buscadores / plugins locales -->
   <link rel="stylesheet" href="css/leaflet-search.css">
@@ -261,7 +261,9 @@
 	  alert("No se pudo obtener tu ubicación");
 	});
 
-
+	// ========== CAPAS ==========
+	var manzanas = L.geoJson(mza06).addTo(map);
+	
   // ========== SIDEBAR ==========
   const sidebar = L.control.sidebar({ container:'sidebar', position:'right' }).addTo(map);
   function mostrarEnSidebar(html){
@@ -671,6 +673,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
