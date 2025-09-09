@@ -258,7 +258,14 @@
 	});
 
 	// ========== CAPAS ==========
-	var mza06 = L.geoJson(mza06).addTo(map);
+	var mza06 = L.geoJson(mza06, {
+	  style: function (feature) {
+	    return { color: "#3388ff", weight: 1 };
+	  }
+	}).addTo(map);
+
+	
+
 	
   // ========== SIDEBAR ==========
   const sidebar = L.control.sidebar({ container:'sidebar', position:'right' }).addTo(map);
@@ -670,6 +677,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
