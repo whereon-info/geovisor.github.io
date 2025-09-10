@@ -258,11 +258,7 @@
 	});
 
 	// ========== CAPAS ==========
-		var mza06Layer = L.geoJson(mza06, {
-		  style: function (feature) {
-		    return { color: "#3388ff", weight: 1 };
-		  }
-		}).addTo(map);
+		var mza06Layer = L.geoJson(mza06).addTo(map);
 		var manzanaStyle = {
 		 'color': "#858585",
 		 'weight': 5,
@@ -685,6 +681,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
