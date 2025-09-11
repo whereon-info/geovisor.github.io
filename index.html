@@ -505,28 +505,6 @@ logoControl.addTo(map);
   //if (mza06Layer) overlays["Manzanas"] = mza06Layer;		
   //L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
 
-		let mza06Layer;
-		
-		fetch("js/col_mza.geojson")
-		  .then(res => res.json())
-		  .then(data => { 
-		    mza06Layer = L.geoJson(data, {
-		      style: {
-		        color: "#ff0000", // rojo fuerte para que se note
-		        weight: 1,
-		        fillOpacity: 0
-		      }
-		    }).addTo(map);
-		
-		    control.addOverlay(mza06Layer, "Manzanas");
-		
-		    console.log("Capa col_mza cargada:", mza06Layer.getLayers().length, "features");
-		
-		    map.fitBounds(mza06Layer.getBounds()); // acercar el mapa a la capa
-		  })
-		  .catch(err => console.error("Error cargando col_mza:", err));
-
-
 
 	var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
 	var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
@@ -702,6 +680,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
