@@ -255,13 +255,7 @@
 	});
 
 	// ========== CAPAS ==========
-		fetch("js/col_mza.geojson")
-	  .then(res => res.json())
-	  .then(data => {
-	    var mza06Layer = L.geoJson(data, {
-	      style: { color: "#3388ff", weight: 1 }
-	    }).addTo(map);
-	  });
+
 
 
 	
@@ -510,12 +504,15 @@ logoControl.addTo(map);
   //if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;	
   //if (mza06Layer) overlays["Manzanas"] = mza06Layer;		
   //L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
-	
+
+		fetch("js/col_mza.geojson")
+	  .then(res => res.json())
+	  .then(data => { var mza06Layer = L.geoJson(data, { style: { color: "#3388ff", weight: 1 }}).addTo(map);	  });
+
 	var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
 	var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
 	map.addLayer(myMarker); 
 	map.addLayer(myMarker1);
-	var mza06Layer = L.geoJson(col_mza).addTo(map);
 	var baseMaps = {"Claro": osm, "Oscuro": dark, "Light": light, "Satélite": esriSat, "B/N": stamenToner};
 	var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15, "Manzanas": mza06Layer }; 
 	var control = new L.control.layers(baseMaps, overlays, {collapsed:true}); control.addTo(map);
@@ -686,6 +683,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
