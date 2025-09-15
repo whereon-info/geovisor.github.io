@@ -678,16 +678,15 @@ function mostrarResultadosBusqueda(condi, total) {
   //});
 
 	    var wmsLayer = L.tileLayer.wms("http://localhost:8080/geoserver/workspace/wms", {
-      layers: 'workspace:pob_manzanas',
+      layers: 'workspace:whereon',
       format: 'image/png',
       transparent: true
     }).addTo(map);
 
-    // Evento de clic para consulta GetFeatureInfo
+   // Evento de clic para consulta GetFeatureInfo
     map.on("click", function(e) {
       var url = getFeatureInfoUrl(map, wmsLayer, e.latlng, {
-        'info_format': 'application/json',
-        'propertyName': 'POBTOT'  // 👈 el campo que quieras consultar
+        'info_format': 'application/json'
       });
 
       fetch(url)
@@ -695,9 +694,18 @@ function mostrarResultadosBusqueda(condi, total) {
         .then(data => {
           if (data.features.length > 0) {
             var props = data.features[0].properties;
+
+            // Construimos el contenido del popup
+            var content = "<h4>Información de la manzana</h4>";
+            content += "<b>CVEGEO:</b> " + (props.CVEGEO || "N/A") + "<br/>";
+            content += "<b>Población total:</b> " + (props.pobtot || "N/A") + "<br/>";
+            content += "<b>Población de 0 a 14 años:</b> " + (props.pob0_14 || "N/A") + "<br/>";
+            content += "<b>Población de 15 a 64 años:</b> " + (props.pob15_64 || "N/A") + "<br/>";
+			content += "<b>Población de 65 años o más:</b> " + (props.pob65_mas || "N/A") + "<br/>"; 
+
             L.popup()
               .setLatLng(e.latlng)
-              .setContent("<b>Población:</b> " + props.poblacion)
+              .setContent(content)
               .openOn(map);
           } else {
             L.popup()
@@ -745,6 +753,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
