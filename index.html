@@ -317,7 +317,7 @@ async function buscarDENUE(condi, lat, lon, mts) {
           <td>${item.Nombre || "Sin nombre"}</td>
           <td>${item.Calle || ""} ${item.Num_Exterior || ""}, ${item.Colonia || ""}, ${item.Municipio || ""}</td>
           <td>${item.Telefono || "N/D"}</td>
-          <td>${item.Personal_ocupado || "N/D"}</td>
+          <td>${item.Estrato || "N/D"}</td>
           <td>${item.Clase_actividad || "N/D"}</td>
         </tr>
       `;
@@ -681,6 +681,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
