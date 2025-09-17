@@ -42,7 +42,7 @@
 
 
   <style>
-    body,html { margin:0; padding:0; height:100%; font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
+    body,html { margin:0; padding:0; height:100%; display: flex; flex-direction: column;font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     #map { width:100%; height:100%; }
     .leaflet-sidebar { z-index:1000; }
     /*.title {font family: Roboto; background-color:#15f20a}*/
@@ -80,7 +80,7 @@
 	.leaflet-control-search a:hover {color: #b81cb0;}
   	
 	/* 📑 Sidebar y tabla de resultados */
-	#controls {background: #00793a;color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 2.0;}
+	#controls {background: #00793a;color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 2.0;}
 	#listado {background: #00793a;color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 	#sidebar {background: #2c2c2c;color: #000000;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 1.0;}  
 	 table { width: 100%;} 
@@ -750,6 +750,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
