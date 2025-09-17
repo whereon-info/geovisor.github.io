@@ -46,11 +46,11 @@
     
     .dashboard {
       display: grid;
-      grid-template-columns: 25% 50% 25%;  /* tres columnas */
+      grid-template-columns: 33% 34% 33%;  /* tres columnas */
       grid-template-rows: 50% 50%;         /* dos filas */
       grid-template-areas:
-        "busqueda mapa info"
-        "tabla    tabla info";
+        "controls map sidebar"
+        "listado  listado sidebar";
       height: 100vh;
     }
 
@@ -238,12 +238,6 @@
 			  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
 			});
 			
-			
-		    var wmsLayer = L.tileLayer.wms("http://localhost:8080/geoserver/workspace/wms", {
-	    	  layers: 'workspace:whereon',
-	     	 format: 'image/png',
-	     	 transparent: true
-	    	}).addTo(map);
 
 			// 👀 Agregar el mapa base por defecto (ejemplo: OSM claro)
 			osm.addTo(map);
@@ -530,28 +524,22 @@ logoControl.addTo(map);
   title.addTo(map);
 
   // 🎛️ Ahora sí agregamos control de capas
-	// 📌 Definir los mapas base
-	//const baseMaps = {
-	  //"Claro": osm,
-	  //"Oscuro": dark,
-	  //"Light": light,
-	  //"Satélite": esriSat,
-	  //"B/N": stamenToner
-	//};
-  //const overlays = {};
-  //if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
-  //if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;	
-  //if (mza06Layer) overlays["Manzanas"] = mza06Layer;		
-  //L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
+		var baseMaps = {
+		  "Claro": osm,
+		  "Oscuro": dark,
+		  "Light": light,
+		  "Satélite": esriSat
+		};
+		
+		var overlays = { 
+		  "Casa": myMarker, 
+		  "Otro": myMarker1 
+		};
+		if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
+		if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
+		
+		L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
 
-
-	var myMarker = L.marker([19.28581583157899, -99.40670897151347]) 
-	var myMarker1 = L.marker([19.38581583157899, -99.10670897151347]); 
-	map.addLayer(myMarker); 
-	map.addLayer(myMarker1);
-	var baseMaps = {"Claro": osm, "Oscuro": dark, "Light": light, "Satélite": esriSat};
-	var overlays = { "Casa": myMarker, "Otro": myMarker1, "Hive CDMX": hiveLayer09, "Hive EDOMEX": hiveLayer15, "Manzanas": wmsLayer}; 
-	var control = new L.control.layers(baseMaps, overlays, {collapsed:true}); control.addTo(map);
 
 
 	
@@ -787,6 +775,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
