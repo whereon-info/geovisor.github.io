@@ -43,7 +43,34 @@
 
   <style>
     body,html { margin:0; padding:0; height:100%; display: flex; flex-direction: column;font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
-    #map { width:100%; height:100%; }
+    
+    .dashboard {
+      display: grid;
+      grid-template-columns: 25% 25% 25% 25%;
+      grid-template-rows: 100%;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .panel {
+      border: 1px solid #ddd;
+      overflow: auto;
+      padding: 10px;
+    }
+
+	#map { width:100%; height:100%; }
+
+	.header {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      text-align: center;
+      background: #f0f0f0;
+      padding: 5px;
+    }
+
+
+	  
     .leaflet-sidebar { z-index:1000; }
     /*.title {font family: Roboto; background-color:#15f20a}*/
     /*.legend {line-height: 18px; color: #000000;} TEXTO DE LA SIMBOLOGÍA*/
@@ -106,7 +133,10 @@
   </style>
 </head>
 <body>
-<div id="controls">
+
+<div class="dashboard">
+	
+	<div id="controls">
   <label>Establecimiento:</label>
   <input type="text" id="condi" value="pizzerias" />
   <label>Latitud:</label>
@@ -141,7 +171,7 @@
   <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE -->
       </div>
 </div>
-<!--</div>-->
+
 
 	
 <!-- LISTADO -->
@@ -158,7 +188,7 @@
     <tbody id="tablaResultados"></tbody>
   </table>
 </div>
-
+</div>
 
 	<div id="welcomeBox">
  		<div id="welcomeContent">
@@ -750,6 +780,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
