@@ -519,20 +519,25 @@ logoControl.addTo(map);
 
   // 🎛️ Ahora sí agregamos control de capas
 		var baseMaps = {
-		  "Claro": osm,
-		  "Oscuro": dark,
-		  "Light": light,
-		  "Satélite": esriSat
-		};
-		
-		var overlays = { 
-		  "Casa": myMarker, 
-		  "Otro": myMarker1 
-		};
-		if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
-		if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
-		
-		L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
+          "Claro": osm,
+          "Oscuro": dark,
+          "Light": light,
+          "Satélite": esriSat
+        };
+        
+        // Declare and initialize myMarker before using it
+        var myMarker = L.marker([51.5, -0.09]).addTo(map); // Example initialization
+        var myMarker1 = L.marker([51.5, -0.1]).addTo(map); // Example initialization for myMarker1
+        
+        var overlays = {
+          "Casa": myMarker,
+          "Otro": myMarker1
+        };
+        if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
+        if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
+        
+        L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
+
 
 
 
@@ -769,6 +774,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
