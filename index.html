@@ -203,7 +203,7 @@
 			});
 			
 			
-		    var wmsLayer = L.tileLayer.wms("http://localhost:8080/geoserver/workspace/wms", {
+		    var wmsLayer = L.tileLayer.wms("https://localhost:8080/geoserver/workspace/wms", {
 	    	  layers: 'workspace:whereon',
 	     	 format: 'image/png',
 	     	 transparent: true
@@ -751,6 +751,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
