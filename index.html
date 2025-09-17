@@ -45,15 +45,18 @@
   <style>
     body,html { margin:0; padding:0; height:100%; display: flex; flex-direction: column;font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     
-    .dashboard {
-      display: grid;
-      grid-template-columns: 33% 34% 33%;  /* tres columnas */
-      grid-template-rows: 70% 30%;         /* dos filas */
-      grid-template-areas:
-        "controls map sidebar"
-        "listado  listado sidebar";
-      height: 100vh;
-    }
+	.dashboard {
+	  display: grid;
+	  grid-template-columns: 33% 34% 33%;
+	  grid-template-rows: 70% 30%;
+	  grid-template-areas:
+	    "controls map sidebar"
+	    "listado  listado sidebar";
+	  height: 100vh;
+	  width: 100vw;
+	  overflow: hidden; /* 👈 evita desbordes */
+	}
+
 
     .panel {
       border: 1px solid #ddd;
@@ -66,7 +69,14 @@
     #sidebar { grid-area: sidebar; }
     #listado { grid-area: listado; }
 	  
-	#map { width:100%; height:100%; }
+			#map {
+		  grid-area: map;
+		  width: 100%;
+		  height: 100%;
+		  min-height: 0;  /* 👈 evita que crezca más que la celda */
+		  min-width: 0;   /* 👈 evita que desborde horizontalmente */
+		}
+
 
 	.header {
       font-weight: bold;
@@ -759,6 +769,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
