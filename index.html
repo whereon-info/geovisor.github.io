@@ -46,10 +46,12 @@
     
     .dashboard {
       display: grid;
-      grid-template-columns: 25% 25% 25% 25%;
-      grid-template-rows: 100%;
+      grid-template-columns: 25% 50% 25%;  /* tres columnas */
+      grid-template-rows: 50% 50%;         /* dos filas */
+      grid-template-areas:
+        "busqueda mapa info"
+        "tabla    tabla info";
       height: 100vh;
-      width: 100vw;
     }
 
     .panel {
@@ -58,6 +60,11 @@
       padding: 10px;
     }
 
+    #constrols { grid-area: controls; }
+    #map { grid-area: map; }
+    #sidebar { grid-area: sidebar; }
+    #listado { grid-area: listado; }
+	  
 	#map { width:100%; height:100%; }
 
 	.header {
@@ -136,7 +143,7 @@
 
 <div class="dashboard">
 	
-	<div id="controls">
+<div id="controls" class="panel">
   <label>Establecimiento:</label>
   <input type="text" id="condi" value="pizzerias" />
   <label>Latitud:</label>
@@ -150,10 +157,10 @@
 </div>
 
 <!--<div id="mapa-contenedor" style="display:flex; height:100vh; width:100%;">-->	
-<div id="map"></div>
+<div id="map" class="panel"></div>
 
 <!-- SIDEBAR -->
-<div id="sidebar" class="leaflet-sidebar collapsed">
+<div id="sidebar" class="panel">
   <div class="leaflet-sidebar-tabs">
     <ul role="tablist">
       <li><a href="#info" role="tab"><i class="bi bi-info-circle"></i></a></li>
@@ -175,7 +182,7 @@
 
 	
 <!-- LISTADO -->
-<div id="listado">
+<div id="listado" class="panel">
   <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
     <h4>📍 Establecimientos económicos dentro de la zona de estudio</h4>
   </div>
@@ -780,6 +787,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
