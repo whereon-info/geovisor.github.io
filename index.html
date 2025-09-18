@@ -477,16 +477,6 @@ logoControl.addTo(map);
     };
   }
 
-  // Crear capas HIVE
-  var hiveLayer09 = null, hiveLayer15 = null;
-  try {
-    hiveLayer09 = L.geoJson(hive_cdmx, { style: style, onEachFeature: onEachFeature }).addTo(map);
-  } catch(e) { console.warn('hive_cdmx no disponible o error:', e); }
-  try {
-    hiveLayer15 = L.geoJson(hive_edomex, { style: style, onEachFeature: onEachFeature }).addTo(map);
-  } catch(e) { console.warn('hive_edomex no disponible o error:', e); }
-
-
 
   // Leyenda
   var legend = L.control({position: 'bottomright'});
@@ -502,6 +492,14 @@ logoControl.addTo(map);
   legend.addTo(map);
 
 
+ // Crear capas HIVE
+// Crear capas individuales
+const hiveLayer09 = L.geoJson(hive_cdmx, { style, onEachFeature });
+const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
+
+// Agrupar en una sola capa
+const hiveGroup = L.layerGroup([hiveLayer09, hiveLayer15]).addTo(map);
+
   // 🎛️ Ahora sí agregamos control de capas
 		var baseMaps = {
           "Claro": osm,
@@ -516,10 +514,9 @@ logoControl.addTo(map);
         
         var overlays = {
           "Casa": myMarker,
-          "Otro": myMarker1
+          "Otro": myMarker1,
+		  "Zonas HIVE": hiveGroup
         };
-        if (hiveLayer09) overlays["Hive CDMX"] = hiveLayer09;
-        if (hiveLayer15) overlays["Hive EDOMEX"] = hiveLayer15;
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
 
@@ -698,6 +695,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
