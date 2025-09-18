@@ -148,7 +148,7 @@
 <div class="dashboard">
 
 	<div id="title">
-	 	  	<h2>👋 Estudio sobre la viabilidad comercial en México </h2>
+	 	  	<h3> Estudio sobre la viabilidad comercial en México </h3>
 	</div>
 	
 <div id="controls" class="panel">
@@ -365,84 +365,75 @@ async function buscarDENUE(condi, lat, lon, mts) {
 	
 	
   // ========== FUNCIONES DE HEXÁGONOS ==========
-		// 🔹 Nueva función para actualizar tu panel lateral (sin Leaflet-sidebar-v2)
 		function mostrarEnSidebar(html) {
 		  const cont = document.getElementById("sidebar-content");
-		  if (cont) {
-		    cont.innerHTML = html;
-		  } else {
-		    console.warn("No se encontró #sidebar-content en el DOM");
-		  }
+		  if (cont) cont.innerHTML = html;
 		}
 
+function onEachFeature(feature, layer) {
+  layer.on("click", async () => {
+    const props = feature.properties || {};
 
-      const htmlFija = `
-        <div id="info-fija">
-          <h2>${props.nomgeo || 'Zona'}</h2>
-          <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
-          <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
-          <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
-          <p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
-          <p><b>Extorsión:</b> ${props["extorsión"] || 0}</p>
-          <p><b>Narcomenudeo:</b> ${props.narcomenud || 0}</p>
-          <p><b>Robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
-          <p><b>Créditos personales:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
-          <p><b>Créditos nómina:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
-          <p><b>Créditos hipotecarios:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
-          <p><b>Créditos automotrices:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p><hr>
-        </div>
-        <div id="info-dinamica">Cargando...</div>
-      `;
-      mostrarEnSidebar(htmlFija);
+    const htmlFija = `
+      <div id="info-fija">
+        <h2>${props.nomgeo || 'Zona'}</h2>
+        <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
+        <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
+        <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
+        <p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
+        <p><b>Extorsión:</b> ${props["extorsión"] || 0}</p>
+        <p><b>Narcomenudeo:</b> ${props.narcomenud || 0}</p>
+        <p><b>Robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
+        <p><b>Créditos personales:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
+        <p><b>Créditos nómina:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
+        <p><b>Créditos hipotecarios:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
+        <p><b>Créditos automotrices:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p><hr>
+      </div>
+      <div id="info-dinamica">Cargando...</div>
+    `;
 
-	  const bounds = layer.getBounds();
-      const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
-      console.log("👉 Resultados del hexágono:", resultados);
+    mostrarEnSidebar(htmlFija);
 
-	
+    // 👇 Aquí sí puedes usar await porque estás dentro de async
+    const bounds = layer.getBounds();
+    const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
 
-		
-      // Agrupar
-      const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
-      const extras = {}; // aquí se guardan categorías nuevas
-      
-      for (const item of resultados) {
-        const c = (item.Clase_actividad || "").toLowerCase();
-      
-		if (c.includes("banco") || c.includes("banca múltiple") || c.includes("banca de desallorro")) resumen.Bancos++;
-		else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad") || c.includes("educac")) resumen.Escuelas++;
-		else if (c.includes("super") || c.includes("autoservicio") || c.includes("bodega") || c.includes("abarrotes") || c.includes("comercio")) resumen.Supermercados++;
-		else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal") || c.includes("hospedaje")) resumen.Hoteles++;
+    // Resumen de resultados
+    const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
+    const extras = {};
 
-      
-        // 🔹 si no entra en las fijas, lo mando a extras
-        else {
-          const nombre = item.Clase_actividad.trim();
-          if (!extras[nombre]) extras[nombre] = 0;
-          extras[nombre]++;
-        }
+    resultados.forEach(item => {
+      const c = (item.Clase_actividad || "").toLowerCase();
+      if (c.includes("banco")) resumen.Bancos++;
+      else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
+      else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
+      else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
+      else {
+        const nombre = item.Clase_actividad.trim();
+        extras[nombre] = (extras[nombre] || 0) + 1;
       }
+    });
 
+    let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul>";
+    for (const [cat, num] of Object.entries(resumen)) {
+      listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
+    }
+    listado += "</ul>";
 
-      let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul style='list-style:none;padding:0;'>";
-       for (const [cat,num] of Object.entries(resumen)) {
-          listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
-                        <span style="margin-right:8px;">${getEmojiCategoria(cat)}</span>
-                        <strong style="margin-right:6px;">${cat}:</strong> ${num}
-                      </li>`;
-                          }
-          listado += "</ul>";
-
-            if (Object.keys(extras).length > 0) {
-        listado += "<h3>🔍 Otros establecimientos:</h3><ul style='list-style:none;padding:0;'>";
-        for (const [cat,num] of Object.entries(extras)) {
-          listado += `<li style="margin-bottom:6px; display:flex; align-items:center;">
-                        <span style="margin-right:8px;">📍</span>
-                        <strong style="margin-right:6px;">${cat}:</strong> ${num}
-                      </li>`;
-        }
-        listado += "</ul>";
+    if (Object.keys(extras).length > 0) {
+      listado += "<h3>🔍 Otros establecimientos:</h3><ul>";
+      for (const [cat, num] of Object.entries(extras)) {
+        listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
       }
+      listado += "</ul>";
+    }
+
+    document.getElementById("info-dinamica").innerHTML = listado;
+  });
+}
+
+
+
       
       function getEmojiCategoria(cat) {
           const emojis = {
@@ -711,6 +702,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
