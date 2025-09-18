@@ -102,7 +102,7 @@
     /*table { width: 100%; border-collapse: collapse; color: #000000; background-color: #FFFFFF; } */
     /*th, td { padding: 3px; border-bottom: 1px solid #000000; } LINEA Y TABLAS*/
     /*tr:hover { background: #00ae4d; cursor: pointer; } COLOR SELECCIÓN ELEMENTOS*/
-    th { background: #2c2c2c; position: sticky; top: 0; } /*BARRA NOMBRE DIRECCION TELEFONO ETC*/
+    th { background: #000000; position: sticky; top: 0; } /*BARRA NOMBRE DIRECCION TELEFONO ETC*/
 
 	/* 🎨 Fuente uniforme en todo el mapa */
 	.leaflet-control, .leaflet-popup-content {font-family: 'Poppins', sans-serif; font-size: 14px; color: #FFFFFF;}
@@ -148,10 +148,7 @@
 <div class="dashboard">
 
 	<div id="title">
-	 		<div id="titleContent">
-	   	 <span id="closeWelcome">&times;</span>
-	    	<h1>👋 Estudio sobre la viabilidad comercial en México </h1>
-		</div>
+	 	  	<h2>👋 Estudio sobre la viabilidad comercial en México </h2>
 	</div>
 	
 <div id="controls" class="panel">
@@ -368,9 +365,16 @@ async function buscarDENUE(condi, lat, lon, mts) {
 	
 	
   // ========== FUNCIONES DE HEXÁGONOS ==========
-  function onEachFeature(feature, layer) {
-    layer.on("click", async () => {
-      const props = feature.properties || {};
+		// 🔹 Nueva función para actualizar tu panel lateral (sin Leaflet-sidebar-v2)
+		function mostrarEnSidebar(html) {
+		  const cont = document.getElementById("sidebar-content");
+		  if (cont) {
+		    cont.innerHTML = html;
+		  } else {
+		    console.warn("No se encontró #sidebar-content en el DOM");
+		  }
+		}
+
 
       const htmlFija = `
         <div id="info-fija">
@@ -707,6 +711,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
