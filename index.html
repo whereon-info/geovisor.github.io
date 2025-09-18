@@ -48,7 +48,7 @@
 	.dashboard {
 	  display: grid;
 	  grid-template-columns: 20% 45% 35%;
-	  grid-template-rows: 10% 60% 30%;
+	  grid-template-rows: 5% 65% 30%;
 	  grid-template-areas:
 	    "title title title"
 		"controls map sidebar"
@@ -64,8 +64,8 @@
       padding: 10px;
     }
 
-    #title {grid-area: title}
-	#constrols { grid-area: controls; }
+    #title {grid-area: title, background: #2c2c2c}
+	#controls { grid-area: controls; }
     #map { grid-area: map; }
     #sidebar { grid-area: sidebar; }
     #listado { grid-area: listado; }
@@ -707,6 +707,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
