@@ -591,6 +591,20 @@ document.getElementById('btnBuscar').addEventListener('click', () => {
       default: return '<i class="bi bi-geo-alt-fill"></i>';
     }
   }
+
+function mostrarResultadosBusqueda(condi, total) {
+  const cont = document.getElementById("resultadosBusqueda");
+  cont.innerHTML = `
+    <div class="resultado-personalizado">
+      <span class="icono">📊</span>
+      <span class="nombre">${condi}</span>
+      <span class="conteo">(${total} encontrados)</span>
+    </div>
+  `;
+}
+
+
+
 	
 	// ========== PLUGIN PHOTON ==========
 const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&", "BAN": "https://api-adresse.data.gouv.fr/search/?"}	
@@ -661,16 +675,7 @@ if (L.control.photon) {
   console.warn("L.control.photon no está disponible (¿falta cargar leaflet.photon.js?)");
 }
 
-function mostrarResultadosBusqueda(condi, total) {
-  const cont = document.getElementById("resultadosBusqueda");
-  cont.innerHTML = `
-    <div class="resultado-personalizado">
-      <span class="icono">📊</span>
-      <span class="nombre">${condi}</span>
-      <span class="conteo">(${total} encontrados)</span>
-    </div>
-  `;
-}
+
 
 // ============== BOTON PDF ===================================
 	
@@ -702,6 +707,7 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
 
 
