@@ -126,7 +126,7 @@
 	#sidebar h3, #listado h3 { font-weight: 150; font-size: 12px; margin-bottom: 8px;}
 	#gcd-button-control {  display: flex;  align-items: center;  justify-content: center;  font-size: 8px;   /* tamaño del emoji */  width: 12px;  height: 28px;   border-radius: 2px;  cursor: pointer;}
 	#gcd-button-control:hover {  background: #f0f0f0;}
-	#info-dinamica {font-size: 10px;line-height: 2.5;}  
+	#info-dinamica {font-size: 12px;line-height: 2.0;}  
 
 	#resultadosBusqueda .resultado-personalizado {  display: flex;  align-items: center;  margin: 4px 0;  padding: 4px 6px;  background: rgba(200,230,255,0.5);  border-radius: 6px;}
 	#resultadosBusqueda .icono {  font-size: 18px;  margin-right: 6px;}
@@ -170,7 +170,7 @@
 
 <!-- SIDEBAR -->
 <div id="sidebar" class="panel">
-   <h2 class="leaflet-sidebar-header" style="margin:0.5;">📊 Ficha de información urbana</h2>
+   <h3 class="leaflet-sidebar-header" style="margin:0.5;">📊 Ficha de información urbana</h3>
     <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
 	<h3>Búsquedas personalizadas</h3>
   <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
@@ -180,7 +180,7 @@
 <!-- LISTADO -->
 <div id="listado" class="panel">
   <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
-    <h2>📍 Establecimientos económicos dentro de la zona de estudio</h2>
+    <h3>📍 Establecimientos económicos dentro de la zona de estudio</h3>
   </div>
   <table>
     <thead>
@@ -698,6 +698,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
