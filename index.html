@@ -118,7 +118,7 @@
 	.leaflet-control-search a:hover {color: #b81cb0;}
   	
 	/* 📑 Sidebar y tabla de resultados */
-	#title {background: #2c2c2c; color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif; line-height: 0.5;}  
+	#title {background: #00793a; color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif; line-height: 0.5;}  
 	#controls {background: #2c2c2c; color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 2.0;}
 	#listado {background: #2c2c2c; color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 	#sidebar {grid-area: sidebar; background: #2c2c2c;color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 1.0;}  
@@ -126,6 +126,7 @@
 	#sidebar h3, #listado h3 { font-weight: 150; font-size: 12px; margin-bottom: 8px;}
 	#gcd-button-control {  display: flex;  align-items: center;  justify-content: center;  font-size: 8px;   /* tamaño del emoji */  width: 12px;  height: 28px;   border-radius: 2px;  cursor: pointer;}
 	#gcd-button-control:hover {  background: #f0f0f0;}
+	#info-dinamica {font-size: 10px;line-height: 1.0;}  
 
 	#resultadosBusqueda .resultado-personalizado {  display: flex;  align-items: center;  margin: 4px 0;  padding: 4px 6px;  background: rgba(200,230,255,0.5);  border-radius: 6px;}
 	#resultadosBusqueda .icono {  font-size: 18px;  margin-right: 6px;}
@@ -414,14 +415,14 @@ function onEachFeature(feature, layer) {
       }
     });
 
-    let listado = "<h3>🏬 Elementos urbanos dentro del área:</h3><ul>";
+    let listado = "<h2>🏬 Elementos urbanos dentro del área:</h2><ul>";
     for (const [cat, num] of Object.entries(resumen)) {
       listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
     }
     listado += "</ul>";
 
     if (Object.keys(extras).length > 0) {
-      listado += "<h3>🔍 Otros establecimientos:</h3><ul>";
+      listado += "<h2>🔍 Otros establecimientos:</h2><ul>";
       for (const [cat, num] of Object.entries(extras)) {
         listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
       }
@@ -705,6 +706,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
