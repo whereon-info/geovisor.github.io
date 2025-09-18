@@ -404,7 +404,7 @@ function onEachFeature(feature, layer) {
 
     resultados.forEach(item => {
       const c = (item.Clase_actividad || "").toLowerCase();
-      if (c.includes("banco")) resumen.Bancos++;
+      if (c.includes("banco") || c.includes("banca múltiple")) resumen.Bancos++;
       else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
       else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
       else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
@@ -698,6 +698,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
