@@ -47,8 +47,8 @@
     
 	.dashboard {
 	  display: grid;
-	  grid-template-columns: 33% 34% 33%;
-	  grid-template-rows: 70% 30%;
+	  grid-template-columns: 20% 40% 40%;
+	  grid-template-rows: 75% 25%;
 	  grid-template-areas:
 	    "controls map sidebar"
 	    "listado  listado sidebar";
@@ -704,126 +704,7 @@ function mostrarResultadosBusqueda(condi, total) {
 
 
 
-   // Evento de clic para consulta GetFeatureInfo
-    map.on("click", function(e) {
-      var url = getFeatureInfoUrl(map, wmsLayer, e.latlng, {
-        'info_format': 'application/json'
-      });
-
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          if (data.features.length > 0) {
-            var props = data.features[0].properties;
-
-            // Construimos el contenido del popup
-            var content = "<h4>Información de la manzana</h4>";
-            content += "<b>CVEGEO:</b> " + (props.CVEGEO || "N/A") + "<br/>";
-            content += "<b>Población total:</b> " + (props.pobtot || "N/A") + "<br/>";
-            content += "<b>Población de 0 a 14 años:</b> " + (props.pob0_14 || "N/A") + "<br/>";
-            content += "<b>Población de 15 a 64 años:</b> " + (props.pob15_64 || "N/A") + "<br/>";
-			content += "<b>Población de 65 años o más:</b> " + (props.pob65_mas || "N/A") + "<br/>"; 
-
-            L.popup()
-              .setLatLng(e.latlng)
-              .setContent(content)
-              .openOn(map);
-          } else {
-            L.popup()
-              .setLatLng(e.latlng)
-              .setContent("Sin datos en esta manzana")
-              .openOn(map);
-          }
-        })
-        .catch(err => console.error(err));
-    });
-
-    // Función para armar la URL de GetFeatureInfo
-    function getFeatureInfoUrl(map, layer, latlng, params) {
-      var point = map.latLngToContainerPoint(latlng, map.getZoom());
-      var size = map.getSize();
-
-      var baseParams = {
-        request: 'GetFeatureInfo',
-        service: 'WMS',
-        srs: 'EPSG:4326',
-        styles: '',
-        transparent: true,
-        version: '1.1.1',
-        format: 'image/png',
-        bbox: map.getBounds().toBBoxString(),
-        height: size.y,
-        width: size.x,
-        layers: layer.wmsParams.layers,
-        query_layers: layer.wmsParams.layers,
-        info_format: 'application/json'
-      };
-
-      baseParams = Object.assign(baseParams, params);
-
-      baseParams[baseParams.version === '1.3.0' ? 'i' : 'x'] = point.x;
-      baseParams[baseParams.version === '1.3.0' ? 'j' : 'y'] = point.y;
-
-      return layer._url + L.Util.getParamString(baseParams, layer._url, true);
-    }
-
-
-
-	
 	
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
