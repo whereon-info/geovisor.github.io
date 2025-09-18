@@ -198,12 +198,11 @@
    	 <span id="closeWelcome">&times;</span>
     	<h2>👋 Bienvenido</h2>
    	 <p>A este webmap donde podrá encontrar información sociodemográfica, económica y urbana de las manchas urbanas de ciudades de México.<br></p>
-		<p>De clic sobre los hexágonos para conocer la información sobre un municipio, una zona, un lugar y/o donde se encuentra usted.</p> 
-		<p>Busque en el recuadro superior el giro de su interés.</p>
 		<p>Conozca la situación social, el status económico, el potencial comercial, la competencia que tendrá su negocio, los elementos urbanos atractores de clientes potenciales, el perfil de los habitantes 
-		de la zona donde se encontrará su emprendimiento, franquicia y/o sucursal.</p>	
-		<p>Renuncia de responsabilidad: Toda la información geoestadística aquí presentada es elaborada y por consiguiente propiedad de los institutos, organismos, asociaciones y/o secretarías respectivamente. Whereon sólo procesa y plasma 
-		los datos.</p>  
+		de la zona donde se encontrará su emprendimiento, franquicia y/o sucursal.</p>
+		<p>Busque en el recuadro superior el giro de su interés.</p>	
+		<p> Y/o de clic sobre los hexágonos para conocer la información sobre un municipio, zona, lugar o donde se encuentra usted.</p> 
+		<p>Renuncia de responsabilidad: Toda la información geoestadística aquí presentada es elaborada y por consiguiente propiedad de los institutos, organismos, asociaciones y/o secretarías respectivamente. Whereon procesa y presenta estos los datos.</p>  
  	 </div>
 	</div>
 
@@ -489,7 +488,7 @@ logoControl.addTo(map);
 
 
 
-  // Leyenda y título
+  // Leyenda
   var legend = L.control({position: 'bottomright'});
   legend.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
@@ -699,6 +698,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
