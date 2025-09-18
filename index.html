@@ -47,16 +47,15 @@
     
 	.dashboard {
 	  display: grid;
-	  grid-template-columns: 20% 40% 40%;
-	  grid-template-rows: 75% 25%;
+	  grid-template-columns: 20% 45% 35%;
+	  grid-template-rows: 70% 30%;
 	  grid-template-areas:
 	    "controls map sidebar"
-	    "listado  listado sidebar";
+	    "listado listado listado";
 	  height: 100vh;
 	  width: 100vw;
 	  overflow: hidden; /* 👈 evita desbordes */
 	}
-
 
     .panel {
       border: 1px solid #ddd;
@@ -699,4 +698,5 @@ function mostrarResultadosBusqueda(condi, total) {
 </script>
 </body>
 </html>
+
 
