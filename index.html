@@ -59,16 +59,16 @@
 	}
 
     .panel {
-      border: 1px solid #ddd;
-      overflow: auto;
+      border: 2px solid #00793a;
+      overflow: hidden;
       padding: 10px;
     }
 
     #title {grid-area: title}
 	#controls { grid-area: controls; }
     #map { grid-area: map; }
-    #sidebar { grid-area: sidebar; }
-    #listado { grid-area: listado; }
+    #sidebar { grid-area: sidebar; overflow: auto;  }
+    #listado { grid-area: listado; overflow: auto;  }
 	  
 	.header {
       font-weight: bold;
@@ -502,13 +502,6 @@ logoControl.addTo(map);
   };
   legend.addTo(map);
 
-  var title = L.control();
-  title.onAdd = function(map) {
-    var div = L.DomUtil.create('div', 'info');
-    div.innerHTML += '<h2>Estudio de mercado</h2><h3>Análisis de entornos</h3>';
-    return div;
-  };
-  title.addTo(map);
 
   // 🎛️ Ahora sí agregamos control de capas
 		var baseMaps = {
@@ -706,6 +699,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
