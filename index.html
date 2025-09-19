@@ -492,8 +492,18 @@ logoControl.addTo(map);
   legend.addTo(map);
 
 
- // Crear capas HIVE
-// Crear capas individuales
+ // Servicios manzanas
+
+var manzanas = L.tileLayer.wms("http://localhost:8080/whereon/geoportal/wms", {
+  layers: 'geoportal:mx_manzanas',
+  format: 'image/png',
+  transparent: true
+  attribution: "INEGI"
+	});
+
+
+	
+// Capas HIVE
 const hiveLayer09 = L.geoJson(hive_cdmx, { style, onEachFeature });
 const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 
@@ -515,7 +525,8 @@ const hiveGroup = L.layerGroup([hiveLayer09, hiveLayer15]).addTo(map);
         var overlays = {
           "Casa": myMarker,
           "Otro": myMarker1,
-		  "Zonas HIVE": hiveGroup
+		  "Zonas HIVE": hiveGroup,
+		  "Manzanas": manzanas	
         };
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
@@ -695,6 +706,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
