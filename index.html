@@ -497,7 +497,7 @@ logoControl.addTo(map);
 var manzanas = L.tileLayer.wms("http://localhost:8080/whereon/geoportal/wms", {
   layers: 'geoportal:mx_manzanas',
   format: 'image/png',
-  transparent: true
+  transparent: true,
   attribution: "INEGI"
 	});
 
@@ -706,6 +706,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
