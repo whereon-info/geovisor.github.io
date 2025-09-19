@@ -494,7 +494,7 @@ logoControl.addTo(map);
 
  // Servicios manzanas
 
-var manzanas = L.tileLayer.wms("http://localhost:8080/whereon/geoportal/wms", {
+var manzanas = L.tileLayer.wms("https://localhost:8080/whereon/geoportal/wms", {
   layers: 'geoportal:mx_manzanas',
   format: 'image/png',
   transparent: true,
@@ -706,6 +706,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
