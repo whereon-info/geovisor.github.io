@@ -19,6 +19,7 @@
   <!-- Hive (tu geojson) -->
   <script type="text/javascript" src="js/hive_cdmx.js"></script>
   <script type="text/javascript" src="js/hive_edomex.js"></script>
+  <script type="text/javascript" src="js/hive_ags.js"></script>	
 
   <!-- Buscadores / plugins locales -->
   <link rel="stylesheet" href="css/leaflet-search.css">
@@ -522,11 +523,12 @@ consultarBigQuery(`
 
 	
 // Capas HIVE
+const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature })
 const hiveLayer09 = L.geoJson(hive_cdmx, { style, onEachFeature });
 const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 
 // Agrupar en una sola capa
-const hiveGroup = L.layerGroup([hiveLayer09, hiveLayer15]).addTo(map);
+const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 
   // 🎛️ Ahora sí agregamos control de capas
 		var baseMaps = {
@@ -724,6 +726,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
