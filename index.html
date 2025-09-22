@@ -522,7 +522,7 @@ logoControl.addTo(map);
 var nse = L.geoJSON(geojsonData, {
   style: function (feature) {
     return {
-      fillColor: getColor(feature.properties.NIVEL PREDOMINANTE),
+      fillColor: getColor(feature.properties."NIVEL_PREDOMINANTE"),
       weight: 1,
       opacity: 1,
       color: 'white',
@@ -748,6 +748,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
