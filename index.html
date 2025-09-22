@@ -519,7 +519,7 @@ logoControl.addTo(map);
     default: return '#cccccc'; // gris si no hay coincidencia
   }
 }
-var nse = L.geoJSON(geojsonData, {
+var nse = L.geoJSON(nseGroup, {
   style: function (feature) {
     return {
       fillColor: getColor(feature.properties.NIVEL_PREDOMINANTE),
@@ -540,12 +540,12 @@ var nse = L.geoJSON(geojsonData, {
 const nseLayer01 = L.geoJson(nse_ags, { style, onEachFeature });
 
 	
-// Capas HIVE
+// HIVE
 const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
 const hiveLayer09 = L.geoJson(hive_cdmx, { style, onEachFeature });
 const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 
-// gRUPOS
+// GRUPOS
 const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 const nseGroup = L.layerGroup([nseLayer01]).addTo(map);	
 
@@ -748,6 +748,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
