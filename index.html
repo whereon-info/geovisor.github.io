@@ -511,35 +511,36 @@ logoControl.addTo(map);
 	const nseLayer01 = L.geoJson(nse_ags, { style, onEachFeature });
 	const nseGroup = L.layerGroup([nseLayer01]).addTo(map);	
 	
-  function getColor(tipo) {
-	   switch (tipo) {
-    case 'A/B': return '#1f77b4'; // azul
-    case 'C+': return '#0ddec9'; // azul cielo
-	case 'C': return '#2ca02c'; // verde
-	case 'C-': return '#95de0d'; // verde	   
-    case 'D+': return '#ffd200'; // amarillo
-	case 'D': return '#ff7f0e'; // naranja	   
-    case 'E': return '#d62728'; // rojo
-    default: return '#cccccc'; // gris si no hay coincidencia
-  }
-}
-var nse = L.geoJSON(nseGroup, {
-  style: function (feature) {
-    return {
-      fillColor: getColor(feature.properties.NIVEL_PREDOMINANTE),
-      weight: 1,
-      opacity: 1,
-      color: 'white',
-      fillOpacity: 0.7
-    };
-  },
-  onEachFeature: function (feature, layer) {
-    // Popup para mostrar info
-    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties.nseGroup);
-  }
-}).addTo(map);
-
+	// 🎨 Colores para NSE
+	function getColorNSE(tipo) {
+	  switch (tipo) {
+	    case 'A/B': return '#1f77b4';
+	    case 'C+':  return '#0ddec9';
+	    case 'C':   return '#2ca02c';
+	    case 'C-':  return '#95de0d';
+	    case 'D+':  return '#ffd200';
+	    case 'D':   return '#ff7f0e';
+	    case 'E':   return '#d62728';
+	    default:    return '#cccccc';
+	  }
+	}
 	
+	function styleNSE(feature) {
+	  return {
+		fillColor: getColorNSE(feature.properties.NIVEL_PREDOMINANTE),
+		weight: 1,
+		opacity: 1,
+		color: 'white',
+		fillOpacity: 0.7
+	  };
+	}
+
+		const nseLayer01 = L.geoJson(nse_ags, {
+	  style: styleNSE,
+	  onEachFeature: function (feature, layer) {
+	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties.NIVEL_PREDOMINANTE);
+	  }
+	});
 
 	
 // HIVE
@@ -549,6 +550,7 @@ const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 
 // GRUPOS
 const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
+const nseGroup  = L.layerGroup([nseLayer01]).addTo(map);
 
 
   // 🎛️ Ahora sí agregamos control de capas
@@ -750,6 +752,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
