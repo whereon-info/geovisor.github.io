@@ -507,6 +507,10 @@ logoControl.addTo(map);
   legend.addTo(map);
 
   // ========== ESTILO NSE ==========
+	//NSE
+	const nseLayer01 = L.geoJson(nse_ags, { style, onEachFeature });
+	const nseGroup = L.layerGroup([nseLayer01]).addTo(map);	
+	
   function getColor(tipo) {
 	   switch (tipo) {
     case 'A/B': return '#1f77b4'; // azul
@@ -536,8 +540,6 @@ var nse = L.geoJSON(nseGroup, {
 }).addTo(map);
 
 	
-//NSE
-const nseLayer01 = L.geoJson(nse_ags, { style, onEachFeature });
 
 	
 // HIVE
@@ -547,7 +549,7 @@ const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 
 // GRUPOS
 const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
-const nseGroup = L.layerGroup([nseLayer01]).addTo(map);	
+
 
   // 🎛️ Ahora sí agregamos control de capas
 		var baseMaps = {
@@ -748,6 +750,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
