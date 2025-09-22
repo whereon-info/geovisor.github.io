@@ -492,35 +492,6 @@ logoControl.addTo(map);
   };
   legend.addTo(map);
 
-
- // Servicios manzanas
-
-async function consultarBigQuery(sqlQuery) {
-  const projectId = "manzanas-469720";
-  const url = `https://bigquery.googleapis.com/bigquery/v2/projects/${manzanas-469720}/queries`;
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${gapi.auth.getToken().access_token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ query: sqlQuery })
-  });
-
-  const data = await response.json();
-  return data;
-}
-
-// Ejemplo: consulta establecimientos en CDMX
-consultarBigQuery(`
-  SELECT * FROM proyecto_mercado.denue_ext
-  WHERE nom_ent = 'Ciudad de México'
-  LIMIT 100
-`).then(data => console.log(data));
-
-
-
 	
 // Capas HIVE
 const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -546,7 +517,6 @@ const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(ma
           "Casa": myMarker,
           "Otro": myMarker1,
 		  "HIVE": hiveGroup,
-		  "Manzanas": manzanas	
         };
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
@@ -726,6 +696,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
