@@ -233,8 +233,14 @@
 			const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 			  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
 			});
-			
 
+			
+	        // 🛰️ INEGI
+			const inegi = L.tileLayer('https://gaia.inegi.org.mx/NLB/tunnel/wms/wms61?', {
+			  attribution: 'INEGI'
+			});
+	
+			
 			// 👀 Agregar el mapa base por defecto (ejemplo: OSM claro)
 			osm.addTo(map);
 	
@@ -506,7 +512,8 @@ const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(ma
           "Claro": osm,
           "Oscuro": dark,
           "Light": light,
-          "Satélite": esriSat
+          "Satélite": esriSat,
+		  "INEGI"": inegi	
         };
         
         // Declare and initialize myMarker before using it
@@ -696,6 +703,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
