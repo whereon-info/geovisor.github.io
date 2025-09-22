@@ -236,7 +236,13 @@
 
 			
 	        // 🛰️ INEGI
-			const inegi = L.tileLayer.wms('https://gaia.inegi.org.mx/NLB/tunnel/wms/wms61?', { attribution: 'INEGI'	});
+			const inegi = L.tileLayer.wms('https://gaia.inegi.org.mx/NLB/tunnel/wms/wms61?', { 
+				 layers: "Marco geoestadístico",
+ 				 format: 'image/jpeg',
+                 transparent: true,
+				 version: '1.3.0', 
+				 attribution: 'INEGI'	
+			     });
 	
 			
 			// 👀 Agregar el mapa base por defecto (ejemplo: OSM claro)
@@ -701,6 +707,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
