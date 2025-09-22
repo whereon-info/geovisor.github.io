@@ -523,7 +523,7 @@ consultarBigQuery(`
 
 	
 // Capas HIVE
-const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature })
+const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
 const hiveLayer09 = L.geoJson(hive_cdmx, { style, onEachFeature });
 const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 
@@ -539,13 +539,13 @@ const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(ma
         };
         
         // Declare and initialize myMarker before using it
-        var myMarker = L.marker([51.5, -0.09]).addTo(map); // Example initialization
-        var myMarker1 = L.marker([51.5, -0.1]).addTo(map); // Example initialization for myMarker1
+        var myMarker = L.marker([51.5, -0.09]).addTo(map); 
+        var myMarker1 = L.marker([51.5, -0.1]).addTo(map); 
         
         var overlays = {
           "Casa": myMarker,
           "Otro": myMarker1,
-		  "Zonas HIVE": hiveGroup,
+		  "HIVE": hiveGroup,
 		  "Manzanas": manzanas	
         };
         
@@ -726,6 +726,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
