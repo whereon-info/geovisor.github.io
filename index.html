@@ -517,8 +517,7 @@ const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(ma
           "Claro": osm,
           "Oscuro": dark,
           "Light": light,
-          "Satélite": esriSat,
-		  "INEGI": inegi,	
+          "Satélite": esriSat,	
         };
         
         // Declare and initialize myMarker before using it
@@ -529,6 +528,7 @@ const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(ma
           "Casa": myMarker,
           "Otro": myMarker1,
 		  "HIVE": hiveGroup,
+		  "INEGI": inegi,
         };
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
@@ -708,6 +708,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
