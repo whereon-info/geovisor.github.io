@@ -522,7 +522,7 @@ logoControl.addTo(map);
 var nse = L.geoJSON(geojsonData, {
   style: function (feature) {
     return {
-      fillColor: getColor(feature.properties.["NIVEL PREDOMINANTE"]),
+      fillColor: getColor(feature.properties.NIVEL PREDOMINANTE),
       weight: 1,
       opacity: 1,
       color: 'white',
@@ -545,7 +545,7 @@ const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
 const hiveLayer09 = L.geoJson(hive_cdmx, { style, onEachFeature });
 const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 
-// Agrupar en una sola capa
+// gRUPOS
 const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 const nseGroup = L.layerGroup([nseLayer01]).addTo(map);	
 
@@ -748,6 +748,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
