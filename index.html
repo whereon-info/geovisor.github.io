@@ -506,6 +506,39 @@ logoControl.addTo(map);
   };
   legend.addTo(map);
 
+  // ========== ESTILO NSE ==========
+  function getColor(tipo) {
+	   switch (tipo) {
+    case 'A/B': return '#1f77b4'; // azul
+    case 'C+': return '#0ddec9'; // azul cielo
+	case 'C': return '#2ca02c'; // verde
+	case 'C-': return '#95de0d'; // verde	   
+    case 'D+': return '#ffd200'; // amarillo
+	case 'D': return '#ff7f0e'; // naranja	   
+    case 'E': return '#d62728'; // rojo
+    default: return '#cccccc'; // gris si no hay coincidencia
+  }
+}
+var nse = L.geoJSON(geojsonData, {
+  style: function (feature) {
+    return {
+      fillColor: getColor(feature.properties.["NIVEL PREDOMINANTE"]),
+      weight: 1,
+      opacity: 1,
+      color: 'white',
+      fillOpacity: 0.7
+    };
+  },
+  onEachFeature: function (feature, layer) {
+    // Popup para mostrar info
+    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties.nseGroup);
+  }
+}).addTo(map);
+
+	
+//NSE
+const nseLayer01 = L.geoJson(nse_ags, { style, onEachFeature });
+
 	
 // Capas HIVE
 const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -514,6 +547,7 @@ const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 
 // Agrupar en una sola capa
 const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
+const nseGroup = L.layerGroup([nseLayer01]).addTo(map);	
 
   // 🎛️ Ahora sí agregamos control de capas
 		var baseMaps = {
@@ -531,10 +565,13 @@ const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(ma
           "Casa": myMarker,
           "Otro": myMarker1,
 		  "HIVE": hiveGroup,
+		  "NSE": nseGroup,
 		  "INEGI": inegi,
         };
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
+
+
 
 
 
@@ -711,6 +748,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
