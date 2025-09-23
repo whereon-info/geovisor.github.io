@@ -508,14 +508,6 @@ logoControl.addTo(map);
 
   // ========== ESTILO NSE ==========
 
-	var nseAgs = L.geoJson(nse_ags).addTo(map);
-	var nseStyle = {
-	 'color': "#858585",
-	 'weight': 5,
-	 'opacity': 0.6
-	};
-
-
 	function getColorNSE(tipo) {
 	  switch (tipo) {
 	    case 'A/B': return '#1f77b4';
@@ -530,7 +522,7 @@ logoControl.addTo(map);
 	}
 	function styleNSE(feature) {
 	 return {
-	 fillColor: getColor(feature.properties.["NIVEL PREDOMINANTE"]),
+	 fillColor: getColorNSE (feature.properties["NIVEL PREDOMINANTE"]),
 	 weight: 2,
 	 opacity: 1,
 	 color: 'white',
@@ -538,7 +530,12 @@ logoControl.addTo(map);
 	 fillOpacity: 0.7
 		 };
 		}
-	L.geoJson(nse_ags, {style: styleNSE	}).addTo(map);
+	var nseAgs = L.geoJson(nse_ags, {
+	  style: styleNSE,
+	  onEachFeature: function (feature, layer) {
+	    layer.bindPopup("NSE: " + feature.properties["NIVEL PREDOMINANTE"]);
+	  }
+	}).addTo(map);
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -748,6 +745,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
