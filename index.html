@@ -470,13 +470,13 @@ function onEachFeature(feature, layer) {
   //======================= LOGO ================================
 	var logoControl = L.control({ position: "bottomleft" });
 
-logoControl.onAdd = function (map) {
-    var div = L.DomUtil.create("div", "logo-leaflet");
-    div.innerHTML = '<img src="images/WhereOn-Logo-Color-Vrt.png" style="width:80px; opacity:0.9;">';
-    return div;
-};
-
-logoControl.addTo(map);
+	logoControl.onAdd = function (map) {
+	    var div = L.DomUtil.create("div", "logo-leaflet");
+	    div.innerHTML = '<img src="images/WhereOn-Logo-Color-Vrt.png" style="width:80px; opacity:0.9;">';
+	    return div;
+	};
+	
+	logoControl.addTo(map);
   
   // ========== ESTILO / LAYERS (crear HIVE primero) ==========
   function getColor(d) {
@@ -496,7 +496,7 @@ logoControl.addTo(map);
 
   // Leyenda
   var legendHex = L.control({position: 'bottomright'});
-  legend.onAdd = function (map) {
+  legendHex.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
         grades = [0, 100, 250, 500, 1000];
     for (var i = 0; i < grades.length; i++) {
@@ -573,19 +573,19 @@ logoControl.addTo(map);
 		
 			// Mostrar la leyenda correspondiente
 		map.on('overlayadd', function (eventLayer) {
-		  if (eventLayer.name === "Delitos (hexágonos)") {
+		  if (eventLayer.name === "Hive") {
 		    map.addControl(legendHex);
 		  }
-		  if (eventLayer.name === "Nivel Socioeconómico") {
+		  if (eventLayer.name === "NSE") {
 		    map.addControl(legendNSE);
 		  }
 		});
 		
 		map.on('overlayremove', function (eventLayer) {
-		  if (eventLayer.name === "Delitos (hexágonos)") {
+		  if (eventLayer.name === "Hive") {
 		    map.removeControl(legendHex);
 		  }
-		  if (eventLayer.name === "Nivel Socioeconómico") {
+		  if (eventLayer.name === "NSE") {
 		    map.removeControl(legendNSE);
 		  }
 		});
@@ -789,6 +789,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
