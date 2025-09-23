@@ -522,6 +522,7 @@ logoControl.addTo(map);
 	}
 	
 	function styleNSE(feature) {
+		 console.log("NSE valor:", feature.properties.NIVEL_PREDOMINANTE);
 	  return {
 		fillColor: getColorNSE(feature.properties.["NIVEL PREDOMINANTE"]),
 		weight: 1,
@@ -749,5 +750,6 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
