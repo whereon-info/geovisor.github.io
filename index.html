@@ -507,11 +507,7 @@ logoControl.addTo(map);
   legend.addTo(map);
 
   // ========== ESTILO NSE ==========
-	//NSE
-	const nseLayer01 = L.geoJson(nse_ags, { style, onEachFeature });
-	const nseGroup = L.layerGroup([nseLayer01]).addTo(map);	
-	
-	// 🎨 Colores para NSE
+
 	function getColorNSE(tipo) {
 	  switch (tipo) {
 	    case 'A/B': return '#1f77b4';
@@ -535,8 +531,6 @@ logoControl.addTo(map);
 	  };
 	}
 
-
-
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -546,13 +540,13 @@ logoControl.addTo(map);
 	// GRUPOS
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 	
-	const nseLayer01 = L.geoJson(nseGroup, {
+	const nseLayer01 = L.geoJson(nse_ags, {
 	  style: styleNSE,
 	  onEachFeature: function (feature, layer) {
 		layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties.NIVEL_PREDOMINANTE);
 	  }
 	});
-	
+	const nseGroup = L.layerGroup([nseLayer01]).addTo(map);
 
 
   // 🎛️ Ahora sí agregamos control de capas
@@ -754,6 +748,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
