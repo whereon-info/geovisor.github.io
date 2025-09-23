@@ -505,7 +505,7 @@ function onEachFeature(feature, layer) {
     }
     return div;
   };
-  legend.addTo(map);
+  legendHex.addTo(map);
 
 	
 
@@ -570,6 +570,7 @@ function onEachFeature(feature, layer) {
 		  }
 		  return div;
 		};
+		legendNSE.addTo(map);
 		
 			// Mostrar la leyenda correspondiente
 		map.on('overlayadd', function (eventLayer) {
@@ -789,6 +790,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
