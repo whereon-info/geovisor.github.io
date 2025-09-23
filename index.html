@@ -562,7 +562,7 @@ function onEachFeature(feature, layer) {
 		legendNSE.onAdd = function (map) {
 		  var div = L.DomUtil.create('div', 'info legend'),
 		      categories = ['A/B', 'C+', 'C', 'C-', 'D+', 'D', 'E'];
-		  div.innerHTML += "<b>Nivel Socioeconómico</b><br>";
+		  div.innerHTML += "<b>NSE</b><br>";
 		  for (var i = 0; i < categories.length; i++) {
 		    div.innerHTML +=
 		      '<i style="background:' + getColorNSE(categories[i]) + '"></i> ' +
