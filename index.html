@@ -508,38 +508,7 @@ logoControl.addTo(map);
 
   // ========== ESTILO NSE ==========
 
-	function getColorNSE(tipo) {
-	  switch (tipo) {
-	    case 'A/B': return '#1f77b4';
-	    case 'C+':  return '#0ddec9';
-	    case 'C':   return '#2ca02c';
-	    case 'C-':  return '#95de0d';
-	    case 'D+':  return '#ffd200';
-	    case 'D':   return '#ff7f0e';
-	    case 'E':   return '#d62728';
-	    default:    return '#cccccc';
-	  }
-	}
-	
-	function styleNSE(feature) {
-		 console.log("NSE valor:", feature.properties.NIVEL_PREDOMINANTE);
-	  return {
-		fillColor: getColorNSE(feature.properties.NIVEL_PREDOMINANTE),
-		weight: 1,
-		opacity: 1,
-		color: 'white',
-		fillOpacity: 0.7
-	  };
-	}
-	const nseLayer01 = L.geoJson(nse_ags, {
-	  style: styleNSE,
-	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties.NIVEL_PREDOMINANTE);
-	  }
-	});
-	
-
-	const nseGroup = L.layerGroup([nse_ags]).addTo(map);
+	var nseAgs = L.geoJson(nse_ags).addTo(map);
 
 	
 	// HIVE
@@ -567,7 +536,7 @@ logoControl.addTo(map);
           "Casa": myMarker,
           "Otro": myMarker1,
 		  "HIVE": hiveGroup,
-		  "NSE": nseGroup,
+		  "NSE": nseAgs,
 		  "INEGI": inegi,
         };
         
@@ -750,6 +719,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
