@@ -509,7 +509,36 @@ logoControl.addTo(map);
   // ========== ESTILO NSE ==========
 
 	var nseAgs = L.geoJson(nse_ags).addTo(map);
+	var nseStyle = {
+	 'color': "#858585",
+	 'weight': 5,
+	 'opacity': 0.6
+	};
 
+
+	function getColorNSE(tipo) {
+	  switch (tipo) {
+	    case 'A/B': return '#1f77b4';
+	    case 'C+':  return '#0ddec9';
+	    case 'C':   return '#2ca02c';
+	    case 'C-':  return '#95de0d';
+	    case 'D+':  return '#ffd200';
+	    case 'D':   return '#ff7f0e';
+	    case 'E':   return '#d62728';
+	    default:    return '#cccccc';
+	  }
+	}
+	function styleNSE(feature) {
+	 return {
+	 fillColor: getColor(feature.properties.["NIVEL PREDOMINANTE"]),
+	 weight: 2,
+	 opacity: 1,
+	 color: 'white',
+	 dashArray: '3',
+	 fillOpacity: 0.7
+		 };
+		}
+	L.geoJson(nse_ags, {style: styleNSE	}).addTo(map);
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -719,6 +748,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
