@@ -499,6 +499,7 @@ function onEachFeature(feature, layer) {
   legendHex.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
         grades = [0, 100, 250, 500, 1000];
+	  div.innerHTML += "<b>Nivel</b><br>";
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
                        grades[i] + (grades[i+1] ? '&ndash;' + grades[i+1] + '<br>' : '+');
@@ -574,7 +575,7 @@ function onEachFeature(feature, layer) {
 		
 			// Mostrar la leyenda correspondiente
 		map.on('overlayadd', function (eventLayer) {
-		  if (eventLayer.name === "Hive") {
+		  if (eventLayer.name === "HIVE") {
 		    map.addControl(legendHex);
 		  }
 		  if (eventLayer.name === "NSE") {
@@ -583,7 +584,7 @@ function onEachFeature(feature, layer) {
 		});
 		
 		map.on('overlayremove', function (eventLayer) {
-		  if (eventLayer.name === "Hive") {
+		  if (eventLayer.name === "HIVE") {
 		    map.removeControl(legendHex);
 		  }
 		  if (eventLayer.name === "NSE") {
@@ -790,6 +791,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
