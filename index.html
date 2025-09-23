@@ -495,7 +495,7 @@ logoControl.addTo(map);
 
 
   // Leyenda
-  var legend = L.control({position: 'bottomright'});
+  var legendHex = L.control({position: 'bottomright'});
   legend.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
         grades = [0, 100, 250, 500, 1000];
@@ -506,6 +506,8 @@ logoControl.addTo(map);
     return div;
   };
   legend.addTo(map);
+
+	
 
   // ========== ESTILO NSE ==========
 
@@ -556,7 +558,37 @@ logoControl.addTo(map);
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
 
-	
+			var legendNSE = L.control({ position: 'bottomright' });
+		legendNSE.onAdd = function (map) {
+		  var div = L.DomUtil.create('div', 'info legend'),
+		      categories = ['A/B', 'C+', 'C', 'C-', 'D+', 'D', 'E'];
+		  div.innerHTML += "<b>Nivel Socioeconómico</b><br>";
+		  for (var i = 0; i < categories.length; i++) {
+		    div.innerHTML +=
+		      '<i style="background:' + getColorNSE(categories[i]) + '"></i> ' +
+		      categories[i] + '<br>';
+		  }
+		  return div;
+		};
+		
+			// Mostrar la leyenda correspondiente
+		map.on('overlayadd', function (eventLayer) {
+		  if (eventLayer.name === "Delitos (hexágonos)") {
+		    map.addControl(legendHex);
+		  }
+		  if (eventLayer.name === "Nivel Socioeconómico") {
+		    map.addControl(legendNSE);
+		  }
+		});
+		
+		map.on('overlayremove', function (eventLayer) {
+		  if (eventLayer.name === "Delitos (hexágonos)") {
+		    map.removeControl(legendHex);
+		  }
+		  if (eventLayer.name === "Nivel Socioeconómico") {
+		    map.removeControl(legendNSE);
+		  }
+		});
 
   // 🎛️ Ahora sí agregamos control de capas
 		var baseMaps = {
@@ -757,6 +789,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
