@@ -531,6 +531,8 @@ logoControl.addTo(map);
 	  };
 	}
 
+	const nseGroup = L.layerGroup([nseLayer01]).addTo(map);
+
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -540,14 +542,6 @@ logoControl.addTo(map);
 	// GRUPOS
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 	
-	const nseLayer01 = L.geoJson(nse_ags, {
-	  style: styleNSE,
-	  onEachFeature: function (feature, layer) {
-		layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties.NIVEL_PREDOMINANTE);
-	  }
-	});
-	const nseGroup = L.layerGroup([nseLayer01]).addTo(map);
-
 
   // 🎛️ Ahora sí agregamos control de capas
 		var baseMaps = {
@@ -748,58 +742,3 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
