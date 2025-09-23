@@ -532,8 +532,20 @@ logoControl.addTo(map);
 		 };
 		}
 
-	const nseAgs = L.geoJson(hive_ags, { style: styleNSE, onEachFeature });
-	const nseCdmx = L.geoJson(hive_cdmx, { style: styleNSE, onEachFeature });
+	const nseAgs = L.geoJson(hive_ags, {
+	  style: styleNSE,
+	  onEachFeature: function (feature, layer) {
+	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties["NIVEL PREDOMINANTE"]);
+	  }
+	});
+	
+	const nseCdmx = L.geoJson(hive_cdmx, {
+	  style: styleNSE,
+	  onEachFeature: function (feature, layer) {
+	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties["NIVEL PREDOMINANTE"]);
+	  }
+	});
+
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -544,12 +556,6 @@ logoControl.addTo(map);
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
 
-	var nse = L.geoJson(nseGroup, {
-	  style: styleNSE,
-	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties["NIVEL PREDOMINANTE"]);
-	  }
-	}).addTo(map);
 	
 
   // 🎛️ Ahora sí agregamos control de capas
@@ -751,6 +757,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
