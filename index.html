@@ -524,7 +524,7 @@ logoControl.addTo(map);
 	function styleNSE(feature) {
 		 console.log("NSE valor:", feature.properties.NIVEL_PREDOMINANTE);
 	  return {
-		fillColor: getColorNSE(feature.properties.["NIVEL PREDOMINANTE"]),
+		fillColor: getColorNSE(feature.properties.NIVEL_PREDOMINANTE),
 		weight: 1,
 		opacity: 1,
 		color: 'white',
@@ -534,7 +534,7 @@ logoControl.addTo(map);
 	const nseLayer01 = L.geoJson(nse_ags, {
 	  style: styleNSE,
 	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties.["NIVEL PREDOMINANTE"]);
+	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties.NIVEL_PREDOMINANTE);
 	  }
 	});
 	
@@ -750,6 +750,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
