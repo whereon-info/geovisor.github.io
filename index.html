@@ -24,6 +24,7 @@
 
    <!-- NSE -->
   <script type="text/javascript" src="js/nse_ags.js"></script>	
+  <script type="text/javascript" src="js/nse_cdmx.js"></script>
 
   <!-- Buscadores / plugins locales -->
   <link rel="stylesheet" href="css/leaflet-search.css">
@@ -530,10 +531,10 @@ logoControl.addTo(map);
 	 fillOpacity: 0.7
 		 };
 		}
-	var nseAgs = L.geoJson(nse_ags, {
+	var nse = L.geoJson(nse_ags, nse_cdmx, {
 	  style: styleNSE,
 	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("NSE: " + feature.properties["NIVEL PREDOMINANTE"]);
+	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties["NIVEL PREDOMINANTE"]);
 	  }
 	}).addTo(map);
 	
@@ -562,7 +563,7 @@ logoControl.addTo(map);
           "Casa": myMarker,
           "Otro": myMarker1,
 		  "HIVE": hiveGroup,
-		  "NSE": nseAgs,
+		  "NSE": nse,
 		  "INEGI": inegi,
         };
         
@@ -745,6 +746,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
