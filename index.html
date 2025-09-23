@@ -531,12 +531,9 @@ logoControl.addTo(map);
 	 fillOpacity: 0.7
 		 };
 		}
-	var nse = L.geoJson(nse_ags, nse_cdmx, {
-	  style: styleNSE,
-	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties["NIVEL PREDOMINANTE"]);
-	  }
-	}).addTo(map);
+
+	const nseAgs = L.geoJson(hive_ags, { style: styleNSE, onEachFeature });
+	const nseCdmx = L.geoJson(hive_cdmx, { style: styleNSE, onEachFeature });
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -545,6 +542,14 @@ logoControl.addTo(map);
 	
 	// GRUPOS
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
+	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
+
+	var nse = L.geoJson(nseGroup, {
+	  style: styleNSE,
+	  onEachFeature: function (feature, layer) {
+	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties["NIVEL PREDOMINANTE"]);
+	  }
+	}).addTo(map);
 	
 
   // 🎛️ Ahora sí agregamos control de capas
@@ -563,7 +568,7 @@ logoControl.addTo(map);
           "Casa": myMarker,
           "Otro": myMarker1,
 		  "HIVE": hiveGroup,
-		  "NSE": nse,
+		  "NSE": nseGroup,
 		  "INEGI": inegi,
         };
         
@@ -746,6 +751,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
