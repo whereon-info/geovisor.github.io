@@ -489,7 +489,8 @@ function onEachFeature(feature, layer) {
            d > 100  ? '#abdda4' :
                       '#2b83ba';
   }
-  function style(feature) {
+  
+	function style(feature) {
     return {
       fillColor: getColor(feature.properties?.["robo a neg"]),
       weight: 2, opacity: 1, color: 'white', dashArray: '3', fillOpacity: 0.7
@@ -574,7 +575,7 @@ function onEachFeature(feature, layer) {
 		 };
 		}
 
-	const mzaMx = L.geoJson(mza06, {
+	const mzaLayer06 = L.geoJson(mza06, {
 	  style: styleMZA,
 	  onEachFeature: function (feature, layer) {
 	    layer.bindPopup("Población: " + feature.properties["Población total"]);
@@ -582,7 +583,7 @@ function onEachFeature(feature, layer) {
 	})
 
 	// MZA
-	mzaMX.addTo(map);
+	//const mzaLayer06 = L.geoJson(mza06, { styleMZA, onEachFeature });
 	
 	
 	// HIVE
@@ -593,7 +594,7 @@ function onEachFeature(feature, layer) {
 	// GRUPOS
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
-	//const mzaGroup = L.layerGroup([mzaLayer06]).addTo(map);
+	const mzaGroup = L.layerGroup([mzaLayer06]).addTo(map);
 
 			var legendNSE = L.control({ position: 'bottomright' });
 		legendNSE.onAdd = function (map) {
@@ -639,7 +640,7 @@ function onEachFeature(feature, layer) {
         var overlays = {
 		  "HIVE": hiveGroup,
 		  "NSE": nseGroup,
-		  "MZA": mzaMX,
+		  "MZA": mzaGroup,
         };
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
@@ -821,6 +822,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
