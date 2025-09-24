@@ -26,8 +26,6 @@
   <script type="text/javascript" src="js/nse_ags.js"></script>	
   <script type="text/javascript" src="js/nse_cdmx.js"></script>
 
-     <!-- MANZANAS -->
-  <script type="text/javascript" src="js/mza06.js"></script>		
 
   <!-- Buscadores / plugins locales -->
   <link rel="stylesheet" href="css/leaflet-search.css">
@@ -607,7 +605,6 @@ function onEachFeature(feature, layer) {
         var overlays = {
 		  "HIVE": hiveGroup,
 		  "NSE": nseGroup,
-		  "MZA": mzaGroup,
         };
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
@@ -789,6 +786,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
