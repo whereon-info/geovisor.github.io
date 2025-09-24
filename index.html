@@ -201,7 +201,7 @@
 <!-- CHART -->
 <div id="chart" class="panel">
    <h2>📊 Gráfica 2 </h2>
-	<canvas id="myChart" style="width:100%;max-width:700px"></canvas>	
+	<canvas id="myChart"></canvas>	
 </div>	
 
 	
@@ -792,67 +792,53 @@ if (L.control.photon) {
   //});
 
 // ============== CHART ===================================
-	new Chart("myChart", {
+
+	
+
+	
+new Chart("myChart", {
   type: "pie",
   data: {
-    labels: xValues,
+    labels: ["0-14 años", "15-64 años", "65+ años"],
     datasets: [{
-      backgroundColor: barColors,
-      data: yValues
+		backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
+      data: [0, 0, 0]
     }]
   },
   options: {
-    title: {
+    responsive: true,
+	  title: {
       display: true,
       text: "Población según grupo de edad"
     }
   }
 });
 
+L.geoJSON(hiveGroup, {
+  onEachFeature: function (feature, layer) {
+    layer.on("click", function () {
+      let hiveData = feature.properties;
+
+      // Actualizar datos en el gráfico
+      chart.data.datasets[0].data = [
+        hiveData.POB0_14_sum,
+        hiveData.POB15_64_sum,
+        hiveData.POB65_MAS_sum
+      ];
+
+      // Actualizar título con el total
+      chart.options.plugins.title.text =
+        "Población total: " + hiveData.Pop_tot.toLocaleString();
+
+      // Redibujar gráfica
+      chart.update();
+    });
+  }
+}).addTo(map);
+
+
 
 	
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
