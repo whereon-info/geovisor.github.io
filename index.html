@@ -556,7 +556,7 @@ function onEachFeature(feature, layer) {
 	//MANZANAS
     function styleMZA(feature) {
 	 return {
-	 fillColor: getColorMZA (feature.properties["POP_TOT"]),
+	 fillColor: getColorMZA (feature.properties["Población total"]),
 	 weight: 2,
 	 opacity: 1,
 	 color: 'white',
@@ -569,9 +569,12 @@ function onEachFeature(feature, layer) {
 	const mzaMx = L.geoJson(mza06, {
 	  style: styleMZA,
 	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("Población: " + feature.properties["POP_TOT"]);
+	    layer.bindPopup("Población: " + feature.properties["Población total"]);
 	  }
-	});.addTo(map);
+	});
+
+	const mzaLayer06 = L.geoJson(mza06, { styleMZA, onEachFeature });
+	
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -814,6 +817,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
