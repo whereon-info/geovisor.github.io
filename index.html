@@ -177,9 +177,9 @@
 
 <!-- SIDEBAR -->
 <div id="sidebar" class="panel">
-   <h3 class="leaflet-sidebar-header" style="margin:0.5;">📊 Ficha de información urbana</h3>
+   <h2 class="leaflet-sidebar-header" style="margin:0.5;">📊 Ficha de información urbana</h2>
     <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
-	<h2>Búsquedas personalizadas</h2>
+	<h3>Búsquedas personalizadas</h3>
   <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
 </div>
 
@@ -187,7 +187,7 @@
 <!-- LISTADO -->
 <div id="listado" class="panel">
   <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
-    <h2>📍 Establecimientos económicos dentro de la zona de estudio</h2>
+    <h3>📍 Establecimientos económicos dentro de la zona de estudio</h3>
   </div>
   <table>
     <thead>
@@ -217,7 +217,7 @@
 
 <script>
   // ========== MAPA + CAPAS ==========
-  const map = L.map('map').setView([22.5, -105.5], 5);
+  const map = L.map('map').setView([20.5, -100.5], 5);
 
 			// 🌍 Mapa claro (OSM estándar)
 			const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -261,7 +261,7 @@
   var last = null;
 
   // ========== CONTROLES (locate) ======================
-	  L.control.locate({ locateOptions: { maxZoom: 15 } }).addTo(map);
+	  L.control.locate({ locateOptions: { maxZoom: 10 } }).addTo(map);
 	  var draggableMarker;
 		map.on("locationfound", function (e) {
 	  if (draggableMarker) {
@@ -474,10 +474,10 @@ function onEachFeature(feature, layer) {
   
   // ========== ESTILO / LAYERS ==========
   function getColor(d) {
-    return d > 100 ? '#d7191c' :
-           d > 50  ? '#fdae61' :
-           d > 25  ? '#ffffbf' :
-           d > 10  ? '#abdda4' :
+    return d > 1000 ? '#d7191c' :
+           d > 500  ? '#fdae61' :
+           d > 250  ? '#ffffbf' :
+           d > 100  ? '#abdda4' :
                       '#2b83ba';
   }
   
@@ -779,6 +779,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
