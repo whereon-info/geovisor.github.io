@@ -26,6 +26,9 @@
   <script type="text/javascript" src="js/nse_ags.js"></script>	
   <script type="text/javascript" src="js/nse_cdmx.js"></script>
 
+     <!-- MANZANAS -->
+  <script type="text/javascript" src="js/mza06.js"></script>		
+
   <!-- Buscadores / plugins locales -->
   <link rel="stylesheet" href="css/leaflet-search.css">
   <link rel="stylesheet" href="css/L.Control.Locate.min.css">
@@ -549,6 +552,26 @@ function onEachFeature(feature, layer) {
 	  }
 	});
 
+
+	//MANZANAS
+    function styleMZA(feature) {
+	 return {
+	 fillColor: getColorMZA (feature.properties["POP_TOT"]),
+	 weight: 2,
+	 opacity: 1,
+	 color: 'white',
+	 dashArray: '3',
+	 fillOpacity: 0.7
+		 };
+		}
+
+	
+	const mzaMx = L.geoJson(mza06, {
+	  style: styleMZA,
+	  onEachFeature: function (feature, layer) {
+	    layer.bindPopup("Población: " + feature.properties["POP_TOT"]);
+	  }
+	});.addTo(map);
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
@@ -791,6 +814,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
