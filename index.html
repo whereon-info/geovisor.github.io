@@ -58,10 +58,11 @@
 	.dashboard {
 	  display: grid;
 	  grid-template-columns: 20% 45% 35%;
-	  grid-template-rows: 5% 65% 30%;
+	  grid-template-rows: 5% 35% 30% 30%;
 	  grid-template-areas:
 	    "title title title"
 		"controls map sidebar"
+		"graph map chart"
 	    "listado listado listado";
 	  height: 100vh;
 	  width: 100vw;
@@ -79,6 +80,8 @@
     #map { grid-area: map; }
     #sidebar { grid-area: sidebar; overflow: auto;  }
     #listado { grid-area: listado; overflow: auto;  }
+	#chart { grid-area: sidebar; overflow: auto;  }
+	#graph { grid-area: sidebar; overflow: auto;  }
 	  
 	.header {
       font-weight: bold;
@@ -128,7 +131,7 @@
 	.leaflet-control-search a:hover {color: #b81cb0;}
   	
 	/* 📑 Sidebar y tabla de resultados */
-	#title {background: #00793a; color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif; line-height: 0.5;}  
+	#title {background: #00793a; color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif;}  
 	#controls {background: #2c2c2c; color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 2.0;}
 	#listado {background: #2c2c2c; color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 	#sidebar {grid-area: sidebar; background: #2c2c2c;color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 1.0;}  
@@ -185,6 +188,22 @@
 	<h3>Búsquedas personalizadas</h3>
   <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
 </div>
+
+<!-- GRAPH -->
+<div id="graph" class="panel">
+   <h2>📊 Gráfica</h2>
+    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
+	<h3>Búsquedas personalizadas</h3>
+  <div id="resultadosBusqueda"></div>
+</div>
+
+<!-- CHART -->
+<div id="chart" class="panel">
+   <h2>📊 Gráfica 2 </h2>
+    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
+	<h3>Búsquedas personalizadas</h3>
+  <div id="resultadosBusqueda"></div>
+</div>	
 
 	
 <!-- LISTADO -->
@@ -779,6 +798,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
