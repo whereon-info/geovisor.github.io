@@ -574,7 +574,6 @@ function onEachFeature(feature, layer) {
 		 };
 		}
 
-	
 	const mzaMx = L.geoJson(mza06, {
 	  style: styleMZA,
 	  onEachFeature: function (feature, layer) {
@@ -582,6 +581,7 @@ function onEachFeature(feature, layer) {
 	  }
 	});
 
+	// MZA
 	const mzaLayer06 = L.geoJson(mza06, { styleMZA, onEachFeature });
 	
 	
@@ -593,6 +593,7 @@ function onEachFeature(feature, layer) {
 	// GRUPOS
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
+	const mzaGroup = L.layerGroup([mzaLayer06]).addTo(map);
 
 			var legendNSE = L.control({ position: 'bottomright' });
 		legendNSE.onAdd = function (map) {
@@ -634,17 +635,11 @@ function onEachFeature(feature, layer) {
           "Light": light,
           "Satélite": esriSat,	
         };
-        
-        // Declare and initialize myMarker before using it
-        var myMarker = L.marker([51.5, -0.09]).addTo(map); 
-        var myMarker1 = L.marker([51.5, -0.1]).addTo(map); 
-        
+               
         var overlays = {
-          "Casa": myMarker,
-          "Otro": myMarker1,
 		  "HIVE": hiveGroup,
 		  "NSE": nseGroup,
-		  "INEGI": inegi,
+		  "MZA": mzaGroup,
         };
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
@@ -826,6 +821,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
