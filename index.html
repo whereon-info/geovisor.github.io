@@ -18,9 +18,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <!-- Hive (tu geojson) -->
+  <script type="text/javascript" src="js/hive_ags.js"></script>
+  <script type="text/javascript" src="js/hive_hgo.js"></script>
+  <script type="text/javascript" src="js/hive_qro.js"></script>	
   <script type="text/javascript" src="js/hive_cdmx.js"></script>
   <script type="text/javascript" src="js/hive_edomex.js"></script>
-  <script type="text/javascript" src="js/hive_ags.js"></script>	
+  	
 
    <!-- NSE -->
   <script type="text/javascript" src="js/nse_ags.js"></script>	
@@ -292,8 +295,6 @@
 
 
 
-  // ========== SIDEBAR ==========
-
 
   // ======================= DENUE =============================================
  //const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
@@ -442,9 +443,6 @@ function onEachFeature(feature, layer) {
   });
 }
 
-
-
-      
       function getEmojiCategoria(cat) {
           const emojis = {
             "Bancos": "🏦",
@@ -547,11 +545,13 @@ function onEachFeature(feature, layer) {
 	
 	// HIVE
 	const hiveLayer01 = L.geoJson(hive_ags, { style, onEachFeature });
+	const hiveLayer13 = L.geoJson(hive_hgo, { style, onEachFeature });
+	const hiveLayer22 = L.geoJson(hive_qro, { style, onEachFeature });
 	const hiveLayer09 = L.geoJson(hive_cdmx, { style, onEachFeature });
 	const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
 	
 	// GRUPOS
-	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
+	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15, hiveLayer13, hiveLayer22]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
 
 			var legendNSE = L.control({ position: 'bottomright' });
@@ -779,6 +779,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
