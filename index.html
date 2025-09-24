@@ -50,8 +50,10 @@
 	<!-- jsPDF -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+	<!-- Chart -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
-
+	
   <style>
     body,html { margin:0; padding:0; height:100%; display: flex; flex-direction: column;font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     
@@ -95,7 +97,6 @@
 
 	  
     /*.leaflet-sidebar { z-index:1000; }*/
-    /*.title {font family: Roboto; background-color:#15f20a}*/
     /*.legend {line-height: 18px; color: #000000;} TEXTO DE LA SIMBOLOGÍA*/
     .legend i {width: 10px;height: 10px; float: left;margin-right: 8px; opacity: 0.5;}
     /*.leaflet-sidebar-header {height: 20px;line-height: 20px; font-size: 10pt; color:#FFFFFF; background-color:#000000; margin:15px 15px 0; padding:0 20px;} SIDEBAR*/
@@ -131,7 +132,7 @@
 	.leaflet-control-search a:hover {color: #b81cb0;}
   	
 	/* 📑 Sidebar y tabla de resultados */
-	#title {background: #00793a; color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif;}  
+	#title {background: #00793a; color: #FFFFFF; font-family: 'Poppins', sans-serif;}  
 	#controls {background: #2c2c2c; color: #FFFFFF; flex: 0 0 auto; font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 2.0;}
 	#listado {background: #2c2c2c; color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 	#sidebar {grid-area: sidebar; background: #2c2c2c;color: #FFFFFF;font-family: 'Poppins', sans-serif;font-size: 14px; line-height: 1.0;}  
@@ -200,8 +201,7 @@
 <!-- CHART -->
 <div id="chart" class="panel">
    <h2>📊 Gráfica 2 </h2>
-	<h3>Búsquedas personalizadas</h3>
-	<div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
+	<canvas id="myChart" style="width:100%;max-width:700px"></canvas>	
 </div>	
 
 	
@@ -791,12 +791,30 @@ if (L.control.photon) {
     //});
   //});
 
+// ============== CHART ===================================
+	new Chart("myChart", {
+  type: "pie",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "Población según grupo de edad"
+    }
+  }
+});
 
 
 	
 </script>
 </body>
 </html>
+
 
 
 
