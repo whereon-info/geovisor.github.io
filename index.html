@@ -577,7 +577,7 @@ function onEachFeature(feature, layer) {
 	const mzaMx = L.geoJson(mza06, {
 	  style: styleMZA,
 	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("Población: " + feature.properties["Población total"] || "N/D"));
+	    layer.bindPopup("Población: " + feature.properties["Población total"] || "N/D");
 	  }
 	}).addTo(map);
 
@@ -821,6 +821,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
