@@ -474,10 +474,10 @@ function onEachFeature(feature, layer) {
   
   // ========== ESTILO / LAYERS ==========
   function getColor(d) {
-    return d > 5000 ? '#d7191c' :
-           d > 2500 ? '#fdae61' :
-           d > 1000 ? '#ffffbf' :
-           d > 500  ? '#abdda4' :
+    return d > 50000 ? '#d7191c' :
+           d > 25000 ? '#fdae61' :
+           d > 10000 ? '#ffffbf' :
+           d > 5000  ? '#abdda4' :
                       '#2b83ba';
   }
   
@@ -493,7 +493,7 @@ function onEachFeature(feature, layer) {
   var legendHex = L.control({position: 'bottomright'});
   legendHex.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 500, 1000, 2500, 5000];
+        grades = [0, 5000, 10000, 25000, 50000];
 	  div.innerHTML += "<b>Población</b><br>";
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
@@ -779,6 +779,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
