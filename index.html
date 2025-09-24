@@ -481,7 +481,7 @@ function onEachFeature(feature, layer) {
 	
 	logoControl.addTo(map);
   
-  // ========== ESTILO / LAYERS (crear HIVE primero) ==========
+  // ========== ESTILO / LAYERS ==========
   function getColor(d) {
     return d > 1000 ? '#d7191c' :
            d > 500  ? '#fdae61' :
@@ -492,7 +492,7 @@ function onEachFeature(feature, layer) {
   
 	function style(feature) {
     return {
-      fillColor: getColor(feature.properties?.["robo a neg"]),
+      fillColor: getColor(feature.properties?.["POBTOT_sum"]),
       weight: 2, opacity: 1, color: 'white', dashArray: '3', fillOpacity: 0.7
     };
   }
@@ -503,7 +503,7 @@ function onEachFeature(feature, layer) {
   legendHex.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
         grades = [0, 100, 250, 500, 1000];
-	  div.innerHTML += "<b>Nivel</b><br>";
+	  div.innerHTML += "<b>Población</b><br>";
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
                        grades[i] + (grades[i+1] ? '&ndash;' + grades[i+1] + '<br>' : '+');
@@ -552,38 +552,6 @@ function onEachFeature(feature, layer) {
 	    layer.bindPopup("Nivel socioeconómico predominante: " + feature.properties["NIVEL PREDOMINANTE"]);
 	  }
 	});
-
-
-	//MANZANAS
-
-	function getColorMZA(d) {
-    return d > 1000 ? '#d7191c' :
-           d > 500  ? '#fdae61' :
-           d > 250  ? '#ffffbf' :
-           d > 100  ? '#abdda4' :
-                      '#2b83ba';
-		 }
-
-    function styleMZA(feature) {
-	 return {
-	 fillColor: getColorMZA (feature.properties["Población total"]),
-	 weight: 2,
-	 opacity: 1,
-	 color: 'white',
-	 dashArray: '3',
-	 fillOpacity: 0.7
-		 };
-		}
-
-	const mzaLayer06 = L.geoJson(mza06, {
-	  style: styleMZA,
-	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("Población: " + feature.properties["Población total"]);
-	  }
-	})
-
-	// MZA
-	//const mzaLayer06 = L.geoJson(mza06, { styleMZA, onEachFeature });
 	
 	
 	// HIVE
@@ -594,7 +562,6 @@ function onEachFeature(feature, layer) {
 	// GRUPOS
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
-	const mzaGroup = L.layerGroup([mzaLayer06]).addTo(map);
 
 			var legendNSE = L.control({ position: 'bottomright' });
 		legendNSE.onAdd = function (map) {
@@ -822,6 +789,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
