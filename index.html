@@ -577,12 +577,12 @@ function onEachFeature(feature, layer) {
 	const mzaMx = L.geoJson(mza06, {
 	  style: styleMZA,
 	  onEachFeature: function (feature, layer) {
-	    layer.bindPopup("Población: " + feature.properties["Población total"] || "N/D");
+	    layer.bindPopup("Población: " + feature.properties["Población total"]);
 	  }
-	}).addTo(map);
+	})
 
 	// MZA
-	const mzaLayer06 = L.geoJson(mza06, { styleMZA, onEachFeature });
+	mzaMX.addTo(map);
 	
 	
 	// HIVE
@@ -593,7 +593,7 @@ function onEachFeature(feature, layer) {
 	// GRUPOS
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
-	const mzaGroup = L.layerGroup([mzaLayer06]).addTo(map);
+	//const mzaGroup = L.layerGroup([mzaLayer06]).addTo(map);
 
 			var legendNSE = L.control({ position: 'bottomright' });
 		legendNSE.onAdd = function (map) {
@@ -639,7 +639,7 @@ function onEachFeature(feature, layer) {
         var overlays = {
 		  "HIVE": hiveGroup,
 		  "NSE": nseGroup,
-		  "MZA": mzaGroup,
+		  "MZA": mzaMX,
         };
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
@@ -821,6 +821,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
