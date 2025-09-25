@@ -422,9 +422,9 @@ function onEachFeature(feature, layer) {
     const htmlFija = `
       <div id="info-fija">
         <h2>${props.nomgeo || 'Zona'}</h2>
-        <b>Tipo:</b> ${props.TIPO || 'N/A'}<br>
+        <b>Tipo:</b> ${props.TIPO || 'N/A'}<b>
         <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
-        <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
+        <b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}
 		<p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
 		<p><b>Población total en la zona:</b> ${props.POBTOT_sum?.toLocaleString() || 0}</p>
 		<p><b>Población joven (0 a 14 años) en la zona:</b> ${props.POB0_14_sum?.toLocaleString() || 0}</p>
@@ -885,6 +885,7 @@ fetch("hive_ags.js")
 </script>
 </body>
 </html>
+
 
 
 
