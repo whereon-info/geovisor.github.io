@@ -796,7 +796,7 @@ if (L.control.photon) {
 	
 
 	
-new Chart("myChart", {
+let chart = new Chart(document.getElementById("myChart"), {
   type: "pie",
   data: {
     labels: ["0-14 años", "15-64 años", "65+ años"],
@@ -819,18 +819,18 @@ L.geoJSON(hiveGroup, {
     layer.on("click", function () {
       let hiveData = feature.properties;
 
-      // Actualizar datos en el gráfico
+      // Actualizar datos en la gráfica
       chart.data.datasets[0].data = [
         hiveData.POB0_14_sum,
         hiveData.POB15_64_sum,
         hiveData.POB65_MAS_sum
       ];
 
-      // Actualizar título con el total
+      // Actualizar título
       chart.options.plugins.title.text =
         "Población total: " + hiveData.Pop_tot.toLocaleString();
 
-      // Redibujar gráfica
+      // Redibujar
       chart.update();
     });
   }
@@ -842,3 +842,4 @@ L.geoJSON(hiveGroup, {
 </script>
 </body>
 </html>
+
