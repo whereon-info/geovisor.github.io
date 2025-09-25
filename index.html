@@ -170,15 +170,15 @@
 	
 <div id="controls" class="panel">
   <label>Establecimiento:</label>
-  <input type="text" id="condi" value="pizzerias" />
+  <input type="text" id="condi" value="taqueria" />
   <label>Latitud:</label>
   <input type="text" id="lat" value="19.432650801677962" />
   <label>Longitud:</label>
   <input type="text" id="lon" value="-99.13316794583835" />
   <label>Metros:</label>
   <input type="number" id="mts" value="1000" />
-  <button id="btnBuscar">Buscar</button>
-	<label for="filtroEstado">Filtrar por estado:</label>
+  <button id="btnBuscar">Buscar</button><hr>
+	<label for="filtroEstado">Filtrar por Entidad:</label>
 	<select id="filtroEstado">
 	  <option value="todos">Todos</option>
 	  <option value="AGS">Aguascalientes</option>
@@ -186,7 +186,7 @@
 	  <option value="QRO">Querétaro</option>
 	  <option value="CDMX">Ciudad de México</option>
 	  <option value="MEX">Estado de México</option>
-	</select>
+	</select><hr>
   <button id="btnExportar">Exportar a PDF</button>
 </div>
 
@@ -875,6 +875,7 @@ fetch("hive_ags.js")
 </script>
 </body>
 </html>
+
 
 
 
