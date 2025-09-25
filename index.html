@@ -156,7 +156,8 @@
   	z-index: 1000;  max-width: 800px; font-family: 'Poppins', sans-serif; font-size: 12px;}
 	#welcomeContent {  position: relative;}
 	#closeWelcome {  position: absolute;  top: 5px;  right: 10px;  cursor: pointer;  font-size: 18px;  color: #333;}
-
+	#ubicacion {position: absolute;  top: 80px;  left: 25%;  transform: translateX(-50%);  background: #f0f0f0;  padding: 15px 20px;  border-radius: 12px;  box-shadow: 0px 8px 10px rgba(0,0,0,0.8);
+  	z-index: 1000;  max-width: 100px; font-family: 'Poppins', sans-serif; font-size: 10px;}
  
   </style>
 </head>
@@ -243,6 +244,12 @@
  	 </div>
 	</div>
 
+<div id="ubicacion">
+ 		<div id="ubica">
+   	 	<h3>De clic para conocer su ubicación</h3>
+	 </div>
+</div>
+
 <!-- plugins local JS -->
 <script src="js/L.Control.Locate.min.js"></script>
 
@@ -283,6 +290,11 @@
 		// Cerrar haciendo clic en el mapa
 		map.on("click", () => {
 		  document.getElementById("welcomeBox").style.display = "none";
+		});
+
+		// Cerrar haciendo clic en el mapa
+		map.on("click", () => {
+		  document.getElementById("ubica").style.display = "none";
 		});
 
 	
@@ -875,6 +887,7 @@ fetch("hive_ags.js")
 </script>
 </body>
 </html>
+
 
 
 
