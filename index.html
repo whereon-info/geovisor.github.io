@@ -820,7 +820,10 @@ let hiveGeoJSON = {
 };
 
 // Ahora sí lo puedes pasar a Leaflet
-L.geoJSON(hiveGeoJSON, {
+fetch("hive_ags.js")
+  .then(res => res.json())
+  .then(data => {
+    L.geoJSON(data, {
   onEachFeature: function (feature, layer) {
     layer.on("click", function () {
       let hiveData = feature.properties;
@@ -839,7 +842,7 @@ L.geoJSON(hiveGeoJSON, {
     });
   }
 }).addTo(map);
-
+});
 
 
 
@@ -847,5 +850,6 @@ L.geoJSON(hiveGeoJSON, {
 </script>
 </body>
 </html>
+
 
 
