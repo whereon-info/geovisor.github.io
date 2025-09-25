@@ -178,6 +178,15 @@
   <label>Metros:</label>
   <input type="number" id="mts" value="1000" />
   <button id="btnBuscar">Buscar</button>
+	<label for="filtroEstado">Filtrar por estado:</label>
+	<select id="filtroEstado">
+	  <option value="todos">Todos</option>
+	  <option value="AGS">Aguascalientes</option>
+	  <option value="HGO">Hidalgo</option>
+	  <option value="QRO">Querétaro</option>
+	  <option value="CDMX">Ciudad de México</option>
+	  <option value="MEX">Estado de México</option>
+	</select>
   <button id="btnExportar">Exportar a PDF</button>
 </div>
 
@@ -472,11 +481,7 @@ function onEachFeature(feature, layer) {
           return emojis[cat] || "📍";
         }
 
-      // Reemplaza #info-dinamica
-      const cont = document.getElementById("info-dinamica");
-      if (cont) cont.innerHTML = listado;
 
-	
   
   //======================= LOGO ================================
 	var logoControl = L.control({ position: "bottomleft" });
@@ -571,7 +576,7 @@ function onEachFeature(feature, layer) {
 	
 	// GRUPOS
 	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15, hiveLayer13, hiveLayer22]).addTo(map);
-	const nseGroup = L.layerGroup([nseAgs,nseCdmx]).addTo(map);
+	const nseGroup = L.layerGroup([nseAgs,nseCdmx]);
 
 			var legendNSE = L.control({ position: 'bottomright' });
 		legendNSE.onAdd = function (map) {
@@ -622,16 +627,6 @@ function onEachFeature(feature, layer) {
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
 
 // ============================== FILTRO ======================================
-
-	<label for="filtroEstado">Filtrar por estado:</label>
-	<select id="filtroEstado">
-	  <option value="todos">Todos</option>
-	  <option value="AGS">Aguascalientes</option>
-	  <option value="HGO">Hidalgo</option>
-	  <option value="QRO">Querétaro</option>
-	  <option value="CDMX">Ciudad de México</option>
-	  <option value="MEX">Estado de México</option>
-	</select>
 
 const hiveLayers = {
   AGS: hiveLayer01,
@@ -729,16 +724,15 @@ function mostrarResultadosBusqueda(condi, total) {
 	
 	// ========== PLUGIN PHOTON ==========
 const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&", "BAN": "https://api-adresse.data.gouv.fr/search/?"}	
- var photonControl;
+var photonControl;
 if (L.control.photon) {
   photonControl = L.control.photon({
     url: url["Nominatim"],
-    position: 'topleft',
 	container: document.getElementById("photon-container"),  
     includePosition: true,
     placeholder: "Buscar dirección...",
     initial: true
-  }).addTo(map);
+  });
 
   // Manejar selección de Photon
   photonControl.on('selected', function(e) {
@@ -867,10 +861,9 @@ fetch("hive_ags.js")
         hiveData.POB65_MAS_sum
       ];
 
-      chart.options.plugins.title.text =
-        "Población: " + hiveData.Pop_tot.toLocaleString();
+	chart.options.title.text = "Población: " + hiveData.POBTOT_sum.toLocaleString();
+	chart.update();
 
-      chart.update();
     });
   }
 }).addTo(map);
@@ -882,6 +875,7 @@ fetch("hive_ags.js")
 </script>
 </body>
 </html>
+
 
 
 
