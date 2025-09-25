@@ -814,23 +814,27 @@ let chart = new Chart(document.getElementById("myChart"), {
   }
 });
 
-L.geoJSON(hiveGroup, {
+let hiveGeoJSON = {
+  "type": "FeatureCollection",
+  "features": hiveGroup
+};
+
+// Ahora sí lo puedes pasar a Leaflet
+L.geoJSON(hiveGeoJSON, {
   onEachFeature: function (feature, layer) {
     layer.on("click", function () {
       let hiveData = feature.properties;
 
-      // Actualizar datos en la gráfica
+      // Actualizar datos de Chart.js
       chart.data.datasets[0].data = [
         hiveData.POB0_14_sum,
         hiveData.POB15_64_sum,
         hiveData.POB65_MAS_sum
       ];
 
-      // Actualizar título
       chart.options.plugins.title.text =
-        "Población total: " + hiveData.Pop_tot.toLocaleString();
+        "Población: " + hiveData.Pop_tot.toLocaleString();
 
-      // Redibujar
       chart.update();
     });
   }
@@ -838,8 +842,10 @@ L.geoJSON(hiveGroup, {
 
 
 
+
 	
 </script>
 </body>
 </html>
+
 
