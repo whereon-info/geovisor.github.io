@@ -620,10 +620,40 @@ function onEachFeature(feature, layer) {
         
         L.control.layers(baseMaps, overlays, { collapsed: true }).addTo(map);
 
+// ============================== FILTRO ======================================
 
+	<label for="filtroEstado">Filtrar por estado:</label>
+	<select id="filtroEstado">
+	  <option value="todos">Todos</option>
+	  <option value="AGS">Aguascalientes</option>
+	  <option value="HGO">Hidalgo</option>
+	  <option value="QRO">Querétaro</option>
+	  <option value="CDMX">Ciudad de México</option>
+	  <option value="MEX">Estado de México</option>
+	</select>
 
+const hiveLayers = {
+  AGS: hiveLayer01,
+  HGO: hiveLayer13,
+  QRO: hiveLayer22,
+  CDMX: hiveLayer09,
+  MEX: hiveLayer15
+};
 
+document.getElementById("filtroEstado").addEventListener("change", (e) => {
+  const estado = e.target.value;
 
+  // Limpia el grupo
+  hiveGroup.clearLayers();
+
+  if (estado === "todos") {
+    // Si es "todos", vuelves a meter todos
+    Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
+  } else {
+    // Solo agregas el seleccionado
+    hiveGroup.addLayer(hiveLayers[estado]);
+  }
+});
 
 	
 // ============================== RESUMEN DENUE ======================================
@@ -850,6 +880,7 @@ fetch("hive_ags.js")
 </script>
 </body>
 </html>
+
 
 
 
