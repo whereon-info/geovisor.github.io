@@ -196,6 +196,7 @@
 <div id="graph" class="panel">
    <h2>📊 Gráfica</h2>
 	<h3>Búsquedas personalizadas</h3>
+	<div id="photon-container"></div>
 </div>
 
 <!-- CHART -->
@@ -733,6 +734,7 @@ if (L.control.photon) {
   photonControl = L.control.photon({
     url: url["Nominatim"],
     position: 'topleft',
+	container: document.getElementById("photon-container"),  
     includePosition: true,
     placeholder: "Buscar dirección...",
     initial: true
@@ -880,6 +882,7 @@ fetch("hive_ags.js")
 </script>
 </body>
 </html>
+
 
 
 
