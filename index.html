@@ -405,40 +405,70 @@ async function buscarDENUE(condi, lat, lon, mts) {
 	
 	
   // ========== FUNCIONES DE HEXÁGONOS ==========
-		function mostrarEnSidebar(html) {
-		  const cont = document.getElementById("sidebar-content");
-		  if (cont) cont.innerHTML = html;
-		}
+// ================== GRÁFICA ==================
+let chart = new Chart(document.getElementById("myChart"), {
+  type: "pie",
+  data: {
+    labels: ["0-14 años", "15-64 años", "65+ años"],
+    datasets: [{
+      backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
+      data: [0, 0, 0]
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+      text: "Población según grupo de edad"
+    }
+  }
+});
 
+// ================== SIDEBAR ==================
+function mostrarEnSidebar(html) {
+  const cont = document.getElementById("sidebar-content");
+  if (cont) cont.innerHTML = html;
+}
+
+// ================== FUNCIÓN CENTRAL ==================
 function onEachFeature(feature, layer) {
   layer.on("click", async () => {
     const props = feature.properties || {};
 
+    // --- 1. Mostrar en Sidebar ---
     const htmlFija = `
       <div id="info-fija">
-        <h2>${props.nomgeo || 'Zona'}</h2>
-        <b>Tipo:</b> ${props.TIPO || 'N/A'}
+        <h2>${props.nomgeo || "Zona"}</h2>
+        <b>Tipo:</b> ${props.TIPO || "N/A"}<br>
         <p><b>Población municipal total:</b> ${props.pobtot?.toLocaleString() || 0}</p>
-        <b><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}
-		<p><b>Índice de Rezago:</b> ${props.REZAGO || 'N/A'}</p><hr>
-		<p><b>Población total en la zona:</b> ${props.POBTOT_sum?.toLocaleString() || 0}</p>
-		<p><b>Población joven (0 a 14 años) en la zona:</b> ${props.POB0_14_sum?.toLocaleString() || 0}</p>
-		<p><b>Población adulta (15 a 64 años) en la zona:</b> ${props.POB15_64_sum?.toLocaleString() || 0}</p>
-		<p><b>Población adulta mayor (65 años o más) en la zona:</b> ${props.POB65_MAS_sum?.toLocaleString() || 0}</p><hr>
+        <p><b>Población adulta municipal:</b> ${props.POBADUL?.toLocaleString() || 0}</p>
+        <p><b>Índice de Rezago:</b> ${props.REZAGO || "N/A"}</p><hr>
+        <p><b>Población total en la zona:</b> ${props.POBTOT_sum?.toLocaleString() || 0}</p>
+        <p><b>Población joven (0 a 14 años):</b> ${props.POB0_14_sum?.toLocaleString() || 0}</p>
+        <p><b>Población adulta (15 a 64 años):</b> ${props.POB15_64_sum?.toLocaleString() || 0}</p>
+        <p><b>Población adulta mayor (65+):</b> ${props.POB65_MAS_sum?.toLocaleString() || 0}</p><hr>
         <p><b>Extorsión:</b> ${props["extorsión"] || 0}</p>
         <p><b>Narcomenudeo:</b> ${props.narcomenud || 0}</p>
         <p><b>Robo a negocio:</b> ${props["robo a neg"] || 0}</p><hr>
         <p><b>Créditos personales:</b> ${props.CRED_PERS?.toLocaleString() || 0}</p>
         <p><b>Créditos nómina:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
         <p><b>Créditos hipotecarios:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
-        <p><b>Créditos automotrices:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p><hr>
+        <p><b>Créditos automotrices:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
       </div>
-      <div id="info-dinamica">Cargando...</div>
+      <div id="info-dinamica">Cargando datos de establecimientos...</div>
     `;
-
     mostrarEnSidebar(htmlFija);
 
-    // 👇 Aquí sí puedes usar await porque estás dentro de async
+    // --- 2. Actualizar gráfica ---
+    chart.data.datasets[0].data = [
+      props.POB0_14_sum || 0,
+      props.POB15_64_sum || 0,
+      props.POB65_MAS_sum || 0
+    ];
+    chart.options.title.text = "Población total: " + (props.POBTOT_sum?.toLocaleString() || 0);
+    chart.update();
+
+    // --- 3. Consultar DENUE dentro del hexágono ---
     const bounds = layer.getBounds();
     const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
 
@@ -448,7 +478,7 @@ function onEachFeature(feature, layer) {
 
     resultados.forEach(item => {
       const c = (item.Clase_actividad || "").toLowerCase();
-      if (c.includes("banco") || c.includes("banca múltiple")) resumen.Bancos++;
+      if (c.includes("banco")) resumen.Bancos++;
       else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
       else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
       else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
@@ -458,14 +488,14 @@ function onEachFeature(feature, layer) {
       }
     });
 
-    let listado = "<h2>🏬 Elementos urbanos dentro del área:</h2><ul>";
+    let listado = "<h3>🏬 Elementos urbanos en la zona:</h3><ul>";
     for (const [cat, num] of Object.entries(resumen)) {
       listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
     }
     listado += "</ul>";
 
     if (Object.keys(extras).length > 0) {
-      listado += "<h2>🔍 Otros establecimientos:</h2><ul>";
+      listado += "<h3>🔍 Otros establecimientos:</h3><ul>";
       for (const [cat, num] of Object.entries(extras)) {
         listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
       }
@@ -476,15 +506,17 @@ function onEachFeature(feature, layer) {
   });
 }
 
-      function getEmojiCategoria(cat) {
-          const emojis = {
-            "Bancos": "🏦",
-            "Supermercados": "🛒",
-            "Escuelas": "🏫",
-            "Hoteles": "🏨"
-          };
-          return emojis[cat] || "📍";
-        }
+// Helper para íconos
+function getEmojiCategoria(cat) {
+  const emojis = {
+    "Bancos": "🏦",
+    "Supermercados": "🛒",
+    "Escuelas": "🏫",
+    "Hoteles": "🏨"
+  };
+  return emojis[cat] || "📍";
+}
+
 
 
   
@@ -730,7 +762,7 @@ function mostrarResultadosBusqueda(condi, total) {
 
 	
 	// ========== PLUGIN PHOTON ==========
-// ===================== BUSCADOR PHOTON EN #controls =====================
+	
 if (L.control.photon) {
   // Inicializa Photon en el mapa
   const photonControl = L.control.photon({
@@ -797,44 +829,7 @@ if (L.control.photon) {
 
 // ============== CHART ===================================
 
-// 🥧 Configuración de la gráfica
-let chart = new Chart(document.getElementById("myChart"), {
-  type: "pie",
-  data: {
-    labels: ["0-14 años", "15-64 años", "65+ años"],
-    datasets: [{
-      backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
-      data: [0, 0, 0]
-    }]
-  },
-  options: {
-    responsive: true,
-    title: {
-      display: true,
-      text: "Población según grupo de edad"
-    }
-  }
-});
 
-// 🎯 Usa el mismo onEachFeature
-function onEachFeature(feature, layer) {
-  layer.on("click", () => {
-    const props = feature.properties || {};
-
-    // Actualizar Chart.js
-    chart.data.datasets[0].data = [
-      props.POB0_14_sum || 0,
-      props.POB15_64_sum || 0,
-      props.POB65_MAS_sum || 0
-    ];
-
-    chart.options.title.text = "Población: " + (props.POBTOT_sum?.toLocaleString() || 0);
-    chart.update();
-
-    // Además, sigues mostrando info en el sidebar
-    mostrarEnSidebar(`<h2>${props.nomgeo || "Zona"}</h2>`);
-  });
-}
 	
 
 
@@ -847,6 +842,7 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
+
 
 
 
