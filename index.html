@@ -188,6 +188,7 @@
 	  <option value="MEX">Estado de México</option>
 	  <option value="GTO">Guanajuato</option>
 	</select>
+	<p><label>Busque por lugar:</label>
 	<div id="photon-container"></div><hr>
   <button id="btnExportar">Exportar a PDF</button><hr>
 </div>
@@ -638,7 +639,8 @@ const hiveLayers = {
   HGO: hiveLayer13,
   QRO: hiveLayer22,
   CDMX: hiveLayer09,
-  MEX: hiveLayer15
+  MEX: hiveLayer15,
+ GTO: hiveLayer11	
 };
 
 document.getElementById("filtroEstado").addEventListener("change", (e) => {
@@ -852,6 +854,7 @@ fetch("hive_ags.js")
 </script>
 </body>
 </html>
+
 
 
 
