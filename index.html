@@ -60,7 +60,7 @@
     
 	.dashboard {
 	  display: grid;
-	  grid-template-columns: 20% 40% 25% 15%;
+	  grid-template-columns: 20% 40% 15% 25%;
 	  grid-template-rows: 5% 35% 30% 30%;
 	  grid-template-areas:
 	    "title title title title"
@@ -856,14 +856,11 @@ function onEachFeature(feature, layer) {
         <p><b>Población adulta (15 a 64 años):</b> ${props.POB15_64_sum?.toLocaleString() || 0}</p>
         <p><b>Población adulta mayor (65+):</b> ${props.POB65_MAS_sum?.toLocaleString() || 0}</p>
       </div>
-      <div id="info-dinamica">Cargando datos de establecimientos...</div>
     `;
     mostrarEnGraph(infoPob);
   });
 }
 	
-
-
 // ============== INEGI GASTO ===================================
 	
 
@@ -873,6 +870,7 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
+
 
 
 
