@@ -209,7 +209,7 @@
 
 <!-- CHART -->
 <div id="chart" class="panel">
-   <h2>📊 Población por grupos de edad </h2>
+   <h3>📊 Población por grupos de edad </h3>
 	<canvas id="myChart"></canvas>	
 </div>
 
@@ -414,7 +414,6 @@ async function buscarDENUE(condi, lat, lon, mts) {
 
 	
 	
-  // ========== FUNCIONES DE HEXÁGONOS ==========
 // ================== GRÁFICA ==================
 let chart = new Chart(document.getElementById("myChart"), {
   type: "pie",
@@ -474,7 +473,7 @@ function onEachFeature(feature, layer) {
     // ================== INFO GRAPH ==================
     const infoPob = `
       <div id="info-fija">
-        <p><b>Pertecene al municipio de:</b>${props.nomgeo || "Zona"}</p>
+        <p><b>Pertecene al municipio de: </b>${props.nomgeo || "Zona"}</p>
         <p><b>Población total en la zona:</b> ${props.POBTOT_sum?.toLocaleString() || 0}</p>
         <p><b>Población joven (0 a 14 años):</b> ${props.POB0_14_sum?.toLocaleString() || 0}</p>
         <p><b>Población adulta (15 a 64 años):</b> ${props.POB15_64_sum?.toLocaleString() || 0}</p>
@@ -863,6 +862,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
