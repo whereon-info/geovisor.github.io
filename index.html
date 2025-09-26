@@ -435,17 +435,11 @@ let chart = new Chart(document.getElementById("myChart"), {
 });
 
 // ================== SIDEBAR ==================
-function mostrarEnSidebar(html) {
-  const cont = document.getElementById("sidebar-content");
-  if (cont) cont.innerHTML = html;
-}
-
-// ================== FUNCIÓN CENTRAL ==================
 function onEachFeature(feature, layer) {
   layer.on("click", async () => {
     const props = feature.properties || {};
 
-// ================== INFO SIDEBAR ==================
+    // ================== INFO SIDEBAR ==================
     const htmlFija = `
       <div id="info-fija">
         <h2>${props.nomgeo || "Zona"}</h2>
@@ -465,6 +459,18 @@ function onEachFeature(feature, layer) {
     `;
     mostrarEnSidebar(htmlFija);
 
+    // ================== INFO GRAPH ==================
+    const infoPob = `
+      <div id="info-fija">
+        <h2>${props.nomgeo || "Zona"}</h2>
+        <p><b>Población total en la zona:</b> ${props.POBTOT_sum?.toLocaleString() || 0}</p>
+        <p><b>Población joven (0 a 14 años):</b> ${props.POB0_14_sum?.toLocaleString() || 0}</p>
+        <p><b>Población adulta (15 a 64 años):</b> ${props.POB15_64_sum?.toLocaleString() || 0}</p>
+        <p><b>Población adulta mayor (65+):</b> ${props.POB65_MAS_sum?.toLocaleString() || 0}</p>
+      </div>
+    `;
+    mostrarEnGraph(infoPob);
+
     // --- 2. Actualizar gráfica ---
     chart.data.datasets[0].data = [
       props.POB0_14_sum || 0,
@@ -478,13 +484,12 @@ function onEachFeature(feature, layer) {
     const bounds = layer.getBounds();
     const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
 
-    // Resumen de resultados
     const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
     const extras = {};
 
     resultados.forEach(item => {
       const c = (item.Clase_actividad || "").toLowerCase();
-      if (c.includes("banco")|| c.includes("banca múltiple")) resumen.Bancos++;
+      if (c.includes("banco")) resumen.Bancos++;
       else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
       else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
       else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
@@ -511,6 +516,7 @@ function onEachFeature(feature, layer) {
     document.getElementById("info-dinamica").innerHTML = listado;
   });
 }
+
 
 // Helper para íconos
 function getEmojiCategoria(cat) {
@@ -834,29 +840,7 @@ if (L.control.photon) {
   //});
 
 // ============== REPETIR GRAPH ===================================
-function mostrarEnGraph(html) {
-  const cont = document.getElementById("info-content");
-  if (cont) cont.innerHTML = html;
-}
 
-// ================== FUNCIÓN CENTRAL ==================
-function onEachFeature(feature, layer) {
-  layer.on("click", async () => {
-    const props = feature.properties || {};
-
-// ================== INFO SIDEBAR ==================
-    const infoPob = `
-      <div id="info-fija">
-        <h2>${props.nomgeo || "Zona"}</h2>
-        <p><b>Población total en la zona:</b> ${props.POBTOT_sum?.toLocaleString() || 0}</p>
-        <p><b>Población joven (0 a 14 años):</b> ${props.POB0_14_sum?.toLocaleString() || 0}</p>
-        <p><b>Población adulta (15 a 64 años):</b> ${props.POB15_64_sum?.toLocaleString() || 0}</p>
-        <p><b>Población adulta mayor (65+):</b> ${props.POB65_MAS_sum?.toLocaleString() || 0}</p>
-      </div>
-    `;
-    mostrarEnGraph(infoPob);
-  });
-}
 	
 // ============== INEGI GASTO ===================================
 	
@@ -867,39 +851,3 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
