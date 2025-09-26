@@ -187,9 +187,9 @@
 	  <option value="CDMX">Ciudad de México</option>
 	  <option value="MEX">Estado de México</option>
 	  <option value="GTO">Guanajuato</option>
-	</select><hr>
+	</select>
 	<div id="photon-container"></div><hr>
-  <button id="btnExportar">Exportar a PDF</button>
+  <button id="btnExportar">Exportar a PDF</button><hr>
 </div>
 
 <!--<div id="mapa-contenedor" style="display:flex; height:100vh; width:100%;">-->	
@@ -845,44 +845,6 @@ fetch("hive_ags.js")
 
 // ============== INEGI GASTO ===================================
 	
-  async function consultaIndicador(indicador, areaClave) {
-  const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240473/es/0700/true/BISE/2.0/33602899-98fd-4db7-8ce9-41c0330f1d7e?type=json`;
-  
-  try {
-    const resp = await fetch(url);
-    const data = await resp.json();
-    return data;
-  } catch (err) {
-    console.error("Error consultando INEGI:", err);
-    return null;
-  }
-}
-
-async function getDataPorEstado(feature) {
-  const cveEnt = feature.properties.CVE_ENT;  // Clave de estado
-  const indicador = "1002000001"; // Población total
-
-  const datos = await consultaIndicador(indicador, cveEnt);
-  if (datos && datos.Series && datos.Series[0]) {
-    const ultimo = datos.Series[0].OBSERVATIONS.slice(-1)[0]; // último valor
-    return ultimo.OBS_VALUE || 0;
-  }
-  return 0;
-}
-
-function onEachFeature(feature, layer) {
-  layer.on("click", async () => {
-    const poblacion = await getDataPorEstado(feature);
-
-    const props = feature.properties || {};
-    const htmlFija = `
-      <h2>${props.nomgeo || 'Zona'}</h2>
-      <p><b>Población (INEGI):</b> ${poblacion.toLocaleString()}</p>
-    `;
-
-    document.getElementById("sidebar-content").innerHTML = htmlFija;
-  });
-}
 
 
 
@@ -890,6 +852,7 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
+
 
 
 
