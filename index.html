@@ -303,36 +303,49 @@
   var marker = null;       // marcador temporal usado por photon
   var last = null;
 
-  // ========== CONTROLES (locate) ======================
-	  L.control.locate({ locateOptions: { maxZoom: 10 } }).addTo(map);
-	  var draggableMarker;
-		map.on("locationfound", function (e) {
-	  if (draggableMarker) {
-	    draggableMarker.setLatLng(e.latlng);
-	  } else {
-	    draggableMarker = L.marker(e.latlng, { draggable: true }).addTo(map);
+  // ========== LOCATE ======================
+	  //L.control.locate({ locateOptions: { maxZoom: 10 } }).addTo(map);
+	  //var draggableMarker;
+		//map.on("locationfound", function (e) {
+	  //if (draggableMarker) {
+	    //draggableMarker.setLatLng(e.latlng);
+	  //} else {
+	    //draggableMarker = L.marker(e.latlng, { draggable: true }).addTo(map);
 	
 	    // Cuando se arrastra, actualizamos inputs
-	    draggableMarker.on("dragend", function (ev) {
-	      var pos = ev.target.getLatLng();
-	      document.getElementById("lat").value = pos.lat.toFixed(6);
-	      document.getElementById("lon").value = pos.lng.toFixed(6);
-	    });
-	  }
+	    //draggableMarker.on("dragend", function (ev) {
+	      //var pos = ev.target.getLatLng();
+	      //document.getElementById("lat").value = pos.lat.toFixed(6);
+	      //document.getElementById("lon").value = pos.lng.toFixed(6);
+	    //});
+	  //}
 	
 	  // Guardar coordenadas iniciales en los inputs
-	  document.getElementById("lat").value = e.latlng.lat.toFixed(6);
-	  document.getElementById("lon").value = e.latlng.lng.toFixed(6);
-	  map.setView(e.latlng, 15);
-	});
+	  //document.getElementById("lat").value = e.latlng.lat.toFixed(6);
+	  //document.getElementById("lon").value = e.latlng.lng.toFixed(6);
+	  //map.setView(e.latlng, 15);
+	//});
 	
 	// Si falla la localización
-	map.on("locationerror", function () {
-	  alert("No se pudo obtener tu ubicación");
-	});
+	//map.on("locationerror", function () {
+	  //alert("No se pudo obtener tu ubicación");
+	//});
 
-	// ========== CAPAS ==========
+	
+  // ========== LOCATE ======================
 
+		function buscarLocalizacion(e) {
+		var mydate = new Date(e.timestamp);
+		L.marker(e.latlng).addTo(map).bindPopup(mydate.toString());
+		}
+		function errorLocalizacion(e) {
+		 alert("No es posible encontrar su ubicación. Es posible que tenga que
+		activar su geolocalizaciónpara conocer su entorno.");
+		}
+		map.on('locationerror', errorLocalizacion);
+		map.on('locationfound', buscarLocalizacion);
+		map.locate({setView: true, maxZoom:12}); 
+	
 
 
 
@@ -859,6 +872,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
