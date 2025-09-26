@@ -797,53 +797,46 @@ if (L.control.photon) {
 
 // ============== CHART ===================================
 
-
+// 🥧 Configuración de la gráfica
 let chart = new Chart(document.getElementById("myChart"), {
   type: "pie",
   data: {
     labels: ["0-14 años", "15-64 años", "65+ años"],
     datasets: [{
-		backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
+      backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
       data: [0, 0, 0]
     }]
   },
   options: {
     responsive: true,
-	  title: {
+    title: {
       display: true,
       text: "Población según grupo de edad"
     }
   }
 });
 
-let hiveGeoJSON = {
-  "type": "FeatureCollection",
-  "features": hiveGroup
-};
+// 🎯 Usa el mismo onEachFeature
+function onEachFeature(feature, layer) {
+  layer.on("click", () => {
+    const props = feature.properties || {};
 
-// Ahora sí lo puedes pasar a Leaflet
-fetch("hive_ags.js")
-  .then(res => res.json())
-  .then(data => {
-    L.geoJSON(data, {
-  onEachFeature: function (feature, layer) {
-    layer.on("click", function () {
-      let hiveData = feature.properties;
+    // Actualizar Chart.js
+    chart.data.datasets[0].data = [
+      props.POB0_14_sum || 0,
+      props.POB15_64_sum || 0,
+      props.POB65_MAS_sum || 0
+    ];
 
-      // Actualizar datos de Chart.js
-      chart.data.datasets[0].data = [
-        hiveData.POB0_14_sum,
-        hiveData.POB15_64_sum,
-        hiveData.POB65_MAS_sum
-      ];
+    chart.options.title.text = "Población: " + (props.POBTOT_sum?.toLocaleString() || 0);
+    chart.update();
 
-	chart.options.title.text = "Población: " + hiveData.POBTOT_sum.toLocaleString();
-	chart.update();
+    // Además, sigues mostrando info en el sidebar
+    mostrarEnSidebar(`<h2>${props.nomgeo || "Zona"}</h2>`);
+  });
+}
+	
 
-    });
-  }
-}).addTo(map);
-});
 
 // ============== INEGI GASTO ===================================
 	
@@ -854,6 +847,7 @@ fetch("hive_ags.js")
 </script>
 </body>
 </html>
+
 
 
 
