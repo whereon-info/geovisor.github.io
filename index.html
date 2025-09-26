@@ -846,7 +846,7 @@ fetch("hive_ags.js")
 // ============== INEGI GASTO ===================================
 	
   async function consultaIndicador(indicador, areaClave) {
-  const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240473/es/0700/true/BISE/2.0/${33602899-98fd-4db7-8ce9-41c0330f1d7e}?type=json`;
+  const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240473/es/0700/true/BISE/2.0/33602899-98fd-4db7-8ce9-41c0330f1d7e?type=json`;
   
   try {
     const resp = await fetch(url);
@@ -890,6 +890,7 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
+
 
 
 
