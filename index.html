@@ -60,13 +60,13 @@
     
 	.dashboard {
 	  display: grid;
-	  grid-template-columns: 20% 45% 35%;
+	  grid-template-columns: 20% 40% 25% 15%;
 	  grid-template-rows: 5% 35% 30% 30%;
 	  grid-template-areas:
-	    "title title title"
-		"controls map sidebar"
-		"controls map chart"
-	    "listado listado listado";
+	    "title title title title"
+		"controls map sidebar sidebar"
+		"controls map graph chart"
+	    "listado listado listado listado";
 	  height: 100vh;
 	  width: 100vw;
 	  overflow: hidden; /* 👈 evita desbordes */
@@ -84,6 +84,7 @@
     #sidebar { grid-area: sidebar; overflow: auto;  }
     #listado { grid-area: listado; overflow: auto;  }
 	#chart { grid-area: chart; overflow: auto;  }
+	#graph { grid-area: chart; overflow: auto;  }  
 	  
 	.header {
       font-weight: bold;
@@ -142,6 +143,7 @@
 	#gcd-button-control:hover {  background: #f0f0f0;}
 	#info-dinamica {font-size: 12px;line-height: 2.0;}
 	#chart {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
+	#graph {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 
 	#resultadosBusqueda .resultado-personalizado {  display: flex;  align-items: center;  margin: 4px 0;  padding: 4px 6px;  background: rgba(200,230,255,0.5);  border-radius: 6px;}
 	#resultadosBusqueda .icono {  font-size: 18px;  margin-right: 6px;}
@@ -208,6 +210,12 @@
 <div id="chart" class="panel">
    <h2>📊 Gráfica 2 </h2>
 	<canvas id="myChart"></canvas>	
+</div>
+
+<!-- GRAPH -->
+<div id="graph" class="panel">
+   <h3>📊 Información de zona </h3>
+	<div id="info-content">Hága clic en una zona para conocer su información</div>	
 </div>	
 
 	
@@ -435,7 +443,7 @@ function onEachFeature(feature, layer) {
   layer.on("click", async () => {
     const props = feature.properties || {};
 
-    // --- 1. Mostrar en Sidebar ---
+// ================== INFO SIDEBAR ==================
     const htmlFija = `
       <div id="info-fija">
         <h2>${props.nomgeo || "Zona"}</h2>
@@ -827,8 +835,29 @@ if (L.control.photon) {
     //});
   //});
 
-// ============== CHART ===================================
+// ============== REPETIR GRAPH ===================================
+function mostrarEnGraph(html) {
+  const cont = document.getElementById("info-content");
+  if (cont) cont.innerHTML = html;
+}
 
+// ================== FUNCIÓN CENTRAL ==================
+function onEachFeature(feature, layer) {
+  layer.on("click", async () => {
+    const props = feature.properties || {};
+
+// ================== INFO SIDEBAR ==================
+    const infoPob = `
+      <div id="info-fija">
+        <h2>${props.nomgeo || "Zona"}</h2>
+        <p><b>Población total en la zona:</b> ${props.POBTOT_sum?.toLocaleString() || 0}</p>
+        <p><b>Población joven (0 a 14 años):</b> ${props.POB0_14_sum?.toLocaleString() || 0}</p>
+        <p><b>Población adulta (15 a 64 años):</b> ${props.POB15_64_sum?.toLocaleString() || 0}</p>
+        <p><b>Población adulta mayor (65+):</b> ${props.POB65_MAS_sum?.toLocaleString() || 0}</p>
+      </div>
+      <div id="info-dinamica">Cargando datos de establecimientos...</div>
+    `;
+    mostrarEnGraph(infoPob);
 
 	
 
@@ -842,6 +871,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
