@@ -439,6 +439,7 @@ function onEachFeature(feature, layer) {
   layer.on("click", async () => {
     const props = feature.properties || {};
 
+
     // ================== INFO SIDEBAR ==================
     const htmlFija = `
       <div id="info-fija">
@@ -515,6 +516,17 @@ function onEachFeature(feature, layer) {
 
     document.getElementById("info-dinamica").innerHTML = listado;
   });
+}
+
+// ================== Helpers para imprimir en paneles ==================
+function mostrarEnSidebar(html) {
+  const cont = document.getElementById("sidebar-content");
+  if (cont) cont.innerHTML = html;
+}
+
+function mostrarEnGraph(html) {
+  const cont = document.getElementById("info-content");
+  if (cont) cont.innerHTML = html;
 }
 
 
@@ -851,3 +863,4 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
