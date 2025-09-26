@@ -64,7 +64,7 @@
 	  grid-template-areas:
 	    "title title title"
 		"controls map sidebar"
-		"graph map chart"
+		"controls map chart"
 	    "listado listado listado";
 	  height: 100vh;
 	  width: 100vw;
@@ -83,7 +83,6 @@
     #sidebar { grid-area: sidebar; overflow: auto;  }
     #listado { grid-area: listado; overflow: auto;  }
 	#chart { grid-area: chart; overflow: auto;  }
-	#graph { grid-area: graph; overflow: auto;  }
 	  
 	.header {
       font-weight: bold;
@@ -142,7 +141,6 @@
 	#gcd-button-control:hover {  background: #f0f0f0;}
 	#info-dinamica {font-size: 12px;line-height: 2.0;}
 	#chart {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
-	#graph {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 
 	#resultadosBusqueda .resultado-personalizado {  display: flex;  align-items: center;  margin: 4px 0;  padding: 4px 6px;  background: rgba(200,230,255,0.5);  border-radius: 6px;}
 	#resultadosBusqueda .icono {  font-size: 18px;  margin-right: 6px;}
@@ -188,6 +186,7 @@
 	  <option value="CDMX">Ciudad de México</option>
 	  <option value="MEX">Estado de México</option>
 	</select><hr>
+	<div id="photon-container"></div><hr>
   <button id="btnExportar">Exportar a PDF</button>
 </div>
 
@@ -200,13 +199,6 @@
     <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
 	<h3>Búsquedas personalizadas</h3>
   <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
-</div>
-
-<!-- GRAPH -->
-<div id="graph" class="panel">
-   <h2>📊 Gráfica</h2>
-	<h3>Búsquedas personalizadas</h3>
-	<div id="photon-container"></div>
 </div>
 
 <!-- CHART -->
@@ -733,73 +725,44 @@ function mostrarResultadosBusqueda(condi, total) {
 
 	
 	// ========== PLUGIN PHOTON ==========
-const url = {"Nominatim": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&", "BAN": "https://api-adresse.data.gouv.fr/search/?"}	
-var photonControl;
+// ===================== BUSCADOR PHOTON EN #controls =====================
 if (L.control.photon) {
-  photonControl = L.control.photon({
-    url: url["Nominatim"],
-	container: document.getElementById("photon-container"),  
-    includePosition: true,
-    placeholder: "Buscar dirección...",
-    initial: true
-  });
+  // Inicializa Photon en el mapa
+  const photonControl = L.control.photon({
+    url: "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&",
+    placeholder: "Buscar dirección..."
+  }).addTo(map);
 
-  // Manejar selección de Photon
+  // Mueve el nodo a #controls
+  const photonNode = document.getElementsByClassName("leaflet-photon")[0];
+  if (photonNode) {
+    document.getElementById("controls").appendChild(photonNode);
+  }
+
+  // Evento cuando seleccionas un resultado
   photonControl.on('selected', function(e) {
     try {
       if (x) { map.removeLayer(x); x = null; }
       if (marker) { map.removeLayer(marker); marker = null; }
 
-      // Dibujar geometría si viene en respuesta
+      // Dibujar geometría si existe
       x = L.geoJSON(e.choice).addTo(map);
       const ll = x.getLayers()[0].getLatLng();
       marker = L.marker(ll).addTo(map);
       map.setView(ll, 17);
 
-      // Texto en input
-      const label = (e.choice.properties && (e.choice.properties.label || e.choice.properties.display_name)) || '';
-      if (e.target && e.target.input) e.target.input.value = label;
-
-      // Si quieres guardar coordenadas en inputs lat/lon
+      // Actualizar inputs
       if (document.getElementById("lat")) document.getElementById("lat").value = ll.lat;
       if (document.getElementById("lon")) document.getElementById("lon").value = ll.lng;
     } catch (err) {
       console.error('Error en selección Photon:', err);
     }
   });
-
-  // --- Ajustes visuales del control Photon ---
-  const search = document.getElementsByClassName("leaflet-photon leaflet-control")[0];
-  if (search) {
-    search.classList.add("leaflet-control-search");
-    search.style.display = "flex";
-    search.style.alignItems = "center";
-    search.style.backgroundColor = "rgba(255,255,255,0.9)";
-    search.style.padding = "2px 6px";
-    search.style.borderRadius = "6px";
-    search.style.fontFamily = "Poppins, Arial, sans-serif";
-    search.style.fontSize = "14px";
-
-    // Botón 🔍 centrado
-    var button = document.createElement("div");
-    button.id = "gcd-button-control";
-    button.innerHTML = "🔍"; 
-    button.style.fontSize = "18px";
-    button.style.cursor = "pointer";
-    button.style.marginRight = "6px";
-    search.insertBefore(button, search.firstChild);
-
-    // Input visible/invisible al dar clic en 🔍
-    let last = search.lastChild;
-    if (last) last.style.display = "none";
-    button.addEventListener("click", function () {
-      if (!last) return;
-      last.style.display = (last.style.display === "none") ? "block" : "none";
-    });
-  }
 } else {
   console.warn("L.control.photon no está disponible (¿falta cargar leaflet.photon.js?)");
 }
+
+	
 
 
 
@@ -829,9 +792,7 @@ if (L.control.photon) {
 
 // ============== CHART ===================================
 
-	
 
-	
 let chart = new Chart(document.getElementById("myChart"), {
   type: "pie",
   data: {
@@ -879,12 +840,54 @@ fetch("hive_ags.js")
 }).addTo(map);
 });
 
+// ============== INEGI GASTO ===================================
+	
+  async function consultaIndicador(indicador, areaClave) {
+  const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240473/es/0700/true/BISE/2.0/${33602899-98fd-4db7-8ce9-41c0330f1d7e}?type=json`;
+  
+  try {
+    const resp = await fetch(url);
+    const data = await resp.json();
+    return data;
+  } catch (err) {
+    console.error("Error consultando INEGI:", err);
+    return null;
+  }
+}
+
+async function getDataPorEstado(feature) {
+  const cveEnt = feature.properties.CVE_ENT;  // Clave de estado
+  const indicador = "1002000001"; // Población total
+
+  const datos = await consultaIndicador(indicador, cveEnt);
+  if (datos && datos.Series && datos.Series[0]) {
+    const ultimo = datos.Series[0].OBSERVATIONS.slice(-1)[0]; // último valor
+    return ultimo.OBS_VALUE || 0;
+  }
+  return 0;
+}
+
+function onEachFeature(feature, layer) {
+  layer.on("click", async () => {
+    const poblacion = await getDataPorEstado(feature);
+
+    const props = feature.properties || {};
+    const htmlFija = `
+      <h2>${props.nomgeo || 'Zona'}</h2>
+      <p><b>Población (INEGI):</b> ${poblacion.toLocaleString()}</p>
+    `;
+
+    document.getElementById("sidebar-content").innerHTML = htmlFija;
+  });
+}
+
 
 
 	
 </script>
 </body>
 </html>
+
 
 
 
