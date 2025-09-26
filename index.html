@@ -255,7 +255,19 @@
 
 <script>
   // ========== MAPA + CAPAS ==========
-  const map = L.map('map').setView([24.5, -100.5], 5);
+  const map = L.map('map',{
+			center: [20.5, -100.5],
+			zoom: 5,
+			maxZoom: 18,
+			minZoom: 2,
+			maxBounds: [
+				//south west
+				[18.5, -90.5],
+				//north east
+				[25.5, -105.5]
+				], 
+			});
+	  
 
 			// 🌍 Mapa claro (OSM estándar)
 			const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -872,6 +884,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
