@@ -23,6 +23,7 @@
   <script type="text/javascript" src="js/hive_qro.js"></script>	
   <script type="text/javascript" src="js/hive_cdmx.js"></script>
   <script type="text/javascript" src="js/hive_edomex.js"></script>
+  <script type="text/javascript" src="js/hive_gto.js"></script>
   	
 
    <!-- NSE -->
@@ -185,6 +186,7 @@
 	  <option value="QRO">Querétaro</option>
 	  <option value="CDMX">Ciudad de México</option>
 	  <option value="MEX">Estado de México</option>
+	  <option value="GTO">Guanajuato</option>
 	</select><hr>
 	<div id="photon-container"></div><hr>
   <button id="btnExportar">Exportar a PDF</button>
@@ -575,9 +577,10 @@ function onEachFeature(feature, layer) {
 	const hiveLayer22 = L.geoJson(hive_qro, { style, onEachFeature });
 	const hiveLayer09 = L.geoJson(hive_cdmx, { style, onEachFeature });
 	const hiveLayer15 = L.geoJson(hive_edomex, { style, onEachFeature });
+	const hiveLayer11 = L.geoJson(hive_gto, { style, onEachFeature });
 	
 	// GRUPOS
-	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer15, hiveLayer13, hiveLayer22]).addTo(map);
+	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer11, hiveLayer15, hiveLayer13, hiveLayer22]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]);
 
 			var legendNSE = L.control({ position: 'bottomright' });
@@ -887,6 +890,7 @@ function onEachFeature(feature, layer) {
 </script>
 </body>
 </html>
+
 
 
 
