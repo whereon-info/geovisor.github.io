@@ -209,7 +209,7 @@
 
 <!-- CHART -->
 <div id="chart" class="panel">
-   <h2>📊 Gráfica 2 </h2>
+   <h2>📊 Población por grupos de edad </h2>
 	<canvas id="myChart"></canvas>	
 </div>
 
@@ -474,7 +474,7 @@ function onEachFeature(feature, layer) {
     // ================== INFO GRAPH ==================
     const infoPob = `
       <div id="info-fija">
-        <h2>${props.nomgeo || "Zona"}</h2>
+        <p><b>Pertecene al municipio de:</b>${props.nomgeo || "Zona"}</p>
         <p><b>Población total en la zona:</b> ${props.POBTOT_sum?.toLocaleString() || 0}</p>
         <p><b>Población joven (0 a 14 años):</b> ${props.POB0_14_sum?.toLocaleString() || 0}</p>
         <p><b>Población adulta (15 a 64 años):</b> ${props.POB15_64_sum?.toLocaleString() || 0}</p>
@@ -863,5 +863,6 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
