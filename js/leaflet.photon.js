@@ -61,8 +61,8 @@ L.PhotonBaseSearch = L.PhotonBase.extend({
         includePosition: true,
         bbox: null,
         noResultLabel: 'Pas de résultats',
-        feedbackEmail: 'photon@komoot.de',  // Set to null to remove feedback box
-        feedbackLabel: 'Feedback'
+        feedbackEmail: 'null',  // Set to null to remove feedback box
+        feedbackLabel: 'null'
     },
 
     CACHE: '',
@@ -502,3 +502,4 @@ var obj3 = {
     }
 
     }
+
