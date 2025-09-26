@@ -434,6 +434,17 @@ let chart = new Chart(document.getElementById("myChart"), {
   }
 });
 
+// ================== Helpers para imprimir en paneles ==================
+function mostrarEnSidebar(html) {
+  const cont = document.getElementById("sidebar-content");
+  if (cont) cont.innerHTML = html;
+}
+
+function mostrarEnGraph(html) {
+  const cont = document.getElementById("info-content");
+  if (cont) cont.innerHTML = html;
+}
+	
 // ================== SIDEBAR ==================
 function onEachFeature(feature, layer) {
   layer.on("click", async () => {
@@ -518,18 +529,7 @@ function onEachFeature(feature, layer) {
   });
 }
 
-// ================== Helpers para imprimir en paneles ==================
-function mostrarEnSidebar(html) {
-  const cont = document.getElementById("sidebar-content");
-  if (cont) cont.innerHTML = html;
-}
-
-function mostrarEnGraph(html) {
-  const cont = document.getElementById("info-content");
-  if (cont) cont.innerHTML = html;
-}
-
-
+	
 // Helper para íconos
 function getEmojiCategoria(cat) {
   const emojis = {
@@ -863,4 +863,5 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
