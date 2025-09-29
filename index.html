@@ -62,28 +62,6 @@
   <style>
     body,html { margin:0; padding:0; height:100%; display: flex; flex-direction: column;font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     
-	Split(['#left-col', '#map', '#right-col','#right-col2'], {
-		  sizes: [20, 40, 15, 15],
-		  minSize: [150, 300, 200],
-		  gutterSize: 6,
-		  cursor: 'col-resize'
-		});
-	
-	Split(['#controls', , '#sidebar', '#chart', '#graph'], {
-	  direction: 'horizontal',
-	  sizes: [40, 30, 30],
-	  minSize: [100, 150, 150],
-	  gutterSize: 6,
-	  cursor: 'row-resize'
-	});
-	
-	Split(['#listado'], {
-	  direction: 'vertical',
-	  sizes: [60, 40],
-	  minSize: [150, 150],
-	  gutterSize: 6,
-	  cursor: 'row-resize'
-	});
 
 	#main-split {  display: flex;  height: 100vh;  width: 100vw;}
     #left-col, #right-col, #right-col2  {  display: flex;  flex-direction: column;}
@@ -915,14 +893,48 @@ if (L.control.photon) {
 
 	
 // ============== INEGI GASTO ===================================
-	
 
 
 
-	
 </script>
+
+<script>
+// División principal en columnas
+		Split(['#left-col', '#map', '#right-col', '#right-col2'], {
+		  sizes: [20, 40, 15, 25],
+		  minSize: [150, 300, 200, 200],
+		  gutterSize: 6,
+		  cursor: 'col-resize',
+		  direction: 'horizontal'
+		});
+		
+		// División vertical en la columna izquierda
+		Split(['#controls'], {
+		  direction: 'vertical',
+		  sizes: [100],
+		  minSize: [150]
+		});
+		
+		// División vertical en la columna derecha
+		Split(['#sidebar'], {
+		  direction: 'vertical',
+		  sizes: [100],
+		  minSize: [150]
+		});
+		
+		// División vertical en right-col2 (chart / graph / listado)
+		Split(['#chart', '#graph', '#listado'], {
+		  direction: 'vertical',
+		  sizes: [30, 30, 40],
+		  minSize: [150, 150, 200],
+		  gutterSize: 6,
+		  cursor: 'row-resize'
+		});
+
+	</script>
 </body>
 </html>
+
 
 
 
