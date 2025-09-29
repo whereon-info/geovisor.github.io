@@ -902,28 +902,22 @@ if (L.control.photon) {
 
 </script>
 
-						<script>
-				// Filas
-				Split(['#top-row', '#listado'], {
-				  sizes: [70, 30],
-				  direction: 'vertical'
-				});
-				
-				// Columnas en la fila superior
-				Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
-				  sizes: [20, 30, 20, 30],
-				  direction: 'horizontal'
-				});
-				
-				// Chart + Graph dentro de chart-graph
-				Split(['#chart', '#graph'], {
-				  sizes: [50, 50],
-				  direction: 'vertical'
-				});
-
-
+<script>
+		// Filas
+		Split(['#top-row', '#listado'], {
+		  sizes: [70, 30],
+		  direction: 'horizontal'
+		});
+		
+		// Columnas en la fila superior
+		Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
+		  sizes: [20, 40, 20, 30],
+		  direction: 'vertical'
+		});
+		
 	</script>
 </body>
 </html>
+
 
 
