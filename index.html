@@ -904,25 +904,25 @@ if (L.control.photon) {
 		  minSize: [150, 300, 200, 200],
 		  gutterSize: 6,
 		  cursor: 'col-resize',
-		  direction: 'horizontal'
+		  direction: 'vertical'
 		});
 		
 		// División vertical en la columna izquierda
 		Split(['#controls'], {
 		  direction: 'vertical',
 		  sizes: [100],
-		  minSize: [150]
+		  minSize: [80]
 		});
 		
 		// División vertical en la columna derecha
-		Split(['#sidebar'], {
-		  direction: 'vertical',
+		Split(['#listado'], {
+		  direction: 'horizontal',
 		  sizes: [100],
 		  minSize: [150]
 		});
 		
-		// División vertical en right-col2 (chart / graph / listado)
-		Split(['#chart', '#graph', '#listado'], {
+		// División vertical en right-col (chart / graph / listado)
+		Split(['#chart', '#graph', '#sidebar'], {
 		  direction: 'vertical',
 		  sizes: [30, 30, 40],
 		  minSize: [150, 150, 200],
@@ -933,33 +933,3 @@ if (L.control.photon) {
 	</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
