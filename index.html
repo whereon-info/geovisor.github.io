@@ -287,23 +287,29 @@
 <script src="js/L.Control.Locate.min.js"></script>
 	
 <script>
-		// Filas
+		// Filas (70% arriba, 30% abajo)
 		Split(['#top-row', '#listado'], {
 		  sizes: [70, 30],
-		  direction: 'horizontal'
+		  direction: 'vertical',   // ✔️ fila superior + fila inferior
+		  gutterSize: 6,
+		  minSize: [100, 100]
 		});
 		
-		// Columnas en la fila superior
+		// Columnas en la fila superior (20%, 40%, 20%, 30%)
 		Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
 		  sizes: [20, 40, 20, 30],
-		  direction: 'vertical'
+		  direction: 'horizontal',  // ✔️ 4 columnas en la misma fila
+		  gutterSize: 6,
+		  minSize: [100, 200, 150, 200]
 		});
-		 Split(['#chart', '#graph'], {
-      sizes: [50, 50],
-      direction: 'vertical',
-      gutterSize: 6,
-      minSize: [50, 50]
-    });
+		
+		// Dentro de chart-graph dividir Chart y Graph verticalmente
+		Split(['#chart', '#graph'], {
+		  sizes: [50, 50],
+		  direction: 'vertical',
+		  gutterSize: 6,
+		  minSize: [50, 50]
+		});
 	</script>
 
 <script>
@@ -924,6 +930,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
