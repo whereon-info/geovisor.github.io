@@ -78,7 +78,6 @@
 	  
 		.panel {
 		  border: 2px solid #00793a;
-		  overflow: auto;
 		  padding: 8px;
 		  background: #2c2c2c;
 		  color: #fff;
@@ -299,7 +298,12 @@
 		  sizes: [20, 40, 20, 30],
 		  direction: 'vertical'
 		});
-		
+		 Split(['#chart', '#graph'], {
+      sizes: [50, 50],
+      direction: 'vertical',
+      gutterSize: 6,
+      minSize: [50, 50]
+    });
 	</script>
 
 <script>
@@ -920,6 +924,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
