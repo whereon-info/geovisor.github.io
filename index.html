@@ -83,8 +83,8 @@
     #map { grid-area: map; }
     #sidebar { grid-area: sidebar; overflow: auto;  }
     #listado { grid-area: listado; overflow: auto;  }
-	#graph { grid-area: graph; overflow: hidden;  } 
-	#chart { grid-area: chart; overflow: hidden;  }
+	#graph { grid-area: graph; overflow: auto;  } 
+	#chart { grid-area: chart; overflow: auto;  }
 	 
 	  
 	.header {
@@ -144,6 +144,7 @@
 	#gcd-button-control:hover {  background: #f0f0f0;}
 	#info-dinamica {font-size: 12px;line-height: 2.0;}
 	#chart {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
+	.chart-container { position: relative;  width: 100%;  height: 100%;   max-height: 300px; }
 	#graph {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 
 	#resultadosBusqueda .resultado-personalizado {  display: flex;  align-items: center;  margin: 4px 0;  padding: 4px 6px;  background: rgba(200,230,255,0.5);  border-radius: 6px;}
@@ -434,6 +435,7 @@ let chart = new Chart(document.getElementById("myChart"), {
   },
   options: {
     responsive: true,
+	maintainAspectRatio: false,
     title: {
       display: true,
       text: "Población según grupo de edad"
@@ -870,6 +872,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
