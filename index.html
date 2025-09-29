@@ -75,8 +75,7 @@
 			  height: 100%;  /* 👈 Ocupa todo el alto que le da split */
 			}
 			
-			#controls, #map, #chart-graph,	#sidebar {  height: 100%; width: 100%; overflow: auto;}
-			
+			#controls, #map, #chart-graph,	#sidebar {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
 			#chart-graph {
 			  display: flex;
 			  flex-direction: column; 
@@ -251,14 +250,13 @@
 	 </div>
 	
 	<!-- SIDEBAR -->
-		<div id="right-col">	
+			
 			<div id="sidebar" class="panel">
 		   <h2 class="leaflet-sidebar-header" style="margin:0.5;">📑 Ficha de información municipal</h2>
 		    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
 			<h3>Búsquedas personalizadas</h3>
 		  <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
 			</div>
-		</div>	
 	</div>
 		
 	
@@ -941,6 +939,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
