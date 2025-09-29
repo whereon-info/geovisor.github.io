@@ -62,8 +62,18 @@
     body,html { margin:0; padding:0; height:100%; display: flex; flex-direction: column;font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     
 
-	#main-split {  display: flex;  height: 100vh;  width: 100vw;flex-direction: column;}
-    #top-row, #right-col, #chart-graph  {  display: flex;  flex-direction: column;}
+			#main-split {
+			  height: 100vh;
+			  width: 100vw;
+			  display: flex;
+			  flex-direction: column;
+			}
+			#top-row {
+			  display: flex;
+			  width: 100%;
+			  height: 100%;
+			}
+
 
 	  
 		.panel {
@@ -164,7 +174,7 @@
 	</div>
 <div id="main-split">
 	<div id="top-row">
-	<div id="controls" class="panel">
+		<div id="controls" class="panel">
 		  <p><label>Establecimiento:</label>
 		  <input type="text" id="condi" value="taqueria" /></p>
 		  <p><label>Latitud:</label>
@@ -231,7 +241,7 @@
 			  <div id="info-content">Haz clic en un hexágono para ver la información</div>
 		</div>
 	 </div>
-	</div>
+	
 	<!-- SIDEBAR -->
 		<div id="right-col">	
 			<div id="sidebar" class="panel">
@@ -241,7 +251,7 @@
 		  <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
 			</div>
 		</div>	
-
+	</div>
 		
 	
 
@@ -892,36 +902,28 @@ if (L.control.photon) {
 
 </script>
 
-		<script>
-		// Paso 1: dividir filas (70% arriba, 30% abajo)
-		Split(['#top-row', '#listado'], {
-		  sizes: [70, 30],
-		  direction: 'vertical',
-		  gutterSize: 6,
-		  minSize: [200, 150],
-		  cursor: 'row-resize'
-		});
-		
-		// Paso 2: dividir columnas en la fila superior
-		Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
-		  sizes: [20, 30, 20, 30],
-		  direction: 'horizontal',
-		  gutterSize: 6,
-		  minSize: [150, 200, 150, 200],
-		  cursor: 'col-resize'
-		});
-		
-		// Paso 3: dividir chart y graph dentro de #chart-graph (mitad y mitad)
-		Split(['#chart', '#graph'], {
-		  sizes: [50, 50],
-		  direction: 'vertical',
-		  gutterSize: 6,
-		  minSize: [100, 100],
-		  cursor: 'row-resize'
-		});
-		</script>
+						<script>
+				// Filas
+				Split(['#top-row', '#listado'], {
+				  sizes: [70, 30],
+				  direction: 'vertical'
+				});
+				
+				// Columnas en la fila superior
+				Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
+				  sizes: [20, 30, 20, 30],
+				  direction: 'horizontal'
+				});
+				
+				// Chart + Graph dentro de chart-graph
+				Split(['#chart', '#graph'], {
+				  sizes: [50, 50],
+				  direction: 'vertical'
+				});
+
 
 	</script>
 </body>
 </html>
+
 
