@@ -75,18 +75,12 @@
 			  height: 100%;  /* 👈 Ocupa todo el alto que le da split */
 			}
 			
-			#controls,
-			#map,
-			#chart-graph,
-			#sidebar {
-			  height: 100%;   /* 👈 Todas las columnas llenan el alto */
-			  overflow: auto; /* 👈 Evita que se desborden */
-			}
+			#controls, #map, #chart-graph,	#sidebar {  height: 100%; width: 100%; overflow: auto;}
 			
 			#chart-graph {
 			  display: flex;
-			  flex-direction: column; /* 👈 Para que chart y graph se repartan */
-			  height: 100%;
+			  flex-direction: column; 
+			  height: 100%; width: 100%;
 			}
 
 			}
@@ -947,6 +941,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
