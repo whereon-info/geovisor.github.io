@@ -226,7 +226,7 @@
 			</div>
 		
 	
-<div id="map" class="panel"></div>
+	<div id="map" class="panel"></div>
 
 	<!-- CHART -->
 	<div id="chart-graph">
@@ -286,6 +286,21 @@
 
 <!-- plugins local JS -->
 <script src="js/L.Control.Locate.min.js"></script>
+	
+<script>
+		// Filas
+		Split(['#top-row', '#listado'], {
+		  sizes: [70, 30],
+		  direction: 'horizontal'
+		});
+		
+		// Columnas en la fila superior
+		Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
+		  sizes: [20, 40, 20, 30],
+		  direction: 'vertical'
+		});
+		
+	</script>
 
 <script>
   // ========== MAPA + CAPAS ==========
@@ -902,22 +917,10 @@ if (L.control.photon) {
 
 </script>
 
-<script>
-		// Filas
-		Split(['#top-row', '#listado'], {
-		  sizes: [70, 30],
-		  direction: 'horizontal'
-		});
-		
-		// Columnas en la fila superior
-		Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
-		  sizes: [20, 40, 20, 30],
-		  direction: 'vertical'
-		});
-		
-	</script>
+
 </body>
 </html>
+
 
 
 
