@@ -73,9 +73,13 @@
 			  width: 100%;
 			  height: 100%;
 			}
-
-
 	  
+			 #chart-graph {
+			  display: flex;
+			  flex-direction: column;
+			  height: 100%;
+			}
+
 		.panel {
 		  border: 2px solid #00793a;
 		  padding: 8px;
@@ -297,7 +301,7 @@
 		
 		// Columnas en la fila superior (20%, 40%, 20%, 30%)
 		Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
-		  sizes: [20, 40, 20, 30],
+		  sizes: [20, 40, 20, 20],
 		  direction: 'horizontal',  // ✔️ 4 columnas en la misma fila
 		  gutterSize: 6,
 		  minSize: [100, 200, 150, 200]
@@ -930,6 +934,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
