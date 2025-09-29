@@ -58,25 +58,22 @@
   <style>
     body,html { margin:0; padding:0; height:100%; display: flex; flex-direction: column;font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     
-	// 1. División principal en columnas (3 columnas: izquierda, mapa, derecha)
-	Split(['#left-col', '#map', '#right-col'], {
-	  sizes: [20, 50, 30], // proporciones iniciales
-	  minSize: [150, 300, 200],
-	  gutterSize: 6,
-	  cursor: 'col-resize'
-	});
+	Split(['#left-col', '#map', '#right-col','#right-col2'], {
+		  sizes: [20, 40, 15, 15],
+		  minSize: [150, 300, 200],
+		  gutterSize: 6,
+		  cursor: 'col-resize'
+		});
 	
-	// 2. División vertical en la izquierda (controles / graph / listado)
-	Split(['#controls', '#graph', '#listado'], {
+	Split(['#controls', , '#sidebar', '#chart', '#graph'], {
 	  direction: 'vertical',
-	  sizes: [20, 40, 40],
+	  sizes: [40, 30, 30],
 	  minSize: [100, 150, 150],
 	  gutterSize: 6,
 	  cursor: 'row-resize'
 	});
 	
-	// 3. División vertical en la derecha (sidebar / chart)
-	Split(['#sidebar', '#chart'], {
+	Split(['#listado'], {
 	  direction: 'vertical',
 	  sizes: [60, 40],
 	  minSize: [150, 150],
@@ -188,12 +185,11 @@
 </head>
 <body>
 
-<div class="dashboard">
-
 	<div id="title">
 	 	  	<h1> 🌎 GeoViable - Plataforma para el análisis de viabilidad comercial en México</h1>
 	</div>
-<div id="main-split">	
+<div id="main-split">
+	<div id="left-col">
 <div id="controls" class="panel">
   <p><label>Establecimiento:</label>
   <input type="text" id="condi" value="taqueria" /></p>
@@ -238,38 +234,39 @@
 		<option value="TLX">Tlaxcala</option>
 		<option value="VER">Veracruz</option>
 		<option value="YUC">Yucacán</option>
-		<option value="ZAC">Zacatecas</option>
-		
-	  
+		<option value="ZAC">Zacatecas</option>	  
 	</select>
-	<p><label>Busque por lugar:</label>
-	<div id="photon-container"></div><hr>
-  <button id="btnExportar">Exportar a PDF</button><hr>
-</div>
-
-<!--<div id="mapa-contenedor" style="display:flex; height:100vh; width:100%;">-->	
+		<p><label>Busque por lugar:</label>
+		<div id="photon-container"></div><hr>
+		  <button id="btnExportar">Exportar a PDF</button><hr>
+	</div>
+	</div>
+	
 <div id="map" class="panel"></div>
 
 <!-- SIDEBAR -->
+<div id="right-col">	
 <div id="sidebar" class="panel">
    <h2 class="leaflet-sidebar-header" style="margin:0.5;">📑 Ficha de información municipal</h2>
     <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
 	<h3>Búsquedas personalizadas</h3>
   <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
 </div>
+</div>	
 
 <!-- CHART -->
-<div id="chart" class="panel">
-   <h3>📊 Población de la zona por grupos de edad </h3>
-	<canvas id="myChart"></canvas>	
-</div>
-
-<!-- GRAPH -->
-<div id="graph" class="panel">
-  <h3>📄 Información de zona</h3>
-  <div id="info-content">Haz clic en un hexágono para ver la información</div>
-</div>
-
+	<div id="right-col2">
+	<div id="chart" class="panel">
+	   <h3>📊 Población de la zona por grupos de edad </h3>
+		<canvas id="myChart"></canvas>	
+	</div>
+	
+	<!-- GRAPH -->
+	<div id="graph" class="panel">
+	  <h3>📄 Información de zona</h3>
+	  <div id="info-content">Haz clic en un hexágono para ver la información</div>
+	</div>
+	
 	
 <!-- LISTADO -->
 <div id="listado" class="panel">
@@ -922,6 +919,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
