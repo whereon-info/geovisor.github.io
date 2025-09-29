@@ -58,34 +58,56 @@
   <style>
     body,html { margin:0; padding:0; height:100%; display: flex; flex-direction: column;font-family: 'Poppins', sans-serif; font-size: 14px; color: #f1f1f1; }
     
-	.dashboard {
-	  display: grid;
-	  grid-template-columns: 20% 40% 15% 25%;
-	  grid-template-rows: 4% 36% 30% 30%;
-	  grid-template-areas:
-	    "title title title title"
-		"controls map sidebar sidebar"
-		"controls map graph chart"
-	    "listado listado listado listado";
-	  height: 100vh;
-	  width: 100vw;
-	  overflow: hidden; /* 👈 evita desbordes */
-	}
+	// 1. División principal en columnas (3 columnas: izquierda, mapa, derecha)
+	Split(['#left-col', '#map', '#right-col'], {
+	  sizes: [20, 50, 30], // proporciones iniciales
+	  minSize: [150, 300, 200],
+	  gutterSize: 6,
+	  cursor: 'col-resize'
+	});
+	
+	// 2. División vertical en la izquierda (controles / graph / listado)
+	Split(['#controls', '#graph', '#listado'], {
+	  direction: 'vertical',
+	  sizes: [20, 40, 40],
+	  minSize: [100, 150, 150],
+	  gutterSize: 6,
+	  cursor: 'row-resize'
+	});
+	
+	// 3. División vertical en la derecha (sidebar / chart)
+	Split(['#sidebar', '#chart'], {
+	  direction: 'vertical',
+	  sizes: [60, 40],
+	  minSize: [150, 150],
+	  gutterSize: 6,
+	  cursor: 'row-resize'
+	});
 
-    .panel {
-      border: 4px solid #00793a;
-      overflow: hidden;
-      padding: 10px;
-    }
+	#main-split {  display: flex;  height: 100vh;  width: 100vw;}
+    #left-col, #right-col {  display: flex;  flex-direction: column;}
 
-    #title {grid-area: title}
-	#controls { grid-area: controls; }
-    #map { grid-area: map; }
-    #sidebar { grid-area: sidebar; overflow: auto;  }
-    #listado { grid-area: listado; overflow: auto;  }
-	#graph { grid-area: graph; overflow: auto;  } 
-	#chart { grid-area: chart; overflow: auto;  }
-	 
+	  
+		.panel {
+		  border: 2px solid #00793a;
+		  overflow: auto;
+		  padding: 8px;
+		  background: #2c2c2c;
+		  color: #fff;
+		  font-family: 'Poppins', sans-serif;
+		}
+		
+		/* Gutter (separadores) */
+		.gutter {
+		  background-color: #444;
+		}
+		.gutter.gutter-horizontal {
+		  cursor: col-resize;
+		}
+		.gutter.gutter-vertical {
+		  cursor: row-resize;
+		}
+ 
 	  
 	.header {
       font-weight: bold;
@@ -171,7 +193,7 @@
 	<div id="title">
 	 	  	<h1> 🌎 GeoViable - Plataforma para el análisis de viabilidad comercial en México</h1>
 	</div>
-	
+<div id="main-split">	
 <div id="controls" class="panel">
   <p><label>Establecimiento:</label>
   <input type="text" id="condi" value="taqueria" /></p>
@@ -198,8 +220,8 @@
         <option value="GTO">Guanajuato</option>
 		<option value="GRO">Guerrero</option>
 	    <option value="HGO">Hidalgo</option>
-		<option value="MEX">Estado de México</option>
 		<option value="JAL">Jalisco</option>
+		<option value="MEX">Estado de México</option>
 		<option value="MIC">Michoacán</option>
 		<option value="MOR">Morelos</option>
 		<option value="NAY">Nayarit</option>
@@ -264,6 +286,7 @@
   </table>
 </div>
 </div>
+</div>	
 
 	<div id="welcomeBox">
  		<div id="welcomeContent">
@@ -899,6 +922,7 @@ if (L.control.photon) {
 </script>
 </body>
 </html>
+
 
 
 
