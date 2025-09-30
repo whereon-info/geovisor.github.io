@@ -629,7 +629,7 @@ function getEmojiCategoria(cat) {
            d > 10000 ? '#ffffbf' :
            d > 5000  ? '#abdda4' :
            d > 1     ? '#2b83ba':
-		               '#FFFFFF';
+		               '#2d2d2d';
   }
   
 	function style(feature) {
@@ -644,7 +644,7 @@ function getEmojiCategoria(cat) {
   var legendHex = L.control({position: 'bottomright'});
   legendHex.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 5000, 10000, 25000, 50000];
+        grades = [0, 1, 5000, 10000, 25000, 50000];
 	  div.innerHTML += "<b>Población</b><br>";
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
@@ -945,6 +945,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
