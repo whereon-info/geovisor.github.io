@@ -774,11 +774,19 @@ const hiveLayers = {
 document.getElementById("filtroEstado").addEventListener("change", (e) => {
   const estado = e.target.value;
   hiveGroup.clearLayers();
+
   if (estado === "todos") {
     Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
+    // 👇 Si quieres que al mostrar todos, ajuste la vista a todo el grupo
+    map.fitBounds(hiveGroup.getBounds());
   } else {
-    hiveGroup.addLayer(hiveLayers[estado]);
-	 map.fitBounds(layer.getBounds());
+    const layer = hiveLayers[estado];
+    if (layer) {
+      hiveGroup.addLayer(layer);
+
+      // 👇 Aquí hace zoom al estado seleccionado
+      map.fitBounds(layer.getBounds());
+    }
   }
 });
 
@@ -931,6 +939,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
