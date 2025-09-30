@@ -231,6 +231,8 @@
 			</select>
 				<p><label>3️⃣ Busque un lugar:</label>
 				<div id="photon-container"></div></p><hr>
+				<button id="Ubicacion">Buscar por ubicación</button><hr>
+				<button id="btnExportar">Exportar a PDF</button><hr>
 			</div>
 		
 	
@@ -933,7 +935,44 @@ if (L.control.photon) {
     //});
   //});
 
-// ============== REPETIR GRAPH ===================================
+// ============== UBICACION ===================================
+
+document.getElementById("Ubicacion").addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    alert("⚠️ Tu navegador no soporta geolocalización");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+
+      // 👇 Quitar marcador previo si existe
+      if (window.miUbicacionMarker) {
+        map.removeLayer(window.miUbicacionMarker);
+      }
+
+      // 👇 Crear marcador en la ubicación del usuario
+      window.miUbicacionMarker = L.marker([lat, lon], {
+        icon: L.icon({
+          iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // Ícono personalizado
+          iconSize: [30, 30]
+        })
+      }).addTo(map).bindPopup("📍 Estás aquí").openPopup();
+
+      // 👇 Hacer zoom al punto
+      map.setView([lat, lon], 15);
+
+      // 👇 Si quieres llenar inputs en #controls
+      if (document.getElementById("lat")) document.getElementById("lat").value = lat;
+      if (document.getElementById("lon")) document.getElementById("lon").value = lon;
+    },
+    (err) => {
+      alert("❌ No se pudo obtener la ubicación: " + err.message);
+    }
+  );
+});
 
 	
 // ============== INEGI GASTO ===================================
@@ -945,6 +984,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
