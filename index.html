@@ -316,7 +316,7 @@
 		    sizes: [50, 50],
 		    direction: 'vertical',
 		    gutterSize: 6,
-		    minSize: [60, 40]
+		    minSize: [70, 30]
 		  });
 
 	</script>
@@ -773,17 +773,14 @@ const hiveLayers = {
 
 document.getElementById("filtroEstado").addEventListener("change", (e) => {
   const estado = e.target.value;
-
-  // Limpia el grupo
   hiveGroup.clearLayers();
-
   if (estado === "todos") {
-    // Si es "todos", vuelves a meter todos
     Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
   } else {
-    // Solo agregas el seleccionado
     hiveGroup.addLayer(hiveLayers[estado]);
+	 map.fitBounds(layer.getBounds());
   }
+}
 });
 
 	
@@ -935,6 +932,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
