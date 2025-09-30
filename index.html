@@ -25,7 +25,8 @@
   <script type="text/javascript" src="js/hive_edomex.js"></script>
   <script type="text/javascript" src="js/hive_gto.js"></script>
   <script type="text/javascript" src="js/hive_nay.js"></script>
-  <script type="text/javascript" src="js/hive_mor.js"></script>	
+  <script type="text/javascript" src="js/hive_mor.js"></script>
+  <script type="text/javascript" src="js/hive_pue.js"></script>	
   	
 
    <!-- NSE -->
@@ -702,9 +703,10 @@ function getEmojiCategoria(cat) {
 	const hiveLayer11 = L.geoJson(hive_gto, { style, onEachFeature });
 	const hiveLayer17 = L.geoJson(hive_mor, { style, onEachFeature });
 	const hiveLayer18 = L.geoJson(hive_nay, { style, onEachFeature });
+	const hiveLayer21 = L.geoJson(hive_pue, { style, onEachFeature });
 	
 	// GRUPOS
-	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer11, hiveLayer15, hiveLayer13, hiveLayer17, hiveLayer18, hiveLayer22]).addTo(map);
+	const hiveGroup = L.layerGroup([hiveLayer01, hiveLayer09, hiveLayer11, hiveLayer15, hiveLayer13, hiveLayer17, hiveLayer18, hiveLayer21, hiveLayer22]).addTo(map);
 	const nseGroup = L.layerGroup([nseAgs,nseCdmx]);
 
 			var legendNSE = L.control({ position: 'bottomright' });
@@ -766,6 +768,7 @@ const hiveLayers = {
   GTO: hiveLayer11,
   MOR: hiveLayer17,
   NAY: hiveLayer18,
+  PUE: hiveLayer21
   };
 
 document.getElementById("filtroEstado").addEventListener("change", (e) => {
@@ -932,6 +935,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
