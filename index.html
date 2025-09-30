@@ -628,7 +628,8 @@ function getEmojiCategoria(cat) {
            d > 25000 ? '#fdae61' :
            d > 10000 ? '#ffffbf' :
            d > 5000  ? '#abdda4' :
-                      '#2b83ba';
+           d > 1     ? '#2b83ba':
+		               '#FFFFFF';
   }
   
 	function style(feature) {
@@ -944,6 +945,7 @@ if (L.control.photon) {
 
 </body>
 </html>
+
 
 
 
