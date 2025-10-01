@@ -229,10 +229,15 @@
 				<option value="YUC">Yucacán</option>
 				<option value="ZAC">Zacatecas</option>	  
 			</select>
-				<p><label>3️⃣ Busque un lugar:</label>
-				<div id="photon-container"></div></p><hr>
+				<hr>
+				<p>
+				<label>3️⃣ Busque un lugar:</label><br>
+				<div id="photon-container"></div>
+				</p>
+				</hr>
 				<p><label>4️⃣ </label>
-				<button id="Ubicacion">Buscar por ubicación: </button><hr>
+				<button id="Ubicacion">Buscar por ubicación: </button><p>
+				<hr>
 				<button id="btnExportar">Exportar a PDF</button><hr>
 			</div>
 		
@@ -882,7 +887,7 @@ if (L.control.photon) {
   // Mueve el nodo a #controls
   const photonNode = document.getElementsByClassName("leaflet-photon")[0];
   if (photonNode) {
-    document.getElementById("controls").appendChild(photonNode);
+    document.getElementById("photon-container").appendChild(photonNode);
   }
 
   // Evento cuando seleccionas un resultado
@@ -985,6 +990,7 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
