@@ -548,32 +548,32 @@ function onEachFeature(feature, layer) {
     mostrarEnSidebar(htmlFija);
 
     // ================== INFO GRAPH ==================
-		const pobTot = props.POBTOT_sum || 0;
-		const pob0_14 = props.POB0_14_sum || 0;
-		const pob15_64 = props.POB15_64_sum || 0;
-		const pob65 = props.POB65_MAS_sum || 0;
-		
-		// 👉 Densidad poblacional (habitantes por hectárea aprox.)
-		const densidadTot = (pobTot / 700).toFixed(2);
-		const densidad0_14 = (POB0_14_sum / 700).toFixed(2);
-		const densidad15_64 = (POB15_64_sum / 700).toFixed(2);
-		const densidad65 = (POB65_MAS_sum / 700).toFixed(2);
-		
-		const infoPob = `
-		  <div id="info-fija">
-		    <p><b>Pertenece al municipio de: </b>${props.nomgeo || "Zona"}</p>
-		    <p><b>Población total en la zona:</b> ${pobTot.toLocaleString()} 
-		      <br><i>Densidad:</i> ${densidadTot} hab/ha</p>
-		    <p><b>Población joven (0 a 14 años):</b> ${pob0_14.toLocaleString()} 
-		      <br><i>Densidad:</i> ${densidad0_14} hab/ha</p>
-		    <p><b>Población adulta (15 a 64 años):</b> ${pob15_64.toLocaleString()} 
-		      <br><i>Densidad:</i> ${densidad15_64} hab/ha</p>
-		    <p><b>Población adulta mayor (65+):</b> ${pob65.toLocaleString()} 
-		      <br><i>Densidad:</i> ${densidad65} hab/ha</p>
-		  </div>
-		`;
-		
-		mostrarEnGraph(infoPob);
+			const pobTot = props.POBTOT_sum || 0;
+			const pob0_14 = props.POB0_14_sum || 0;
+			const pob15_64 = props.POB15_64_sum || 0;
+			const pob65 = props.POB65_MAS_sum || 0;
+			
+			// 👉 Densidad poblacional (habitantes por hectárea aprox.)
+			const densidadTot = (pobTot / 700).toFixed(2);
+			const densidad0_14 = (pob0_14 / 700).toFixed(2);
+			const densidad15_64 = (pob15_64 / 700).toFixed(2);
+			const densidad65 = (pob65 / 700).toFixed(2);
+			
+			const infoPob = `
+			<div id="info-fija">
+			<p><b>Pertenece al municipio de: </b>${props.nomgeo || "Zona"}</p>
+			<p><b>Población total en la zona:</b> ${pobTot.toLocaleString()} 
+			  <br><i>Densidad:</i> ${densidadTot} hab/ha</p>
+			<p><b>Población joven (0 a 14 años):</b> ${pob0_14.toLocaleString()} 
+			  <br><i>Densidad:</i> ${densidad0_14} hab/ha</p>
+			<p><b>Población adulta (15 a 64 años):</b> ${pob15_64.toLocaleString()} 
+			  <br><i>Densidad:</i> ${densidad15_64} hab/ha</p>
+			<p><b>Población adulta mayor (65+):</b> ${pob65.toLocaleString()} 
+			  <br><i>Densidad:</i> ${densidad65} hab/ha</p>
+			</div>
+			`;
+			
+			mostrarEnGraph(infoPob);
 
 
     // --- 2. Actualizar gráfica ---
@@ -1007,6 +1007,7 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
