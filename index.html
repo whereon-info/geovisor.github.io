@@ -80,8 +80,8 @@
 			  height: 100%;  /* 👈 Ocupa todo el alto que le da split */
 			}
 			
-			#controls, #map, #sidebar, #chart, #graph {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
-			
+			#controls, #map, #chart-graph,	#sidebar, #urbano {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
+			#chart-graph {  display: flex; flex-direction: column; height: 100%; width: 100%;}
 
 
 
@@ -158,7 +158,8 @@
 	#info-dinamica {font-size: 12px;line-height: 2.0;}
 	#chart {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
 	#graph {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
-
+    #urbano {background: #2c2c2c; color: #FFFFFF; font-family: 'Poppins', sans-serif;font-size: 12px; line-height: 1.5;}
+	  
 	#resultadosBusqueda .resultado-personalizado {  display: flex;  align-items: center;  margin: 4px 0;  padding: 4px 6px;  background: rgba(200,230,255,0.5);  border-radius: 6px;}
 	#resultadosBusqueda .icono {  font-size: 18px;  margin-right: 6px;}
 	#resultadosBusqueda .nombre {  flex: 1;  font-weight: bold;  text-transform: capitalize;}
@@ -181,7 +182,7 @@
 	<div id="title">
 	 	  	<h1> 🌎 GeoViable - Plataforma para el análisis de viabilidad comercial en México</h1>
 	</div>
-
+<div id="main-split">
 	<div id="top-row">
 		<div id="controls" class="panel">
 		  <p><label> 1️⃣ Establecimiento:</label>
@@ -245,17 +246,20 @@
 	<div id="map" class="panel"></div>
 
 	<!-- CHART -->
-	<div id="chart" class="panel">
+	<div id="chart-graph" class="panel">
+			<div id="chart">
 			   <h3>📊 Población de la zona por grupos de edad </h3>
-		<canvas id="myChart"></canvas>		
-	</div>
-
+				<canvas id="myChart"></canvas>		
+			</div>
+			
 			<!-- GRAPH -->
-		<div id="graph" class="panel">
+		<div id="graph">
 			  <h3>📄 Información de zona</h3>
 			  <div id="info-content">Haz clic en un hexágono para ver la información</div>
 		</div>
-	 
+	 </div>
+
+		<div id="urbano" class="panel"></div>
 	
 	<!-- SIDEBAR -->
 			
@@ -282,6 +286,7 @@
     </thead>
     <tbody id="tablaResultados"></tbody>
   </table>
+</div>
 </div>	
 
 	<div id="welcomeBox">
@@ -307,17 +312,25 @@
 		    sizes: [70, 30],
 		    direction: 'vertical', // 👈 Arriba/abajo
 		    gutterSize: 6,
-		    minSize: [100, 100, 100]
+		    minSize: [100, 100]
 		  });
 		
 		  // Columnas dentro de top-row
-		  Split(['#controls', '#map', '#chart','#graph', '#sidebar'], {
+		  Split(['#controls', '#map', '#chart-graph', '#urbano', '#sidebar'], {
 		    sizes: [20, 30, 20, 15, 15],
 		    direction: 'horizontal', // 👈 Izquierda/derecha
 		    gutterSize: 6,
-		    minSize: [50, 50, 50, 50, 50]
+		    minSize: [100, 100, 100, 100, 100]
 		  });
 		
+		  // Dentro de chart-graph (dividido en 2 filas)
+		  Split(['#chart', '#graph'], {
+		    sizes: [70, 30],
+		    direction: 'vertical',
+		    gutterSize: 6,
+		    minSize: [50, 50]
+		  });
+
 	</script>
 
 <script>
@@ -478,6 +491,8 @@ async function buscarDENUE(condi, lat, lon, mts) {
 }
 
 
+	
+	
 // ================== GRÁFICA ==================
 let chart = new Chart(document.getElementById("myChart"), {
   type: "pie",
@@ -498,16 +513,21 @@ let chart = new Chart(document.getElementById("myChart"), {
   }
 });
 
-// ================== Helpers para imprimir en paneles ==================
+// ================== HELPERS PANELES ==================
 function mostrarEnSidebar(html) {
   const cont = document.getElementById("sidebar-content");
   if (cont) cont.innerHTML = html;
 }
 
 function mostrarEnGraph(html) {
-  const cont = document.getElementById("myChart");
+  const cont = document.getElementById("info-content");
   if (cont) cont.innerHTML = html;
 }
+
+function mostrarEnUrbano(html) {
+  const cont = document.getElementById("urbano");
+  if (cont) cont.innerHTML = html;
+}	
 	
 // ================== SIDEBAR ==================
 function onEachFeature(feature, layer) {
@@ -592,7 +612,13 @@ function onEachFeature(feature, layer) {
       }
     });
 
-    let listado = "<h3>🏬 Elementos urbanos en la zona:</h3><ul>";
+	 // ================== URBANO ================== 
+
+      const htmlUrbano = `
+      <div id="info-urbano">
+	  
+	let listado = "<h3>🏬 Elementos urbanos en la zona:</h3><ul>";
+	
     for (const [cat, num] of Object.entries(resumen)) {
       listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
     }
@@ -609,7 +635,9 @@ function onEachFeature(feature, layer) {
     document.getElementById("info-dinamica").innerHTML = listado;
   });
 }
-
+	</div>
+    `;
+    mostrarEnUrbano(htmlUrbano);
 	
 // Helper para íconos
 function getEmojiCategoria(cat) {
@@ -995,15 +1023,3 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
