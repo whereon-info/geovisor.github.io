@@ -80,8 +80,8 @@
 			  height: 100%;  /* 👈 Ocupa todo el alto que le da split */
 			}
 			
-			#controls, #map, #chart, graph,	#sidebar {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
-			#chart, graph {  display: flex; flex-direction: column; height: 100%; width: 100%;}
+			#controls, #map, #chart-graph,	#sidebar {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
+			#chart-graph {  display: flex; flex-direction: column; height: 100%; width: 100%;}
 
 
 
@@ -173,13 +173,6 @@
 	#closeWelcome {  position: absolute;  top: 5px;  right: 10px;  cursor: pointer;  font-size: 18px;  color: #333;}
 	#ubica {position: absolute;  top: 14%;  left: 33%;  transform: translateX(-50%);  background: #2c2c2c;  padding: 5px 5px;  border-radius: 8px;  box-shadow: 0px 8px 10px rgba(0,0,0,0.8);
   	z-index: 1000; font-family: 'Poppins', sans-serif; font-size: 10px;}
-	#Ubicacion {
-    position: absolute;  /* Necesario para poder moverlo */
-    top: 100px;          /* posición inicial */
-    left: 100px;
-    cursor: move;
-    z-index: 2000;       /* para que quede encima del mapa */
-  }  
  
   </style>
 </head>
@@ -252,14 +245,14 @@
 	<div id="map" class="panel"></div>
 
 	<!-- CHART -->
-	<div id="chart" class="panel">
+	<div id="chart-graph" class="panel">
 			<div id="chart">
 			   <h3>📊 Población de la zona por grupos de edad </h3>
 				<canvas id="myChart"></canvas>		
 			</div>
-	</div>	
+			
 			<!-- GRAPH -->
-	<div id="graph">
+		<div id="graph">
 			  <h3>📄 Información de zona</h3>
 			  <div id="info-content">Haz clic en un hexágono para ver la información</div>
 		</div>
@@ -320,8 +313,8 @@
 		  });
 		
 		  // Columnas dentro de top-row
-		  Split(['#controls', '#map', '#chart', '#graph', '#sidebar'], {
-		    sizes: [20, 30, 35, 15],
+		  Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
+		    sizes: [20, 30, 20, 30],
 		    direction: 'horizontal', // 👈 Izquierda/derecha
 		    gutterSize: 6,
 		    minSize: [100, 100, 100, 100]
@@ -966,44 +959,7 @@ if (L.control.photon) {
   //});
 
 // ============== UBICACION ===================================
-botonUbicacion.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-      alert("⚠️ Tu navegador no soporta geolocalización");
-      return;
-    }
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-
-        // 👇 Quitar marcador previo si existe
-        if (window.miUbicacionMarker) {
-          map.removeLayer(window.miUbicacionMarker);
-        }
-
-        // 👇 Crear marcador en la ubicación del usuario
-        window.miUbicacionMarker = L.marker([lat, lon], {
-          icon: L.icon({
-            iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png", 
-            iconSize: [30, 30]
-          })
-        }).addTo(map).bindPopup("📍 Estás aquí").openPopup();
-
-        // 👇 Hacer zoom al punto
-        map.setView([lat, lon], 15);
-
-        // 👇 Llenar inputs
-        if (document.getElementById("lat")) document.getElementById("lat").value = lat;
-        if (document.getElementById("lon")) document.getElementById("lon").value = lon;
-      },
-      (err) => {
-        alert("❌ No se pudo obtener la ubicación: " + err.message);
-      }
-    );
-  });
-
-  // ========= DRAGGABLE =========
 document.getElementById("Ubicacion").addEventListener("click", () => {
   if (!navigator.geolocation) {
     alert("⚠️ Tu navegador no soporta geolocalización");
@@ -1020,11 +976,10 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
         map.removeLayer(window.miUbicacionMarker);
       }
 
-      // 👇 Crear marcador en la ubicación del usuario (DRAGGABLE ✅)
+      // 👇 Crear marcador en la ubicación del usuario
       window.miUbicacionMarker = L.marker([lat, lon], {
-        draggable: true,
         icon: L.icon({
-          iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+          iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // Ícono personalizado
           iconSize: [30, 30]
         })
       }).addTo(map).bindPopup("📍 Estás aquí").openPopup();
@@ -1032,24 +987,15 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
       // 👇 Hacer zoom al punto
       map.setView([lat, lon], 15);
 
-      // 👇 Llenar inputs
+      // 👇 Si quieres llenar inputs en #controls
       if (document.getElementById("lat")) document.getElementById("lat").value = lat;
       if (document.getElementById("lon")) document.getElementById("lon").value = lon;
-
-      // 👇 Cuando el usuario mueva el marcador manualmente
-      window.miUbicacionMarker.on("dragend", function (e) {
-        const nuevaPos = e.target.getLatLng();
-        document.getElementById("lat").value = nuevaPos.lat.toFixed(6);
-        document.getElementById("lon").value = nuevaPos.lng.toFixed(6);
-        map.setView(nuevaPos, 15);
-      });
     },
     (err) => {
       alert("❌ No se pudo obtener la ubicación: " + err.message);
     }
   );
 });
-
 
 	
 // ============== INEGI GASTO ===================================
@@ -1061,47 +1007,4 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
