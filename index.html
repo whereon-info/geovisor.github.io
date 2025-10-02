@@ -563,13 +563,13 @@ function onEachFeature(feature, layer) {
 			<div id="info-fija">
 			<p><b>Pertenece al municipio de: </b>${props.nomgeo || "Zona"}</p>
 			<p><b>Población total en la zona:</b> ${pobTot.toLocaleString()} 
-			  <br><i>Densidad:</i> ${densidadTot} hab/ha</p>
+			  <br><i>Densidad:</i> ${densidadTot} hab/hexágono</p>
 			<p><b>Población joven (0 a 14 años):</b> ${pob0_14.toLocaleString()} 
-			  <br><i>Densidad:</i> ${densidad0_14} hab/ha</p>
+			  <br><i>Densidad:</i> ${densidad0_14} hab/hexágono</p>
 			<p><b>Población adulta (15 a 64 años):</b> ${pob15_64.toLocaleString()} 
-			  <br><i>Densidad:</i> ${densidad15_64} hab/ha</p>
+			  <br><i>Densidad:</i> ${densidad15_64} hab/hexágono</p>
 			<p><b>Población adulta mayor (65+):</b> ${pob65.toLocaleString()} 
-			  <br><i>Densidad:</i> ${densidad65} hab/ha</p>
+			  <br><i>Densidad:</i> ${densidad65} hab/hexágono</p>
 			</div>
 			`;
 			
@@ -1007,6 +1007,7 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
