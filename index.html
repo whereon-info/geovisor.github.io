@@ -247,7 +247,7 @@
 	<!-- CHART -->
 	<div id="chart" class="panel">
 			   <h3>📊 Población de la zona por grupos de edad </h3>
-				<canvas id="myChart"></canvas>		
+		<canvas id="myChart"></canvas>		
 	</div>
 
 			<!-- GRAPH -->
@@ -478,8 +478,6 @@ async function buscarDENUE(condi, lat, lon, mts) {
 }
 
 
-	
-	
 // ================== GRÁFICA ==================
 let chart = new Chart(document.getElementById("myChart"), {
   type: "pie",
@@ -507,7 +505,7 @@ function mostrarEnSidebar(html) {
 }
 
 function mostrarEnGraph(html) {
-  const cont = document.getElementById("info-content");
+  const cont = document.getElementById("myChart");
   if (cont) cont.innerHTML = html;
 }
 	
@@ -997,6 +995,7 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
