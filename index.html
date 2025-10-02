@@ -597,58 +597,63 @@ function onEachFeature(feature, layer) {
     chart.options.title.text = "Población total: " + (props.POBTOT_sum?.toLocaleString() || 0);
     chart.update();
 
-    // --- 3. Consultar DENUE dentro del hexágono ---
-    const bounds = layer.getBounds();
-    const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
-
-    const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
-    const extras = {};
-
-    resultados.forEach(item => {
-      const c = (item.Clase_actividad || "").toLowerCase();
-      if (c.includes("banco")|| c.includes("banca múltiple")) resumen.Bancos++;
-      else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
-      else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
-      else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
-      else {
-        const nombre = item.Clase_actividad.trim();
-        extras[nombre] = (extras[nombre] || 0) + 1;
-      }
-    });
 
 	 // ================== URBANO ================== 
 
-		function procesarDENUE(resumen, extras) {
-		  let listado = "<h3>🏬 Elementos urbanos en la zona:</h3><ul>";
+		 function procesarDENUE(resumen, extras) {
+		   let listado = "<h3>🏬 Elementos urbanos en la zona:</h3><ul>";
 		
-		  for (const [cat, num] of Object.entries(resumen)) {
-		    listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
-		  }
-		  listado += "</ul>";
+		   for (const [cat, num] of Object.entries(resumen)) {
+		     listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
+		   }
+		   listado += "</ul>";
 		
-		  if (Object.keys(extras).length > 0) {
-		    listado += "<h3>🔍 Otros establecimientos:</h3><ul>";
-		    for (const [cat, num] of Object.entries(extras)) {
-		      listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
-		    }
-		    listado += "</ul>";
-		  }
+		   if (Object.keys(extras).length > 0) {
+		     listado += "<h3>🔍 Otros establecimientos:</h3><ul>";
+		     for (const [cat, num] of Object.entries(extras)) {
+		       listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
+		     }
+		     listado += "</ul>";
+		   }
 		
-		  // Enviar al panel #urbano
-		  mostrarEnUrbano(listado);
-		}
-	
-// Helper para íconos
-function getEmojiCategoria(cat) {
-  const emojis = {
-    "Bancos": "🏦",
-    "Supermercados": "🛒",
-    "Escuelas": "🏫",
-    "Hoteles": "🏨"
-  };
-  return emojis[cat] || "📍";
-}
+		   // Enviar al panel #urbano
+		   mostrarEnUrbano(listado);
+		 }
 
+	procesarDENUE(resumen, extras);
+
+	// Helper para íconos
+	function getEmojiCategoria(cat) {
+	  const emojis = {
+	    "Bancos": "🏦",
+	    "Supermercados": "🛒",
+	    "Escuelas": "🏫",
+	    "Hoteles": "🏨"
+	  };
+	  return emojis[cat] || "📍";
+	}
+
+	// --- 3. Consultar DENUE dentro del hexágono ---
+	const bounds = layer.getBounds();
+	const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
+	
+	const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
+	const extras = {};
+	
+	resultados.forEach(item => {
+	  const c = (item.Clase_actividad || "").toLowerCase();
+	  if (c.includes("banco")|| c.includes("banca múltiple")) resumen.Bancos++;
+	  else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
+	  else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
+	  else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
+	  else {
+	    const nombre = item.Clase_actividad.trim();
+	    extras[nombre] = (extras[nombre] || 0) + 1;
+	  }
+	});
+	
+	// 👉 Aquí ya llamas a la función
+	procesarDENUE(resumen, extras);
 
 
   //======================= LOGO ================================
@@ -1022,4 +1027,5 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
