@@ -600,6 +600,27 @@ function onEachFeature(feature, layer) {
 
 	 // ================== URBANO ================== 
 
+	const bounds = layer.getBounds();
+	const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
+	
+	const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
+	const extras = {};
+	
+	resultados.forEach(item => {
+	  const c = (item.Clase_actividad || "").toLowerCase();
+	  if (c.includes("banco")|| c.includes("banca múltiple")) resumen.Bancos++;
+	  else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
+	  else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
+	  else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
+	  else {
+	    const nombre = item.Clase_actividad.trim();
+	    extras[nombre] = (extras[nombre] || 0) + 1;
+	  }
+	});
+	
+	// 👉 Aquí ya llamas a la función
+	procesarDENUE(resumen, extras);
+
 		 function procesarDENUE(resumen, extras) {
 		   let listado = "<h3>🏬 Elementos urbanos en la zona:</h3><ul>";
 		
@@ -632,28 +653,6 @@ function onEachFeature(feature, layer) {
 	  };
 	  return emojis[cat] || "📍";
 	}
-
-	// --- 3. Consultar DENUE dentro del hexágono ---
-	const bounds = layer.getBounds();
-	const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
-	
-	const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
-	const extras = {};
-	
-	resultados.forEach(item => {
-	  const c = (item.Clase_actividad || "").toLowerCase();
-	  if (c.includes("banco")|| c.includes("banca múltiple")) resumen.Bancos++;
-	  else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
-	  else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
-	  else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
-	  else {
-	    const nombre = item.Clase_actividad.trim();
-	    extras[nombre] = (extras[nombre] || 0) + 1;
-	  }
-	});
-	
-	// 👉 Aquí ya llamas a la función
-	procesarDENUE(resumen, extras);
 
 
   //======================= LOGO ================================
@@ -1027,5 +1026,6 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
