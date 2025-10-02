@@ -80,8 +80,8 @@
 			  height: 100%;  /* 👈 Ocupa todo el alto que le da split */
 			}
 			
-			#controls, #map, #chart-graph,	#sidebar {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
-			#chart-graph {  display: flex; flex-direction: column; height: 100%; width: 100%;}
+			#controls, #map, #chart, graph,	#sidebar {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
+			#chart, graph {  display: flex; flex-direction: column; height: 100%; width: 100%;}
 
 
 
@@ -252,14 +252,14 @@
 	<div id="map" class="panel"></div>
 
 	<!-- CHART -->
-	<div id="chart-graph" class="panel">
+	<div id="chart" class="panel">
 			<div id="chart">
 			   <h3>📊 Población de la zona por grupos de edad </h3>
 				<canvas id="myChart"></canvas>		
 			</div>
-			
+	</div>	
 			<!-- GRAPH -->
-		<div id="graph">
+	<div id="graph">
 			  <h3>📄 Información de zona</h3>
 			  <div id="info-content">Haz clic en un hexágono para ver la información</div>
 		</div>
@@ -320,8 +320,8 @@
 		  });
 		
 		  // Columnas dentro de top-row
-		  Split(['#controls', '#map', '#chart-graph', '#sidebar'], {
-		    sizes: [20, 30, 20, 30],
+		  Split(['#controls', '#map', '#chart', '#graph', '#sidebar'], {
+		    sizes: [20, 30, 35, 15],
 		    direction: 'horizontal', // 👈 Izquierda/derecha
 		    gutterSize: 6,
 		    minSize: [100, 100, 100, 100]
@@ -1004,32 +1004,52 @@ botonUbicacion.addEventListener("click", () => {
   });
 
   // ========= DRAGGABLE =========
-  botonUbicacion.onmousedown = function (event) {
-    event.preventDefault();
+document.getElementById("Ubicacion").addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    alert("⚠️ Tu navegador no soporta geolocalización");
+    return;
+  }
 
-    let shiftX = event.clientX - botonUbicacion.getBoundingClientRect().left;
-    let shiftY = event.clientY - botonUbicacion.getBoundingClientRect().top;
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
 
-    function moverBoton(pageX, pageY) {
-      botonUbicacion.style.left = pageX - shiftX + "px";
-      botonUbicacion.style.top = pageY - shiftY + "px";
+      // 👇 Quitar marcador previo si existe
+      if (window.miUbicacionMarker) {
+        map.removeLayer(window.miUbicacionMarker);
+      }
+
+      // 👇 Crear marcador en la ubicación del usuario (DRAGGABLE ✅)
+      window.miUbicacionMarker = L.marker([lat, lon], {
+        draggable: true,
+        icon: L.icon({
+          iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+          iconSize: [30, 30]
+        })
+      }).addTo(map).bindPopup("📍 Estás aquí").openPopup();
+
+      // 👇 Hacer zoom al punto
+      map.setView([lat, lon], 15);
+
+      // 👇 Llenar inputs
+      if (document.getElementById("lat")) document.getElementById("lat").value = lat;
+      if (document.getElementById("lon")) document.getElementById("lon").value = lon;
+
+      // 👇 Cuando el usuario mueva el marcador manualmente
+      window.miUbicacionMarker.on("dragend", function (e) {
+        const nuevaPos = e.target.getLatLng();
+        document.getElementById("lat").value = nuevaPos.lat.toFixed(6);
+        document.getElementById("lon").value = nuevaPos.lng.toFixed(6);
+        map.setView(nuevaPos, 15);
+      });
+    },
+    (err) => {
+      alert("❌ No se pudo obtener la ubicación: " + err.message);
     }
+  );
+});
 
-    function onMouseMove(event) {
-      moverBoton(event.pageX, event.pageY);
-    }
-
-    document.addEventListener("mousemove", onMouseMove);
-
-    botonUbicacion.onmouseup = function () {
-      document.removeEventListener("mousemove", onMouseMove);
-      botonUbicacion.onmouseup = null;
-    };
-  };
-
-  botonUbicacion.ondragstart = function () {
-    return false; // evita comportamiento nativo
-  };
 
 	
 // ============== INEGI GASTO ===================================
@@ -1041,6 +1061,7 @@ botonUbicacion.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
