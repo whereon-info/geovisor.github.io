@@ -80,7 +80,7 @@
 			  height: 100%;  /* 👈 Ocupa todo el alto que le da split */
 			}
 			
-			#controls, #map, #chart-graph,	#sidebar, #urbano {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
+			#controls, #map, #chart,	#sidebar, #urbano {  height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
 			#chart-graph {  display: flex; flex-direction: column; height: 100%; width: 100%;}
 
 
@@ -314,21 +314,13 @@
 		  });
 		
 		  // Columnas dentro de top-row
-		  Split(['#controls', '#map', '#chart-graph', '#urbano', '#sidebar'], {
+		  Split(['#controls', '#map', '#chart', '#urbano', '#sidebar'], {
 		    sizes: [20, 30, 20, 15, 15],
 		    direction: 'horizontal', // 👈 Izquierda/derecha
 		    gutterSize: 6,
 		    minSize: [100, 100, 100, 100, 100]
 		  });
 		
-		  // Dentro de chart-graph (dividido en 2 filas)
-		  Split(['#chart', '#graph'], {
-		    sizes: [70, 30],
-		    direction: 'vertical',
-		    gutterSize: 6,
-		    minSize: [50, 50]
-		  });
-
 	</script>
 
 <script>
@@ -1002,6 +994,7 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
