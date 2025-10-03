@@ -987,8 +987,6 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
   );
 });
 
-	
-// ============== SCATTER ===================================
 
 // ================== CHART SCATTER ==================
 let scatterChart = new Chart(document.getElementById("scatterChart"), {
@@ -1003,7 +1001,7 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
   },
   options: {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     scales: {
       x: {
         type: "category", // eje X = municipios
@@ -1058,6 +1056,7 @@ hiveGroup.eachLayer(layer => {
 </script>
 </body>
 </html>
+
 
 
 
