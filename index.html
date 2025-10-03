@@ -57,7 +57,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 	<!-- Chart -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 	<!-- SPLIT -->
 	<script src="https://unpkg.com/split.js/dist/split.min.js"></script>
@@ -977,7 +977,8 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
       label: "Robo a negocio",
       backgroundColor: "#ff6384",
       borderColor: "#ff6384",
-      data: []
+      pointRadius: 5,
+      data: [] // se llenará dinámicamente
     }]
   },
   options: {
@@ -994,17 +995,18 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
       }
     },
     plugins: {
-      legend: { display: false },
       tooltip: {
         callbacks: {
-          label: function(ctx) {
-            return ctx.raw.x + ": " + ctx.raw.y + " casos";
+          label: function(context) {
+            let punto = context.raw;
+            return `${punto.x}: ${punto.y} casos`;
           }
         }
       }
     }
   }
 });
+
 
 // ================== FUNCIÓN PARA ACTUALIZAR SCATTER ==================
 function actualizarScatter(layer) {
@@ -1016,7 +1018,7 @@ function actualizarScatter(layer) {
       if (props["robo a neg"] !== undefined) {
         datos.push({
           x: props.nomgeo || "N/D",
-          y: props["robo a neg"]
+          y: Number(props["robo a neg"]) || 0
         });
       }
     }
@@ -1026,36 +1028,27 @@ function actualizarScatter(layer) {
   scatterChart.update();
 }
 
+
 // ================== EVENTO FILTRO ==================
 document.getElementById("filtroEstado").addEventListener("change", (e) => {
   const estado = e.target.value;
   hiveGroup.clearLayers();
 
   if (estado === "todos") {
-    Object.values(hiveLayers).forEach(layer => {
-      hiveGroup.addLayer(layer);
-    });
-    // 👉 Graficar todos los estados juntos
-    let todos = [];
-    Object.values(hiveLayers).forEach(layer => {
-      layer.eachLayer(l => todos.push(l));
-    });
-    actualizarScatter(L.layerGroup(todos));
+    Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
+    actualizarScatter(hiveGroup); // 🔹 actualizar con todos
   } else {
-    const layer = hiveLayers[estado];
-    hiveGroup.addLayer(layer);
-
-    // 👉 Graficar solo municipios de ese estado
-    actualizarScatter(layer);
-
-    // 👉 Hacer zoom al estado seleccionado
-    map.fitBounds(layer.getBounds());
+    let capa = hiveLayers[estado];
+    hiveGroup.addLayer(capa);
+    actualizarScatter(capa); // 🔹 actualizar solo con la capa seleccionada
   }
 });
+
 
 </script>
 </body>
 </html>
+
 
 
 
