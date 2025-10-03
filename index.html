@@ -1030,40 +1030,33 @@ function actualizarScatter(layer) {
 
 
 // ================== EVENTO FILTRO ==================
-document.getElementById("filtroEstado").addEventListener("change", (e) => {
+document.getElementById("filtroEstado").addEventListener("change", () => {
   const estado = document.getElementById("filtroEstado").value;
   const delito = document.getElementById("filtroDelito").value;
+
   hiveGroup.clearLayers();
 
   if (estado === "todos") {
     Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
-    actualizarScatter(hiveGroup); // 🔹 actualizar con todos
+    actualizarScatter(hiveGroup, delito);
+
+    // 🔹 Ajustar el mapa a todos los estados
+    const bounds = hiveGroup.getBounds();
+    if (bounds.isValid()) map.fitBounds(bounds);
+
   } else {
     let capa = hiveLayers[estado];
     hiveGroup.addLayer(capa);
-    actualizarScatter(capa); // 🔹 actualizar solo con la capa seleccionada
+    actualizarScatter(capa, delito);
+
+    // 🔹 Ajustar el mapa solo al estado seleccionado
+    const bounds = capa.getBounds();
+    if (bounds.isValid()) map.fitBounds(bounds);
   }
 });
+
 
 
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
