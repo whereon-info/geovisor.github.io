@@ -80,7 +80,7 @@
 			  height: 100%;  /* 👈 Ocupa todo el alto que le da split */
 			}
 			
-			#controls, #map, #chart, #sidebar, #urbano {height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
+			#controls, #map, #chart, #sidebar, #urbano, #scatter {height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
 			#chart {  display: flex; flex-direction: column; height: 100%; width: 100%;}
 
 
@@ -318,11 +318,11 @@
 		  });
 		
 		  // Columnas dentro de top-row
-		  Split(['#controls', '#map', '#chart', '#urbano', '#sidebar'], {
-		    sizes: [15, 25, 20, 20, 20],
+		  Split(['#controls', '#map', '#chart', '#urbano', '#scatter','#sidebar'], {
+		    sizes: [15, 25, 20, 10, 10, 20],
 		    direction: 'horizontal', // 👈 Izquierda/derecha
 		    gutterSize: 6,
-		    minSize: [100, 100, 100, 100, 100]
+		    minSize: [100, 100, 100, 100, 100, 100]
 		  });
 		
 	</script>
@@ -1058,6 +1058,7 @@ hiveGroup.eachLayer(layer => {
 </script>
 </body>
 </html>
+
 
 
 
