@@ -260,6 +260,14 @@
 
 		<div id="scatter" class="panel">
 		  <h3>📉 Robo a negocio por municipio</h3>
+			<p>
+			 <label for="filtroDelito">📌 Selecciona delito:</label>
+			  <select id="filtroDelito">
+			    <option value="robo a neg">Robo a negocio</option>
+			    <option value="extorsión">Extorsión</option>
+			    <option value="narcomenud">Narcomenudeo</option>
+			  </select>
+			</p>
 		  <canvas id="scatterChart"></canvas>
 		</div>
 	
@@ -1060,3 +1068,4 @@ document.getElementById("filtroEstado").addEventListener("change", () => {
 </script>
 </body>
 </html>
+
