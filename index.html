@@ -792,25 +792,6 @@ const hiveLayers = {
   TLX: hiveLayer29
   };
 
-document.getElementById("filtroEstado").addEventListener("change", (e) => {
-  const estado = e.target.value;
-  hiveGroup.clearLayers();
-
-  if (estado === "todos") {
-    Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
-    // 👇 Si quieres que al mostrar todos, ajuste la vista a todo el grupo
-    map.fitBounds(hiveGroup.getBounds());
-  } else {
-    const layer = hiveLayers[estado];
-    if (layer) {
-      hiveGroup.addLayer(layer);
-
-      // 👇 Aquí hace zoom al estado seleccionado
-      map.fitBounds(layer.getBounds());
-    }
-  }
-});
-
 	
 // ============================== RESUMEN DENUE ======================================
 
@@ -996,15 +977,15 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
       label: "Robo a negocio",
       backgroundColor: "#ff6384",
       borderColor: "#ff6384",
-      data: [] // se llenará dinámicamente
+      data: []
     }]
   },
   options: {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
-        type: "category", // eje X = municipios
+        type: "category",
         title: { display: true, text: "Municipio" }
       },
       y: {
@@ -1017,7 +998,7 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
       tooltip: {
         callbacks: {
           label: function(ctx) {
-            return ctx.raw.y + " casos";
+            return ctx.raw.x + ": " + ctx.raw.y + " casos";
           }
         }
       }
@@ -1025,18 +1006,19 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
   }
 });
 
-// ================== FUNCIÓN PARA LLENAR SCATTER ==================
-
-	function actualizarScatter(geojsonFeatures) {
+// ================== FUNCIÓN PARA ACTUALIZAR SCATTER ==================
+function actualizarScatter(layer) {
   const datos = [];
 
-  geojsonFeatures.forEach(f => {
-    const props = f.properties || {};
-    if (props["robo a neg"] !== undefined) {
-      datos.push({
-        x: props.nomgeo || "N/D",
-        y: props["robo a neg"]
-      });
+  layer.eachLayer(l => {
+    if (l.feature && l.feature.properties) {
+      const props = l.feature.properties;
+      if (props["robo a neg"] !== undefined) {
+        datos.push({
+          x: props.nomgeo || "N/D",
+          y: props["robo a neg"]
+        });
+      }
     }
   });
 
@@ -1044,18 +1026,37 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
   scatterChart.update();
 }
 
-// ================== EJEMPLO: recorrer tus capas ==================
-// Si ya tienes hiveGroup con varias capas GeoJSON
-hiveGroup.eachLayer(layer => {
-  if (layer.feature && layer.feature.properties) {
-    actualizarScatter([layer.feature]);
+// ================== EVENTO FILTRO ==================
+document.getElementById("filtroEstado").addEventListener("change", (e) => {
+  const estado = e.target.value;
+  hiveGroup.clearLayers();
+
+  if (estado === "todos") {
+    Object.values(hiveLayers).forEach(layer => {
+      hiveGroup.addLayer(layer);
+    });
+    // 👉 Graficar todos los estados juntos
+    let todos = [];
+    Object.values(hiveLayers).forEach(layer => {
+      layer.eachLayer(l => todos.push(l));
+    });
+    actualizarScatter(L.layerGroup(todos));
+  } else {
+    const layer = hiveLayers[estado];
+    hiveGroup.addLayer(layer);
+
+    // 👉 Graficar solo municipios de ese estado
+    actualizarScatter(layer);
+
+    // 👉 Hacer zoom al estado seleccionado
+    map.fitBounds(layer.getBounds());
   }
 });
-	
 
 </script>
 </body>
 </html>
+
 
 
 
