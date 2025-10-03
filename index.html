@@ -1031,7 +1031,8 @@ function actualizarScatter(layer) {
 
 // ================== EVENTO FILTRO ==================
 document.getElementById("filtroEstado").addEventListener("change", (e) => {
-  const estado = e.target.value;
+  const estado = document.getElementById("filtroEstado").value;
+  const delito = document.getElementById("filtroDelito").value;
   hiveGroup.clearLayers();
 
   if (estado === "todos") {
@@ -1048,6 +1049,7 @@ document.getElementById("filtroEstado").addEventListener("change", (e) => {
 </script>
 </body>
 </html>
+
 
 
 
