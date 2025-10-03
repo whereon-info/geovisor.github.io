@@ -979,7 +979,7 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 // ================== CHART SCATTER ==================
 let scatterChart = new Chart(document.getElementById("scatterChart"), {
-  type: "scatter",
+  type: "bubble",
   data: {
     datasets: [{
       label: "Robo a negocio",
@@ -999,7 +999,7 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
       },
       y: {
         beginAtZero: true,
-        title: { display: true, text: "Casos de robo a negocio" }
+        title: { display: true, text: "Incidencia delictiva municipal" }
       }
     },
     plugins: {
@@ -1068,4 +1068,5 @@ document.getElementById("filtroEstado").addEventListener("change", () => {
 </script>
 </body>
 </html>
+
 
