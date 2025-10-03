@@ -617,9 +617,6 @@ function onEachFeature(feature, layer) {
 	    extras[nombre] = (extras[nombre] || 0) + 1;
 	  }
 	});
-	
-	// 👉 Aquí ya llamas a la función
-	procesarDENUE(resumen, extras);
 
 		 function procesarDENUE(resumen, extras) {
 		   let listado = "<h3>🏬 Elementos urbanos en la zona:</h3><ul>";
@@ -641,7 +638,9 @@ function onEachFeature(feature, layer) {
 		   mostrarEnUrbano(listado);
 		 }
 
-	procesarDENUE(resumen, extras);
+
+	  	// 👉 Aquí ya llamas a la función
+		procesarDENUE(resumen, extras);
 
 	// Helper para íconos
 	function getEmojiCategoria(cat) {
@@ -1026,6 +1025,7 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
