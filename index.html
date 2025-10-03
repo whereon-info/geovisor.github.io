@@ -245,23 +245,17 @@
 	
 	<div id="map" class="panel"></div>
 
-	<!-- CHART -->
-	<div id="chart-graph" class="panel">
-			<div id="chart">
-			   <h3>📊 Población de la zona por grupos de edad </h3>
-				<canvas id="myChart"></canvas>		
-			</div>
-			
-			<!-- GRAPH -->
-		<div id="graph">
-			  <h3>📄 Información de zona</h3>
-			  <div id="info-content">Haz clic en un hexágono para ver la información</div>
+		<!-- ================== CHART PANEL ================== -->
+		<div id="chart" class="panel">
+		  <h3>📊 Población y Densidad en la zona</h3>
+		  <div id="info-content"></div> <!-- Aquí imprime densidades -->
+		  <canvas id="myChart"></canvas>
 		</div>
-	 </div>
-
+		
+		<!-- ================== URBANO PANEL ================== -->
 		<div id="urbano" class="panel">
 		  <h3>🏙️ Elementos urbanos</h3>
-		  <div id="info-urbano"></div>
+		  <div id="info-urbano">Haz clic en una zona para ver la información</div>
 		</div>
 
 	
@@ -494,9 +488,6 @@ async function buscarDENUE(condi, lat, lon, mts) {
   }
 }
 
-
-	
-	
 // ================== GRÁFICA ==================
 let chart = new Chart(document.getElementById("myChart"), {
   type: "pie",
@@ -529,17 +520,46 @@ function mostrarEnGraph(html) {
 }
 
 function mostrarEnUrbano(html) {
-  const cont = document.getElementById("urbano");
+  const cont = document.getElementById("info-urbano");
   if (cont) cont.innerHTML = html;
 }	
 	
-// ================== SIDEBAR ==================
+// ================== FUNCIONES URBANOS ==================
+function procesarDENUE(resumen, extras) {
+  let listado = "<ul>";
+
+  for (const [cat, num] of Object.entries(resumen)) {
+    listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
+  }
+  listado += "</ul>";
+
+  if (Object.keys(extras).length > 0) {
+    listado += "<h4>🔍 Otros establecimientos:</h4><ul>";
+    for (const [cat, num] of Object.entries(extras)) {
+      listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
+    }
+    listado += "</ul>";
+  }
+
+  mostrarEnUrbano(listado);
+}
+
+function getEmojiCategoria(cat) {
+  const emojis = {
+    "Bancos": "🏦",
+    "Supermercados": "🛒",
+    "Escuelas": "🏫",
+    "Hoteles": "🏨"
+  };
+  return emojis[cat] || "📍";
+}
+
+// ================== EVENTOS EN HEXAGONOS ==================
 function onEachFeature(feature, layer) {
   layer.on("click", async () => {
     const props = feature.properties || {};
 
-
-    // ================== INFO SIDEBAR ==================
+    // --- Sidebar fijo ---
     const htmlFija = `
       <div id="info-fija">
         <h2>${props.nomgeo || "Zona"}</h2>
@@ -555,103 +575,60 @@ function onEachFeature(feature, layer) {
         <p><b>Créditos hipotecarios:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
         <p><b>Créditos automotrices:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
       </div>
-      <div id="info-dinamica">Cargando datos de establecimientos...</div>
     `;
     mostrarEnSidebar(htmlFija);
 
-    // ================== INFO GRAPH ==================
-			const pobTot = props.POBTOT_sum || 0;
-			const pob0_14 = props.POB0_14_sum || 0;
-			const pob15_64 = props.POB15_64_sum || 0;
-			const pob65 = props.POB65_MAS_sum || 0;
-			
-			// 👉 Densidad poblacional (habitantes por hectárea aprox.)
-			const densidadTot = (pobTot / 700).toFixed(2);
-			const densidad0_14 = (pob0_14 / 700).toFixed(2);
-			const densidad15_64 = (pob15_64 / 700).toFixed(2);
-			const densidad65 = (pob65 / 700).toFixed(2);
-			
-			const infoPob = `
-			<div id="info-fija">
-			<p><b>Pertenece al municipio de: </b>${props.nomgeo || "Zona"}</p>
-			<p><b>Población total en la zona:</b> ${pobTot.toLocaleString()} 
-			  <br><i>Densidad:</i> ${densidadTot} hab/hexágono</p>
-			<p><b>Población joven (0 a 14 años):</b> ${pob0_14.toLocaleString()} 
-			  <br><i>Densidad:</i> ${densidad0_14} hab/hexágono</p>
-			<p><b>Población adulta (15 a 64 años):</b> ${pob15_64.toLocaleString()} 
-			  <br><i>Densidad:</i> ${densidad15_64} hab/hexágono</p>
-			<p><b>Población adulta mayor (65+):</b> ${pob65.toLocaleString()} 
-			  <br><i>Densidad:</i> ${densidad65} hab/hexágono</p>
-			</div>
-			`;
-			
-			mostrarEnGraph(infoPob);
+    // --- Calculo y densidades ---
+    const pobTot = props.POBTOT_sum || 0;
+    const pob0_14 = props.POB0_14_sum || 0;
+    const pob15_64 = props.POB15_64_sum || 0;
+    const pob65   = props.POB65_MAS_sum || 0;
 
+    const densidadTot = (pobTot / 700).toFixed(2);
+    const densidad0_14 = (pob0_14 / 700).toFixed(2);
+    const densidad15_64 = (pob15_64 / 700).toFixed(2);
+    const densidad65 = (pob65 / 700).toFixed(2);
 
-    // --- 2. Actualizar gráfica ---
-    chart.data.datasets[0].data = [
-      props.POB0_14_sum || 0,
-      props.POB15_64_sum || 0,
-      props.POB65_MAS_sum || 0
-    ];
-    chart.options.title.text = "Población total: " + (props.POBTOT_sum?.toLocaleString() || 0);
+    const infoPob = `
+      <p><b>Pertenece al municipio de:</b> ${props.nomgeo || "Zona"}</p>
+      <p><b>Población total:</b> ${pobTot.toLocaleString()} 
+        <br><i>Densidad:</i> ${densidadTot} hab/hexágono</p>
+      <p><b>Población 0-14:</b> ${pob0_14.toLocaleString()} 
+        <br><i>Densidad:</i> ${densidad0_14} hab/hexágono</p>
+      <p><b>Población 15-64:</b> ${pob15_64.toLocaleString()} 
+        <br><i>Densidad:</i> ${densidad15_64} hab/hexágono</p>
+      <p><b>Población 65+:</b> ${pob65.toLocaleString()} 
+        <br><i>Densidad:</i> ${densidad65} hab/hexágono</p>
+    `;
+    mostrarEnGraph(infoPob);
+
+    // --- Actualizar gráfica ---
+    chart.data.datasets[0].data = [pob0_14, pob15_64, pob65];
+    chart.options.title.text = "Población total: " + (pobTot.toLocaleString());
     chart.update();
 
+    // --- Consulta DENUE ---
+    const bounds = layer.getBounds();
+    const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
 
-	 // ================== URBANO ================== 
+    const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
+    const extras = {};
 
-	const bounds = layer.getBounds();
-	const resultados = await buscarEnHexagono(bounds, ["banco","super","escuela","hotel"]);
-	
-	const resumen = { Bancos:0, Supermercados:0, Escuelas:0, Hoteles:0 };
-	const extras = {};
-	
-	resultados.forEach(item => {
-	  const c = (item.Clase_actividad || "").toLowerCase();
-	  if (c.includes("banco")|| c.includes("banca múltiple")) resumen.Bancos++;
-	  else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
-	  else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
-	  else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
-	  else {
-	    const nombre = item.Clase_actividad.trim();
-	    extras[nombre] = (extras[nombre] || 0) + 1;
-	  }
-	});
+    resultados.forEach(item => {
+      const c = (item.Clase_actividad || "").toLowerCase();
+      if (c.includes("banco")) resumen.Bancos++;
+      else if (c.includes("escuela") || c.includes("colegio") || c.includes("universidad")) resumen.Escuelas++;
+      else if (c.includes("super") || c.includes("bodega") || c.includes("abarrotes")) resumen.Supermercados++;
+      else if (c.includes("hotel") || c.includes("motel") || c.includes("hostal")) resumen.Hoteles++;
+      else {
+        const nombre = item.Clase_actividad.trim();
+        extras[nombre] = (extras[nombre] || 0) + 1;
+      }
+    });
 
-		 function procesarDENUE(resumen, extras) {
-		   let listado = "<h3>🏬 Elementos urbanos en la zona:</h3><ul>";
-		
-		   for (const [cat, num] of Object.entries(resumen)) {
-		     listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
-		   }
-		   listado += "</ul>";
-		
-		   if (Object.keys(extras).length > 0) {
-		     listado += "<h3>🔍 Otros establecimientos:</h3><ul>";
-		     for (const [cat, num] of Object.entries(extras)) {
-		       listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
-		     }
-		     listado += "</ul>";
-		   }
-		
-		   // Enviar al panel #urbano
-		   mostrarEnUrbano(listado);
-		 }
-
-
-	  	// 👉 Aquí ya llamas a la función
-		procesarDENUE(resumen, extras);
-
-	// Helper para íconos
-	function getEmojiCategoria(cat) {
-	  const emojis = {
-	    "Bancos": "🏦",
-	    "Supermercados": "🛒",
-	    "Escuelas": "🏫",
-	    "Hoteles": "🏨"
-	  };
-	  return emojis[cat] || "📍";
-	}
+    procesarDENUE(resumen, extras);
+  });
+}
 
 
   //======================= LOGO ================================
@@ -1025,6 +1002,7 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
