@@ -57,7 +57,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 	<!-- Chart -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/Chart.js"></script>
 
 	<!-- SPLIT -->
 	<script src="https://unpkg.com/split.js/dist/split.min.js"></script>
@@ -249,7 +249,7 @@
 		<div id="chart" class="panel">
 		  <h3>📊 Población y Densidad en la zona</h3>
 		  <div id="info-content"></div> <!-- Aquí imprime densidades -->
-		  <canvas id="myChart"></canvas>
+		  <canvas id="myChart"></canvas>	
 		</div>
 		
 		<!-- ================== URBANO PANEL ================== -->
@@ -258,6 +258,10 @@
 		  <div id="info-urbano">Haz clic en una zona para ver la información</div>
 		</div>
 
+		<div id="scatter" class="panel">
+		  <h3>📉 Robo a negocio por municipio</h3>
+		  <canvas id="scatterChart"></canvas>
+		</div>
 	
 	<!-- SIDEBAR -->
 			
@@ -482,7 +486,7 @@ async function buscarDENUE(condi, lat, lon, mts) {
 
 // ================== GRÁFICA ==================
 let chart = new Chart(document.getElementById("myChart"), {
-  type: "pie",
+  type: "bar",
   data: {
     labels: ["0-14 años", "15-64 años", "65+ años"],
     datasets: [{
@@ -492,7 +496,7 @@ let chart = new Chart(document.getElementById("myChart"), {
   },
   options: {
     responsive: true,
-	maintainAspectRatio: false,
+	maintainAspectRatio: true,
     title: {
       display: true,
       text: "Población según grupo de edad"
@@ -596,7 +600,6 @@ function onEachFeature(feature, layer) {
 
     // --- Actualizar gráfica ---
     chart.data.datasets[0].data = [pob0_14, pob15_64, pob65];
-    chart.options.title.text = "Población total: " + (pobTot.toLocaleString());
     chart.update();
 
     // --- Consulta DENUE ---
@@ -985,15 +988,77 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 });
 
 	
-// ============== INEGI GASTO ===================================
+// ============== SCATTER ===================================
 
+// ================== CHART SCATTER ==================
+let scatterChart = new Chart(document.getElementById("scatterChart"), {
+  type: "scatter",
+  data: {
+    datasets: [{
+      label: "Robo a negocio",
+      backgroundColor: "#ff6384",
+      borderColor: "#ff6384",
+      data: [] // se llenará dinámicamente
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        type: "category", // eje X = municipios
+        title: { display: true, text: "Municipio" }
+      },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: "Casos de robo a negocio" }
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.raw.y + " casos";
+          }
+        }
+      }
+    }
+  }
+});
 
+// ================== FUNCIÓN PARA LLENAR SCATTER ==================
+
+	function actualizarScatter(geojsonFeatures) {
+  const datos = [];
+
+  geojsonFeatures.forEach(f => {
+    const props = f.properties || {};
+    if (props["robo a neg"] !== undefined) {
+      datos.push({
+        x: props.nomgeo || "N/D",
+        y: props["robo a neg"]
+      });
+    }
+  });
+
+  scatterChart.data.datasets[0].data = datos;
+  scatterChart.update();
+}
+
+// ================== EJEMPLO: recorrer tus capas ==================
+// Si ya tienes hiveGroup con varias capas GeoJSON
+hiveGroup.eachLayer(layer => {
+  if (layer.feature && layer.feature.properties) {
+    actualizarScatter([layer.feature]);
+  }
+});
+	
 
 </script>
-
-
 </body>
 </html>
+
 
 
 
