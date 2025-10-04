@@ -1039,6 +1039,14 @@ function actualizarScatter(layer) {
 
 // ================== EVENTO FILTRO ==================
 document.getElementById("filtroEstado").addEventListener("change", () => {
+  actualizarScatterConFiltros();
+});
+
+document.getElementById("filtroDelito").addEventListener("change", () => {
+  actualizarScatterConFiltros();
+});
+
+function actualizarScatterConFiltros() {
   const estado = document.getElementById("filtroEstado").value;
   const delito = document.getElementById("filtroDelito").value;
 
@@ -1048,7 +1056,7 @@ document.getElementById("filtroEstado").addEventListener("change", () => {
     Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
     actualizarScatter(hiveGroup, delito);
 
-    // 🔹 Ajustar el mapa a todos los estados
+    // 🔹 Zoom a todos los estados
     const bounds = hiveGroup.getBounds();
     if (bounds.isValid()) map.fitBounds(bounds);
 
@@ -1057,16 +1065,35 @@ document.getElementById("filtroEstado").addEventListener("change", () => {
     hiveGroup.addLayer(capa);
     actualizarScatter(capa, delito);
 
-    // 🔹 Ajustar el mapa solo al estado seleccionado
+    // 🔹 Zoom al estado seleccionado
     const bounds = capa.getBounds();
     if (bounds.isValid()) map.fitBounds(bounds);
   }
-});
+}
+
+	function actualizarScatter(layer, delito) {
+  let datos = [];
+
+  layer.eachLayer(l => {
+    const props = l.feature?.properties || {};
+    const municipio = props.nomgeo || "N/A";
+    const valor = props[delito] || 0;
+
+    datos.push({ x: municipio, y: valor });
+  });
+
+  scatterChart.data.datasets[0].data = datos;
+  scatterChart.options.plugins.title.text =
+    "Delito seleccionado: " + delito.toUpperCase();
+  scatterChart.update();
+}
+
 
 
 
 </script>
 </body>
 </html>
+
 
 
