@@ -193,7 +193,8 @@
 		  <input type="text" id="lon" value="-99.13316794583835" />
 		  <p><label>Metros:</label>
 		  <input type="number" id="mts" value="1000" /></p>
-		  <button id="btnBuscar">Buscar</button><hr>
+		  <button id="btnBuscar">Buscar</button>
+			<hr>
 			<label for="filtroEstado">2️⃣ Filtrar por Entidad:</label>
 			<select id="filtroEstado">
 			  <option value="todos">Todos</option>
@@ -232,14 +233,15 @@
 			</select>
 				<hr>
 				<p>
-				<label>3️⃣ Busque un lugar:</label><br>
+				<label>3️⃣ Busque un lugar:</label>
 				<div id="photon-container"></div>
 				</p>
 			    <hr>
 				<label>4️⃣ </label>
 				<button id="Ubicacion">Buscar por ubicación</button>
 				<hr>
-				<button id="btnExportar">Exportar a PDF</button><hr>
+				<button id="btnExportar">Exportar a PDF</button>
+			    <hr>
 			</div>
 		
 	
@@ -598,11 +600,11 @@ function onEachFeature(feature, layer) {
       <p><b>Población total: </b> ${pobTot.toLocaleString()} 
         <i>(Dens.: ${densidadTot} hab/ha)</i></p>
       <p><b>Población de 0 a 14 años: </b> ${pob0_14.toLocaleString()} 
-        <i>(Dens.: </i> ${densidad0_14} hab/ha)</p>
+        <i>(Dens.: ${densidad0_14} hab/ha)</i></p>
       <p><b>Población de 15 a 64 años: </b> ${pob15_64.toLocaleString()} 
-        <i>(Dens.: </i> ${densidad15_64} hab/ha)</p>
+        <i>(Dens.: ${densidad15_64} hab/ha)</i></p>
       <p><b>Población de +65 años: </b> ${pob65.toLocaleString()} 
-        <i>(Dens.: </i> ${densidad65} hab/ha)</p>
+        <i>(Dens.: ${densidad65} hab/ha)</i></p>
     `;
     mostrarEnGraph(infoPob);
 
@@ -1094,6 +1096,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
