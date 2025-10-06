@@ -596,13 +596,13 @@ function onEachFeature(feature, layer) {
     const infoPob = `
       <p><b>Pertenece al municipio de:</b> ${props.nomgeo || "Zona"}</p>
       <p><b>Población total: </b> ${pobTot.toLocaleString()} 
-        <i>(Densidad: ${densidadTot} hab/hectárea)</i></p>
+        <i>(Dens.: ${densidadTot} hab/ha)</i></p>
       <p><b>Población de 0 a 14 años: </b> ${pob0_14.toLocaleString()} 
-        <br><i>Densidad: </i> ${densidad0_14} hab/hectárea</p>
+        <i>(Dens.: </i> ${densidad0_14} hab/ha)</p>
       <p><b>Población de 15 a 64 años: </b> ${pob15_64.toLocaleString()} 
-        <br><i>Densidad: </i> ${densidad15_64} hab/hectárea</p>
+        <i>(Dens.: </i> ${densidad15_64} hab/ha)</p>
       <p><b>Población de +65 años: </b> ${pob65.toLocaleString()} 
-        <br><i>Densidad: </i> ${densidad65} hab/hectárea</p>
+        <i>(Dens.: </i> ${densidad65} hab/ha)</p>
     `;
     mostrarEnGraph(infoPob);
 
@@ -1094,6 +1094,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
