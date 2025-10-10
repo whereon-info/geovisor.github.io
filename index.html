@@ -513,9 +513,15 @@ let chart = new Chart(document.getElementById("myChart"), {
 });
 
 // ================== HELPERS PANELES ==================
+// ================== FUNCIONES DE IMPRESIÓN ==================
 function mostrarEnSidebar(html) {
   const cont = document.getElementById("sidebar-content");
-  if (cont) cont.innerHTML = html;
+  if (cont) cont.innerHTML = html; // Sidebar principal (se reemplaza)
+}
+
+function agregarEnSidebar(html) {
+  const cont = document.getElementById("sidebar-content");
+  if (cont) cont.innerHTML += html; // 🔹 Agrega debajo sin borrar lo anterior
 }
 
 function mostrarEnGraph(html) {
@@ -524,10 +530,21 @@ function mostrarEnGraph(html) {
 }
 
 function mostrarEnUrbano(html) {
-  const cont = document.getElementById("info-urbano");
-  if (cont) cont.innerHTML = html;
-}	
-	
+  // 👉 Cambiamos esta función para que se muestre DENTRO de sidebar-content
+  const cont = document.getElementById("sidebar-content");
+  if (cont) {
+    const bloqueUrbano = `
+      <div id="info-urbano">
+        ${html}
+      </div>
+    `;
+    cont.innerHTML += bloqueUrbano;
+  }
+}
+
+
+
+
 // ================== FUNCIONES URBANOS ==================
 function procesarDENUE(resumen, extras) {
   let listado = "<ul>";
@@ -545,7 +562,7 @@ function procesarDENUE(resumen, extras) {
     listado += "</ul>";
   }
 
-  mostrarEnSidebar(listado);
+  mostrarEnUrbano(listado);
 }
 
 function getEmojiCategoria(cat) {
@@ -1094,6 +1111,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
