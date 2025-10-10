@@ -512,7 +512,6 @@ let chart = new Chart(document.getElementById("myChart"), {
   }
 });
 
-// ================== HELPERS PANELES ==================
 // ================== FUNCIONES DE IMPRESIÓN ==================
 function mostrarEnSidebar(html) {
   const cont = document.getElementById("sidebar-content");
@@ -547,7 +546,7 @@ function mostrarEnUrbano(html) {
 
 // ================== FUNCIONES URBANOS ==================
 function procesarDENUE(resumen, extras) {
-  let listado = "<ul>";
+  let listado =  `<h3>🏙️ Elementos urbanos dentro de la zona</h3>`;
 
   for (const [cat, num] of Object.entries(resumen)) {
     listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
@@ -557,7 +556,7 @@ function procesarDENUE(resumen, extras) {
   if (Object.keys(extras).length > 0) {
     listado += "<h4>🔍 Otros establecimientos:</h4><ul>";
     for (const [cat, num] of Object.entries(extras)) {
-      listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
+      listado += `<li>📍 <h3>${cat}:</h3> ${num}</li>`;
     }
     listado += "</ul>";
   }
@@ -595,7 +594,7 @@ function onEachFeature(feature, layer) {
         <p><b>Créditos nómina:</b> ${props.CRED_NOMI?.toLocaleString() || 0}</p>
         <p><b>Créditos hipotecarios:</b> ${props.CRED_HIPOT?.toLocaleString() || 0}</p>
         <p><b>Créditos automotrices:</b> ${props.CRED_AUTOM?.toLocaleString() || 0}</p>
-      </div>
+      </div><hr>
     `;
     mostrarEnSidebar(htmlFija);
 
@@ -1111,6 +1110,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
