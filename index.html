@@ -278,7 +278,7 @@
 	<!-- SIDEBAR -->
 			
 		<div id="sidebar" class="panel">
-		   <h3 class="leaflet-sidebar-header" style="margin:0.5;">📑 Ficha de información municipal</h3>
+		   <h3>📑 Ficha de información municipal</h3>
 		    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
 			<h3>Búsquedas personalizadas</h3>
 		  <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
@@ -531,7 +531,7 @@ function mostrarEnSidebar(html) {
 
 function agregarEnSidebar(html) {
   const cont = document.getElementById("sidebar-content");
-  if (cont) cont.innerHTML += html; // 🔹 Agrega debajo sin borrar lo anterior
+  if (cont) cont.innerHTML += html;
 }
 
 function mostrarEnGraph(html) {
@@ -556,17 +556,17 @@ function mostrarEnUrbano(html) {
 
 // ================== FUNCIONES URBANOS ==================
 function procesarDENUE(resumen, extras) {
-  let listado =  `<p><h2>🏙️ Elementos urbanos dentro de la zona</h2></p>`;
+  let listado =  `<h3>🏙️ Elementos urbanos dentro de la zona</h3>`;
 
   for (const [cat, num] of Object.entries(resumen)) {
-    listado += `${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}`;
+    listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
   }
   listado += "</ul>";
 
   if (Object.keys(extras).length > 0) {
-    listado += "<h2>🔍 Otros establecimientos:</h2>";
+    listado += "<h3>🔍 Otros establecimientos:</h3>";
     for (const [cat, num] of Object.entries(extras)) {
-      listado += `<p>📍 <h3>${cat}:</h3> ${num}</p>`;
+      listado += `<li>📍<h3>${cat}:</h3> ${num}</li>`;
     }
     listado += "</ul>";
   }
@@ -1120,6 +1120,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
