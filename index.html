@@ -541,7 +541,6 @@ function mostrarEnGraph(html) {
 }
 
 function mostrarEnUrbano(html) {
-  // 👉 Cambiamos esta función para que se muestre DENTRO de sidebar-content
   const cont = document.getElementById("sidebar-content");
   if (cont) {
     const bloqueUrbano = `
@@ -561,12 +560,12 @@ function procesarDENUE(resumen, extras) {
   let listado =  `<h3>🏙️ Elementos urbanos dentro de la zona</h3>`;
 
   for (const [cat, num] of Object.entries(resumen)) {
-    listado += `<li>${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}</li>`;
+    listado += `${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}`;
   }
   listado += "</ul>";
 
   if (Object.keys(extras).length > 0) {
-    listado += "<h4>🔍 Otros establecimientos:</h4><ul>";
+    listado += "<h3>🔍 Otros establecimientos:</h3>";
     for (const [cat, num] of Object.entries(extras)) {
       listado += `📍 <h3>${cat}:</h3> ${num}`;
     }
@@ -1122,6 +1121,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
