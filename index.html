@@ -82,7 +82,7 @@
 
 	  		
 			
-			#controls, #map, #chart, #sidebar, #urbano, #scatter {height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
+			#controls, #map, #chart, #sidebar, #urbano, #scatter, #otro {height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
 			#chart {  display: flex; flex-direction: column; height: 100%; width: 100%;}
 
 
@@ -290,7 +290,7 @@
 <!-- LISTADO -->
 <div id="listado" class="panel">
   <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
-    <h3>📍 ¿Quién es tu competencia?</h3>
+    <h2>📍 ¿Quién es tu competencia?</h2>
   </div>
   <table>
     <thead>
@@ -337,7 +337,6 @@
 		    minSize: [100, 100, 100, 100, 100]
 		  });
 
-				// Columnas dentro de top-row
 		  Split(['#urbano', '#scatter'], {
 		    sizes: [50,50],
 		    direction: 'vertical', // 👈 Izquierda/derecha
@@ -557,7 +556,7 @@ function mostrarEnUrbano(html) {
 
 // ================== FUNCIONES URBANOS ==================
 function procesarDENUE(resumen, extras) {
-  let listado =  `<h3>🏙️ Elementos urbanos dentro de la zona</h3>`;
+  let listado =  `<p><h2>🏙️ Elementos urbanos dentro de la zona</h2></p>`;
 
   for (const [cat, num] of Object.entries(resumen)) {
     listado += `${getEmojiCategoria(cat)} <strong>${cat}:</strong> ${num}`;
@@ -565,9 +564,9 @@ function procesarDENUE(resumen, extras) {
   listado += "</ul>";
 
   if (Object.keys(extras).length > 0) {
-    listado += "<h3>🔍 Otros establecimientos:</h3>";
+    listado += "<h2>🔍 Otros establecimientos:</h2>";
     for (const [cat, num] of Object.entries(extras)) {
-      listado += `📍 <h3>${cat}:</h3> ${num}`;
+      listado += `<p>📍 <h3>${cat}:</h3> ${num}</p>`;
     }
     listado += "</ul>";
   }
@@ -1121,6 +1120,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
