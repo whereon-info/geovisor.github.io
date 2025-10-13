@@ -79,6 +79,8 @@
 			  width: 100%;
 			  height: 100%;  /* 👈 Ocupa todo el alto que le da split */
 			}
+
+	  		
 			
 			#controls, #map, #chart, #sidebar, #urbano, #scatter {height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
 			#chart {  display: flex; flex-direction: column; height: 100%; width: 100%;}
@@ -252,7 +254,8 @@
 		  <canvas id="myChart"></canvas>	
 		</div>
 		
-		<!-- ================== URBANO PANEL ================== -->
+<!-- ================== URBANO PANEL ================== -->
+	<div id="otro" class="panel">	
 		<div id="urbano" class="panel">
 		  <h3>🏙️ Elementos urbanos</h3>
 		  <div id="info-urbano">Haz clic en una zona para ver la información</div>
@@ -270,11 +273,12 @@
 			</p>
 		  <canvas id="scatterChart"></canvas>
 		</div>
-	
+	</div>
+		
 	<!-- SIDEBAR -->
 			
 		<div id="sidebar" class="panel">
-		   <h2 class="leaflet-sidebar-header" style="margin:0.5;">📑 Ficha de información municipal</h2>
+		   <h3 class="leaflet-sidebar-header" style="margin:0.5;">📑 Ficha de información municipal</h3>
 		    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
 			<h3>Búsquedas personalizadas</h3>
 		  <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
@@ -326,11 +330,19 @@
 		  });
 		
 		  // Columnas dentro de top-row
-		  Split(['#controls', '#map', '#chart', '#urbano', '#scatter','#sidebar'], {
-		    sizes: [15, 25, 20, 10, 10, 20],
+		  Split(['#controls', '#map', '#chart', '#otro','#sidebar'], {
+		    sizes: [15, 25, 20, 20, 20],
 		    direction: 'horizontal', // 👈 Izquierda/derecha
 		    gutterSize: 6,
-		    minSize: [100, 100, 100, 100, 100, 100]
+		    minSize: [100, 100, 100, 100, 100]
+		  });
+
+				// Columnas dentro de top-row
+		  Split(['#urbano', '#scatter'], {
+		    sizes: [50,50],
+		    direction: 'vertical', // 👈 Izquierda/derecha
+		    gutterSize: 6,
+		    minSize: [100, 100]
 		  });
 		
 	</script>
@@ -1110,6 +1122,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
