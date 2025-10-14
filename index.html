@@ -378,7 +378,7 @@
 	
 			
 			// 👀 Agregar el mapa base por defecto (ejemplo: OSM claro)
-			osm.addTo(map);
+			dark.addTo(map);
 	
 
 		// ================== Cerrar con la X ====================
@@ -665,7 +665,7 @@ function onEachFeature(feature, layer) {
 
 	logoControl.onAdd = function (map) {
 	    var div = L.DomUtil.create("div", "logo-leaflet");
-	    div.innerHTML = '<img src="images/WhereOn-Logo-Color-Vrt.png" style="width:80px; opacity:0.9;">';
+	    div.innerHTML = '<img src="images/WhereOn-Blanco-Vert.png" style="width:80px; opacity:0.9;">';
 	    return div;
 	};
 	
@@ -1120,6 +1120,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
