@@ -567,7 +567,7 @@ function procesarDENUE(resumen, extras) {
   listado += "<ul>";
 	
   if (Object.keys(extras).length > 0) {
-    listado += "<h3>🔍 Otros establecimientos:</h3>";4
+    listado += "<h3>🔍 Otros establecimientos:</h3>";
     for (const [cat, num] of Object.entries(extras)) {
       listado += `<li>📍<h3>${cat}:</h3> ${num}</li>`;
     }
@@ -579,10 +579,10 @@ function procesarDENUE(resumen, extras) {
 
 function getEmojiCategoria(cat) {
   const emojis = {
-    "Bancos": "🏦",
-    "Supermercados": "🛒",
-    "Escuelas": "🏫",
-    "Hoteles": "🏨"
+    <p>"Bancos": "🏦"</p>,
+    <p>"Supermercados": "🛒"</p>,
+    <p>"Escuelas": "🏫"</p>,
+    <p>"Hoteles": "🏨"</p>
   };
   return emojis[cat] || "📍";
 }
@@ -1123,6 +1123,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
