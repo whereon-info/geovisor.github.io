@@ -273,8 +273,8 @@
 <!-- ================== URBANO PANEL ================== -->
 	<div id="otro" class="panel">	
 		<div id="urbano" class="panel">
-		  <h3>🏙️ Elementos urbanos</h3>
-		  <div id="info-urbano">Haz clic en una zona para ver la información</div>
+		  <h3>🏙️ Resultado de las búsquedas personalizadas</h3>
+		  <div id="resultadosBusqueda"></div>
 		</div>
 
 		<div id="scatter" class="panel">
@@ -296,8 +296,6 @@
 		<div id="sidebar" class="panel">
 		   <h3>📑 Ficha de información municipal</h3>
 		    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
-			<h3>Búsquedas personalizadas</h3>
-		  <div id="resultadosBusqueda"> <!-- Aquí se mostrarán las búsquedas con .buscarDENUE --></div>
 		</div>
 	</div>
 		
@@ -551,7 +549,7 @@ let chart = new Chart(document.getElementById("myChart"), {
 // ================== FUNCIONES DE IMPRESIÓN ==================
 function mostrarEnSidebar(html) {
   const cont = document.getElementById("sidebar-content");
-  if (cont) cont.innerHTML = html; // Sidebar principal (se reemplaza)
+  if (cont) cont.innerHTML = html;
 }
 
 function agregarEnSidebar(html) {
@@ -565,7 +563,7 @@ function mostrarEnGraph(html) {
 }
 
 function mostrarEnUrbano(html) {
-  const cont = document.getElementById("info-urbano");
+  const cont = document.getElementById("sidebar-content");
   if (cont) {
     const bloqueUrbano = `
       <div id="info-urbano">
@@ -1144,6 +1142,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
