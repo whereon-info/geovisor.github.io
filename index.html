@@ -89,9 +89,7 @@
 		}
 		
 		
-		#sidebar, #chart, #urbano, #scatter {
-		  overflow-y: auto;
-		}
+		#sidebar, #chart, #urbano, #scatter {  position: relative;  z-index: 1;  overflow: hidden; }
 
 	  
 		#otro {
@@ -101,7 +99,7 @@
 
 			
 			#controls, #map, #chart, #sidebar, #urbano, #scatter, #otro {height: 100%; width: 100%; overflow: auto; border: 2px solid #00793a; box-sizing: border-box;}
-			#chart {  display: flex; flex-direction: column; height: 100%; width: 100%;}
+			#chart {  display: flex; flex-direction: column; height: 100%; width: 100%; pointer-events: none;}
 
 
 
@@ -116,7 +114,7 @@
 		
 		/* Gutter (separadores) */
 		.gutter { background-color: #00793a;}
-		.gutter.gutter-horizontal { cursor: col-resize;	}
+		.gutter.gutter-horizontal { z-index: 1000 !important;  background: #00793a;  cursor: col-resize;	}
 		.gutter.gutter-vertical { cursor: row-resize;}
  
 	  
@@ -1146,6 +1144,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
