@@ -441,7 +441,7 @@ function getBootstrapIconFromActividad(actividad) {
   actividad = actividad.toLowerCase();
   if (actividad.includes("pizza") || actividad.includes("pizzería")) {
     return L.divIcon({ className: "custom-pin", html: "🍕" });
-  } else if (actividad.includes("escuela") || actividad.includes("colegio") || actividad.includes("universidad")) {
+  } else if (actividad.includes("escuela") || actividad.includes("colegio") || actividad.includes("prepa") || actividad.includes("preparatoria") || actividad.includes("universidad")) {
     return L.divIcon({ className: "custom-pin", html: "🏫" });
   } else if (actividad.includes("banco")|| actividad.includes("banca multiple")) {
     return L.divIcon({ className: "custom-pin", html: "🏦" });
@@ -449,7 +449,12 @@ function getBootstrapIconFromActividad(actividad) {
     return L.divIcon({ className: "custom-pin", html: "🏨" });
   } else if (actividad.includes("super") || actividad.includes("bodega") || actividad.includes("tienda") || actividad.includes("abarrotes")) {
     return L.divIcon({ className: "custom-pin", html: "🛒" });
-  }
+  } else if (actividad.includes("tacos") || actividad.includes("taquería") || actividad.includes("taqueria") || actividad.includes("comida mexicana")) {
+    return L.divIcon({ className: "custom-pin", html: "🌮" });
+  } else if (actividad.includes("hamburguesas") || actividad.includes("hamburgueseria") || actividad.includes("hamburgueseria")) {
+    return L.divIcon({ className: "custom-pin", html: "🍔" });
+  } else if (actividad.includes("sushi")) {
+    return L.divIcon({ className: "custom-pin", html: "🍜" });
 
   // valor por defecto
   return L.divIcon({ className: "custom-pin", html: "📍" });
@@ -1123,6 +1128,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
