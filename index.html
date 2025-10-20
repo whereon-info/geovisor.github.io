@@ -69,17 +69,31 @@
 
 			#main-split {
 			  height: 100vh;
-			  width: 100vw;
 			  display: flex;
 			  flex-direction: column;
 			}
 	  
 			#top-row {
 			  display: flex;
-			  width: 100%;
-			  height: calc(70vh - 6px);  
+			  flex: 1;
+			  min-height: 0;
 			}
 
+
+		#controls, #map, #sidebar, #chart, #otro {
+		  height: 100%;
+		  flex: 1;
+		  border: 2px solid #00793a;
+		  box-sizing: border-box;
+		  overflow: hidden; 
+		}
+		
+		
+		#sidebar, #chart, #urbano, #scatter {
+		  overflow-y: auto;
+		}
+
+	  
 		#otro {
 		  display: flex;
 		  flex-direction: column;
@@ -1132,6 +1146,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
