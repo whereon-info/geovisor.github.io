@@ -352,28 +352,31 @@
 	
 <script>
 	
-document.addEventListener("DOMContentLoaded", function () {
-  Split(['#top-row', '#listado'], {
-    sizes: [70, 30],
-    direction: 'vertical',
-    gutterSize: 6,
-    minSize: [100, 100]
-  });
-
-  Split(['#controls', '#map', '#sidebar', '#chart','#otro'], {
-    sizes: [15, 25, 20, 20, 20],
-    direction: 'horizontal',
-    gutterSize: 6,
-    minSize: [100, 100]
-  });
-
-  Split(['#urbano', '#scatter'], {
-    sizes: [50, 50],
-    direction: 'vertical',
-    gutterSize: 6,
-    minSize: [100, 100]
-  });
-});
+	document.addEventListener("DOMContentLoaded", function () {
+	  Split(['#top-row', '#listado'], {
+	    sizes: [70, 30],
+	    direction: 'vertical',
+	    gutterSize: 6,
+	    minSize: [100, 100]
+	  });
+	
+	  Split(['#controls', '#map', '#sidebar', '#chart','#otro'], {
+	    sizes: [15, 25, 20, 20, 20],
+	    direction: 'horizontal',
+	    gutterSize: 6,
+	    minSize: [100, 100]
+	  });
+	
+	  Split(['#urbano', '#scatter'], {
+	    sizes: [50, 50],
+	    direction: 'vertical',
+	    gutterSize: 6,
+	    minSize: [100, 100]
+	  });
+	});
+	setTimeout(() => {
+	  map.invalidateSize();
+	}, 500);
 
 		
 	</script>
@@ -1159,6 +1162,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
