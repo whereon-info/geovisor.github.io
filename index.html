@@ -190,6 +190,8 @@
 			  color: #ffffff;
 			  font-size: 13px;
 			  line-height: 1.5;
+			  min-height: 0;
+              overflow: auto;
 			}
 			
 			/* ====================== TABLAS ====================== */
@@ -510,7 +512,7 @@ document.addEventListener("DOMContentLoaded", function() {
     sizes: [10, 60, 30],            // proporción inicial
     minSize: [400, 300],        // tamaños mínimos en píxeles
     gutterSize: 6,              // ancho del divisor
-    cursor: 'col-resize',
+    direction: 'vertical',
     gutterAlign: 'center',
     snapOffset: 40,
   });
@@ -1322,6 +1324,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
