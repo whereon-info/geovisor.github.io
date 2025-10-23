@@ -506,16 +506,13 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   // ================== SPLIT PRINCIPAL (MAPA Y PANEL DERECHO) ==================
-  const mainSplit = Split(['#top-row, '#listado'], {
+  Split = Split(['#top-row, '#listado'], {
     sizes: [70, 30],            // proporción inicial
     minSize: [400, 300],        // tamaños mínimos en píxeles
     gutterSize: 6,              // ancho del divisor
     cursor: 'col-resize',
     gutterAlign: 'center',
     snapOffset: 40,
-    onDrag: () => {
-      window.dispatchEvent(new Event('resize')); // Mantiene el mapa centrado
-    }
   });
 
   // ================== SPLIT INTERNO (CHART → SIDEBAR Y URBANO) ==================
@@ -1329,6 +1326,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
