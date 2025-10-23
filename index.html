@@ -506,7 +506,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   // ================== SPLIT PRINCIPAL (MAPA Y PANEL DERECHO) ==================
-  Split = Split(['#title, '#top-row, '#listado'], {
+  Split(['#title', '#top-row', '#listado'], {
     sizes: [10, 60, 30],            // proporción inicial
     minSize: [400, 300],        // tamaños mínimos en píxeles
     gutterSize: 6,              // ancho del divisor
@@ -1326,6 +1326,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
