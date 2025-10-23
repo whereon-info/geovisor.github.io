@@ -541,10 +541,6 @@ document.addEventListener("DOMContentLoaded", function() {
     g.addEventListener('mouseleave', () => g.style.background = '#00793a');
   });
 
-  // ================== AJUSTE FINAL ==================
-  // Evita que los paneles tapen el mapa al iniciar
-  window.dispatchEvent(new Event('resize'));
-});
 
   // ========== MAPA + CAPAS ==========
   const map = L.map('map',{
@@ -1326,6 +1322,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
