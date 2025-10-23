@@ -373,7 +373,6 @@
 	<div id="title">	<h1> 🌎 GeoViable - Plataforma para el análisis de la viabilidad comercial en México</h1>	</div>
 
 	<div id="top-row">
-		<div id="map" class="panel"></div>
 		<div id="controls" class="panel">
 		  <p><label> 1️⃣ Establecimiento:</label>
 		  <input type="text" id="condi" value="taqueria" /></p>
@@ -431,7 +430,7 @@
 				<button id="btnExportar">Exportar a PDF</button>
 			    <hr>
 			</div>
-		
+		<div id="map" class="panel"></div>
 	
 	
 
@@ -509,7 +508,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // ================== SPLIT PRINCIPAL (MAPA Y PANEL DERECHO) ==================
   Split(['#title', '#top-row', '#listado'], {
     sizes: [10, 60, 30],            // proporción inicial
-    minSize: [400, 300],        // tamaños mínimos en píxeles
+    minSize: [100, 100],        // tamaños mínimos en píxeles
     gutterSize: 6,              // ancho del divisor
     direction: 'vertical',
     gutterAlign: 'center',
@@ -1323,6 +1322,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
