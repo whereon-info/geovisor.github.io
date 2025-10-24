@@ -765,13 +765,13 @@ function procesarDENUE(resumen, extras) {
   listado += "</ul>";
   listado += "<ul>";
 	
-  if (Object.keys(extras).length > 0) {
-    listado += "<h3>🔍 Otros establecimientos:</h3>";
-    for (const [cat, num] of Object.entries(extras)) {
-      listado += `<li>📍<h3>${cat}:</h3> ${num}</li>`;
+    if (Object.keys(extras).length > 0) {
+      listado += "<h3>🔍 Otros establecimientos:</h3><ul>";
+      for (const [cat, num] of Object.entries(extras)) {
+        listado += `<li>📍 <strong>${cat}:</strong> ${num}</li>`;
+      }
+      listado += "</ul>";
     }
-	  listado += "</ul>";
-     }
 
   mostrarEnUrbano(listado);
 }
@@ -1318,6 +1318,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
