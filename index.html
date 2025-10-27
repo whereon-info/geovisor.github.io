@@ -365,7 +365,7 @@
   </style>
 </head>
 <body>
-
+<div id="main-split">
 	<div id="title">	<h1> 🌎 GeoViable - Plataforma para el análisis de la viabilidad comercial en México</h1>	</div>
 
 	<div id="top-row">
@@ -482,6 +482,7 @@
     <tbody id="tablaResultados"></tbody>
   </table>
 </div>
+</div>
 
 	<div id="welcomeBox">
  		<div id="welcomeContent">
@@ -501,31 +502,34 @@
 	
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  // ================== SPLIT PRINCIPAL (MAPA Y PANEL DERECHO) ==================
+
+  // ====== SPLIT PRINCIPAL (vertical: título / fila / listado) ======
   Split(['#title', '#top-row', '#listado'], {
-    sizes: [2, 60, 38],            // proporción inicial
-    minSize: [100, 100],        // tamaños mínimos en píxeles
-    gutterSize: 6,              // ancho del divisor
+    sizes: [5, 65, 30],
     direction: 'vertical',
-    gutterAlign: 'center',
-    snapOffset: 40,
+    gutterSize: 6,
+    minSize: [60, 200, 150],
+    onDragEnd: () => { if (window.map) map.invalidateSize(); }
   });
 
-  // ================== SPLIT INTERNO (CHART → SIDEBAR Y URBANO) ==================
-	  Split(['#controls', '#map', '#chart', '#otro','#sidebar'], {
-	    sizes: [10, 30, 25, 20, 15],
-	    direction: 'horizontal',
-	    gutterSize: 6,
-	    minSize: [100, 100]
-	  });
-	
-	  Split(['#urbano', '#scatter'], {
-	    sizes: [50, 50],
-	    direction: 'vertical',
-	    gutterSize: 6,
-	    minSize: [100, 100]
-	  });
-	});
+  // ====== SPLIT SECUNDARIO (horizontal: controls / map / chart / otro / sidebar) ======
+  Split(['#controls', '#map', '#chart', '#otro', '#sidebar'], {
+    sizes: [10, 30, 20, 20, 20],
+    direction: 'horizontal',
+    gutterSize: 6,
+    minSize: [100, 100, 100, 100, 100],
+    onDragEnd: () => { if (window.map) map.invalidateSize(); }
+  });
+
+  // ====== SPLIT VERTICAL INTERNO (urbano / scatter) ======
+  Split(['#urbano', '#scatter'], {
+    sizes: [50, 50],
+    direction: 'vertical',
+    gutterSize: 6,
+    onDragEnd: () => { if (window.map) map.invalidateSize(); }
+  });
+});
+
 
   // ================== ESTILO GUTTERS ==================
   const gutters = document.querySelectorAll('.gutter');
@@ -1318,6 +1322,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
