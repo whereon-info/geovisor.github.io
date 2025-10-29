@@ -1209,23 +1209,35 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 });
 
 
-// ================== CHART SCATTER MULTIDELITO ==================
-const delitos = [
-  { campo: "robo a neg", nombre: "Robo a negocio", color: "#ff6384" },
-  { campo: "extorsión", nombre: "Extorsión", color: "#36a2eb" },
-  { campo: "narcomenud", nombre: "Narcomenudeo", color: "#ffce56" }
-];
+// ================== GRÁFICA SCATTER DE DELITOS ==================
+const ctxScatter = document.getElementById("scatterChart").getContext("2d");
 
-let scatterChart = new Chart(document.getElementById("scatterChart"), {
+let scatterChart = new Chart(ctxScatter, {
   type: "bubble",
   data: {
-    datasets: delitos.map(d => ({
-      label: d.nombre,
-      backgroundColor: d.color + "88", // con transparencia
-      borderColor: d.color,
-      pointRadius: 5,
-      data: []
-    }))
+    datasets: [
+      {
+        label: "Robo a negocio",
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        borderColor: "#ff6384",
+        pointRadius: 6,
+        data: []
+      },
+      {
+        label: "Extorsión",
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+        borderColor: "#36a2eb",
+        pointRadius: 6,
+        data: []
+      },
+      {
+        label: "Narcomenudeo",
+        backgroundColor: "rgba(255, 206, 86, 0.6)",
+        borderColor: "#ffce56",
+        pointRadius: 6,
+        data: []
+      }
+    ]
   },
   options: {
     responsive: true,
@@ -1233,95 +1245,82 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
     scales: {
       x: {
         type: "category",
-        title: { display: true, text: "Municipio" }
+        title: { display: true, text: "Municipio" },
+        ticks: { color: "#fff", font: { family: "Poppins" } }
       },
       y: {
         beginAtZero: true,
-        title: { display: true, text: "Incidencia delictiva municipal" }
+        title: { display: true, text: "Casos registrados" },
+        ticks: { color: "#fff", font: { family: "Poppins" } }
       }
     },
     plugins: {
-      title: {
-        display: true,
-        text: "Incidencia delictiva municipal por tipo de delito"
+      legend: {
+        labels: { color: "#fff", font: { family: "Poppins" } }
       },
       tooltip: {
         callbacks: {
-          label: function(context) {
-            const punto = context.raw;
-            return `${context.dataset.label}: ${punto.y} casos (${punto.x})`;
+          label: function (context) {
+            const p = context.raw;
+            return `${context.dataset.label}: ${p.y} casos en ${p.x}`;
           }
         }
-      },
-      legend: {
-        position: "bottom"
       }
     }
   }
 });
 
-
 // ================== FUNCIÓN PARA ACTUALIZAR SCATTER ==================
-function actualizarScatterMultidelito(layer) {
-  // Limpia los datos previos
-  scatterChart.data.datasets.forEach(ds => ds.data = []);
+function actualizarScatter(geojson) {
+  const datosRobo = [];
+  const datosExt = [];
+  const datosNarco = [];
 
-  layer.eachLayer(l => {
-    const props = l.feature?.properties || {};
-    const municipio = props.nomgeo || "N/A";
-
-    delitos.forEach((d, i) => {
-      const valor = props[d.campo] || 0;
-      scatterChart.data.datasets[i].data.push({ x: municipio, y: valor });
-    });
+  geojson.features.forEach(f => {
+    const props = f.properties || {};
+    const municipio = props.nomgeo || "Sin nombre";
+    datosRobo.push({ x: municipio, y: props["robo a neg"] || 0 });
+    datosExt.push({ x: municipio, y: props["extorsión"] || 0 });
+    datosNarco.push({ x: municipio, y: props["narcomenud"] || 0 });
   });
 
+  scatterChart.data.datasets[0].data = datosRobo;
+  scatterChart.data.datasets[1].data = datosExt;
+  scatterChart.data.datasets[2].data = datosNarco;
   scatterChart.update();
 }
 
-
-// ================== EVENTO DE FILTRO (SOLO POR ESTADO) ==================
-document.getElementById("filtroEstado").addEventListener("change", () => {
-  actualizarScatterConFiltros();
-});
-
-// ================== FILTRO DE DELITO (OCULTAR/MOSTRAR) ==================
-document.getElementById("filtroDelito").addEventListener("change", () => {
-  const delitoSeleccionado = document.getElementById("filtroDelito").value;
-
-  scatterChart.data.datasets.forEach(ds => {
-    // si el filtro es "todos" mostramos todo
-    if (delitoSeleccionado === "todos") {
-      ds.hidden = false;
-    } else {
-      ds.hidden = ds.label.toLowerCase().includes(delitoSeleccionado)
-        ? false
-        : true;
-    }
-  });
-
-  scatterChart.update();
-});
-
-
-// ================== FUNCIÓN ACTUALIZAR SCATTER CON FILTROS ==================
-function actualizarScatterConFiltros() {
-  const estado = document.getElementById("filtroEstado").value;
+// ================== FUNCIÓN DE FILTRO POR ESTADO ==================
+document.getElementById("filtroEstado").addEventListener("change", (e) => {
+  const estado = e.target.value;
   hiveGroup.clearLayers();
 
   if (estado === "todos") {
-    Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
-    actualizarScatterMultidelito(hiveGroup);
+    // Combina todos los GeoJSONs en uno
+    const combinado = { type: "FeatureCollection", features: [] };
+    Object.values(hiveLayers).forEach(layer => {
+      hiveGroup.addLayer(layer);
+      if (layer.toGeoJSON) combinado.features.push(...layer.toGeoJSON().features);
+    });
+    actualizarScatter(combinado);
+
+    // Ajusta vista general
     const bounds = hiveGroup.getBounds();
     if (bounds.isValid()) map.fitBounds(bounds);
   } else {
-    let capa = hiveLayers[estado];
-    hiveGroup.addLayer(capa);
-    actualizarScatterMultidelito(capa);
-    const bounds = capa.getBounds();
-    if (bounds.isValid()) map.fitBounds(bounds);
+    // Carga solo la capa del estado seleccionado
+    const layer = hiveLayers[estado];
+    if (layer) {
+      hiveGroup.addLayer(layer);
+      if (layer.toGeoJSON) actualizarScatter(layer.toGeoJSON());
+
+      // Zoom automático al estado
+      const bounds = layer.getBounds();
+      if (bounds.isValid()) map.fitBounds(bounds);
+    }
   }
-}
+});
+
 
 
 
@@ -1416,6 +1415,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
