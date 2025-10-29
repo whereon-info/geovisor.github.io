@@ -1209,17 +1209,35 @@ document.getElementById("Ubicacion").addEventListener("click", () => {
 });
 
 
-// ================== CHART SCATTER ==================
-let scatterChart = new Chart(document.getElementById("scatterChart"), {
+// ================== GRÁFICA SCATTER DE DELITOS ==================
+const ctxScatter = document.getElementById("scatterChart").getContext("2d");
+
+let scatterChart = new Chart(ctxScatter, {
   type: "bubble",
   data: {
-    datasets: [{
-      label: "Robo a negocio",
-      backgroundColor: "#ff6384",
-      borderColor: "#ff6384",
-      pointRadius: 5,
-      data: [] // se llenará dinámicamente
-    }]
+    datasets: [
+      {
+        label: "Robo a negocio",
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+        borderColor: "#ff6384",
+        pointRadius: 6,
+        data: []
+      },
+      {
+        label: "Extorsión",
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+        borderColor: "#36a2eb",
+        pointRadius: 6,
+        data: []
+      },
+      {
+        label: "Narcomenudeo",
+        backgroundColor: "rgba(255, 206, 86, 0.6)",
+        borderColor: "#ffce56",
+        pointRadius: 6,
+        data: []
+      }
+    ]
   },
   options: {
     responsive: true,
@@ -1227,19 +1245,24 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
     scales: {
       x: {
         type: "category",
-        title: { display: true, text: "Municipio" }
+        title: { display: true, text: "Municipio" },
+        ticks: { color: "#fff", font: { family: "Poppins" } }
       },
       y: {
         beginAtZero: true,
-        title: { display: true, text: "Incidencia delictiva municipal" }
+        title: { display: true, text: "Casos registrados" },
+        ticks: { color: "#fff", font: { family: "Poppins" } }
       }
     },
     plugins: {
+      legend: {
+        labels: { color: "#fff", font: { family: "Poppins" } }
+      },
       tooltip: {
         callbacks: {
-          label: function(context) {
-            let punto = context.raw;
-            return `${punto.x}: ${punto.y} casos`;
+          label: function (context) {
+            const p = context.raw;
+            return `${context.dataset.label}: ${p.y} casos en ${p.x}`;
           }
         }
       }
@@ -1247,21 +1270,57 @@ let scatterChart = new Chart(document.getElementById("scatterChart"), {
   }
 });
 
-
 // ================== FUNCIÓN PARA ACTUALIZAR SCATTER ==================
-function actualizarScatter(layer, delito) {
-  const datos = [];
-  layer.eachLayer(l => {
-    const props = l.feature?.properties || {};
-    const municipio = props.nomgeo || "N/A";
-    const valor = props[delito] || 0;
-    datos.push({ x: municipio, y: valor });
+function actualizarScatter(geojson) {
+  const datosRobo = [];
+  const datosExt = [];
+  const datosNarco = [];
+
+  geojson.features.forEach(f => {
+    const props = f.properties || {};
+    const municipio = props.nomgeo || "Sin nombre";
+    datosRobo.push({ x: municipio, y: props["robo a neg"] || 0 });
+    datosExt.push({ x: municipio, y: props["extorsión"] || 0 });
+    datosNarco.push({ x: municipio, y: props["narcomenud"] || 0 });
   });
 
-  scatterChart.data.datasets[0].data = datos;
-  scatterChart.data.datasets[0].label = delito.toUpperCase();
+  scatterChart.data.datasets[0].data = datosRobo;
+  scatterChart.data.datasets[1].data = datosExt;
+  scatterChart.data.datasets[2].data = datosNarco;
   scatterChart.update();
 }
+
+// ================== FUNCIÓN DE FILTRO POR ESTADO ==================
+document.getElementById("filtroEstado").addEventListener("change", (e) => {
+  const estado = e.target.value;
+  hiveGroup.clearLayers();
+
+  if (estado === "todos") {
+    // Combina todos los GeoJSONs en uno
+    const combinado = { type: "FeatureCollection", features: [] };
+    Object.values(hiveLayers).forEach(layer => {
+      hiveGroup.addLayer(layer);
+      if (layer.toGeoJSON) combinado.features.push(...layer.toGeoJSON().features);
+    });
+    actualizarScatter(combinado);
+
+    // Ajusta vista general
+    const bounds = hiveGroup.getBounds();
+    if (bounds.isValid()) map.fitBounds(bounds);
+  } else {
+    // Carga solo la capa del estado seleccionado
+    const layer = hiveLayers[estado];
+    if (layer) {
+      hiveGroup.addLayer(layer);
+      if (layer.toGeoJSON) actualizarScatter(layer.toGeoJSON());
+
+      // Zoom automático al estado
+      const bounds = layer.getBounds();
+      if (bounds.isValid()) map.fitBounds(bounds);
+    }
+  }
+});
+
 
 
 
@@ -1322,6 +1381,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
