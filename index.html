@@ -1315,25 +1315,84 @@ document.getElementById("filtroEstado").addEventListener("change", (e) => {
 
 
 // ================== EVENTO FILTRO ==================
+// ================== FILTROS DE ESTADO Y DELITO ==================
+
+// Crear lista de delitos
+const delitos = [
+  { campo: "robo a neg", nombre: "Robo a negocio", color: "#ff6384" },
+  { campo: "extorsión", nombre: "Extorsión", color: "#36a2eb" },
+  { campo: "narcomenud", nombre: "Narcomenudeo", color: "#ffce56" }
+];
+
+// Crear select de delitos si no existe
+if (!document.getElementById("filtroDelito")) {
+  const select = document.createElement("select");
+  select.id = "filtroDelito";
+  select.innerHTML = `
+    <option value="todos">Todos</option>
+    <option value="robo a neg">Robo a negocio</option>
+    <option value="extorsión">Extorsión</option>
+    <option value="narcomenud">Narcomenudeo</option>
+  `;
+  document.getElementById("controls").appendChild(select);
+}
+
+// ================== ACTUALIZAR GRÁFICA MULTIDELITO ==================
+function actualizarScatterMultidelito(layerGroup) {
+  scatterChart.data.datasets.forEach(ds => (ds.data = [])); // limpiar datasets
+
+  layerGroup.eachLayer(l => {
+    const props = l.feature?.properties || {};
+    const municipio = props.nomgeo || "N/A";
+
+    scatterChart.data.datasets[0].data.push({ x: municipio, y: props["robo a neg"] || 0 });
+    scatterChart.data.datasets[1].data.push({ x: municipio, y: props["extorsión"] || 0 });
+    scatterChart.data.datasets[2].data.push({ x: municipio, y: props["narcomenud"] || 0 });
+  });
+
+  scatterChart.update();
+}
+
+// ================== FILTRO DE ENTIDAD ==================
 document.getElementById("filtroEstado").addEventListener("change", () => {
-  actualizarScatterConFiltros();
-});
-
-document.getElementById("filtroDelito").addEventListener("change", () => {
-  actualizarScatterConFiltros();
-});
-
-function actualizarScatterConFiltros() {
   const estado = document.getElementById("filtroEstado").value;
-  const delito = document.getElementById("filtroDelito").value;
-
   hiveGroup.clearLayers();
 
   if (estado === "todos") {
     Object.values(hiveLayers).forEach(layer => hiveGroup.addLayer(layer));
-    actualizarScatter(hiveGroup, delito);
+    actualizarScatterMultidelito(hiveGroup);
 
-    // 🔹 Zoom a todos los estados
+    const bounds = hiveGroup.getBounds();
+    if (bounds.isValid()) map.fitBounds(bounds);
+  } else {
+    let capa = hiveLayers[estado];
+    hiveGroup.addLayer(capa);
+    actualizarScatterMultidelito(capa);
+
+    const bounds = capa.getBounds();
+    if (bounds.isValid()) map.fitBounds(bounds);
+  }
+});
+
+// ================== FILTRO DE DELITO (OCULTAR/MOSTRAR) ==================
+document.getElementById("filtroDelito").addEventListener("change", () => {
+  const delito = document.getElementById("filtroDelito").value;
+
+  scatterChart.data.datasets.forEach(ds => {
+    if (delito === "todos") {
+      ds.hidden = false;
+    } else {
+      ds.hidden = ds.label.toLowerCase().includes(delito) ? false : true;
+    }
+  });
+
+  scatterChart.update();
+});
+
+
+
+	
+// 🔹 Zoom a todos los estados
     const bounds = hiveGroup.getBounds();
     if (bounds.isValid()) map.fitBounds(bounds);
 
@@ -1371,6 +1430,7 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
 
 
 
