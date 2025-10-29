@@ -446,14 +446,6 @@
 
 		<div id="scatter" class="panel">
 		  <h3>📉 ¿Como está la situación social?</h3>
-			<p>
-			 <label for="filtroDelito">📌 Selecciona delito:</label>
-			  <select id="filtroDelito">
-			    <option value="robo a neg">Robo a negocio</option>
-			    <option value="extorsión">Extorsión</option>
-			    <option value="narcomenud">Narcomenudeo</option>
-			  </select>
-			</p>
 		  <canvas id="scatterChart"></canvas>
 		</div>
 	</div>
@@ -1333,7 +1325,6 @@ document.getElementById("filtroDelito").addEventListener("change", () => {
 
 function actualizarScatterConFiltros() {
   const estado = document.getElementById("filtroEstado").value;
-  const delito = document.getElementById("filtroDelito").value;
 
   hiveGroup.clearLayers();
 
@@ -1379,3 +1370,4 @@ function actualizarScatterConFiltros() {
 </script>
 </body>
 </html>
+
