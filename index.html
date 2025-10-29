@@ -1391,45 +1391,11 @@ document.getElementById("filtroDelito").addEventListener("change", () => {
 
 
 
-	
-// 🔹 Zoom a todos los estados
-    const bounds = hiveGroup.getBounds();
-    if (bounds.isValid()) map.fitBounds(bounds);
-
-  } else {
-    let capa = hiveLayers[estado];
-    hiveGroup.addLayer(capa);
-    actualizarScatter(capa, delito);
-
-    // 🔹 Zoom al estado seleccionado
-    const bounds = capa.getBounds();
-    if (bounds.isValid()) map.fitBounds(bounds);
-  }
-}
-
-	function actualizarScatter(layer, delito) {
-  let datos = [];
-
-  layer.eachLayer(l => {
-    const props = l.feature?.properties || {};
-    const municipio = props.nomgeo || "N/A";
-    const valor = props[delito] || 0;
-
-    datos.push({ x: municipio, y: valor });
-  });
-
-  scatterChart.data.datasets[0].data = datos;
-  scatterChart.options.plugins.title.text =
-    "Delito seleccionado: " + delito.toUpperCase();
-  scatterChart.update();
-}
-
-
-
 
 </script>
 </body>
 </html>
+
 
 
 
