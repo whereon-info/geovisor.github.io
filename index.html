@@ -499,7 +499,7 @@ document.addEventListener("DOMContentLoaded", function() {
   Split(['#title', '#top-row', '#listado'], {
     sizes: [2, 65, 33],
     direction: 'vertical',
-    gutterSize: 6,
+    gutterSize: 3,
     minSize: [60, 200, 150],
     onDragEnd: () => { if (window.map) map.invalidateSize(); }
   });
@@ -508,7 +508,7 @@ document.addEventListener("DOMContentLoaded", function() {
   Split(['#controls', '#map', '#chart', '#otro', '#sidebar'], {
     sizes: [10, 30, 20, 20, 20],
     direction: 'horizontal',
-    gutterSize: 6,
+    gutterSize: 3,
     minSize: [100, 100, 100, 100, 100],
     onDragEnd: () => { if (window.map) map.invalidateSize(); }
   });
@@ -517,7 +517,7 @@ document.addEventListener("DOMContentLoaded", function() {
   Split(['#urbano', '#scatter'], {
     sizes: [50, 50],
     direction: 'vertical',
-    gutterSize: 6,
+    gutterSize: 3,
     onDragEnd: () => { if (window.map) map.invalidateSize(); }
   });
 });
@@ -1395,6 +1395,7 @@ document.getElementById("filtroDelito").addEventListener("change", () => {
 </script>
 </body>
 </html>
+
 
 
 
