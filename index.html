@@ -1338,20 +1338,40 @@ if (!document.getElementById("filtroDelito")) {
 }
 
 // ================== ACTUALIZAR GRÁFICA MULTIDELITO ==================
+// ================== ACTUALIZAR GRÁFICA MULTIDELITO (sin duplicados) ==================
 function actualizarScatterMultidelito(layerGroup) {
-  scatterChart.data.datasets.forEach(ds => (ds.data = [])); // limpiar datasets
+  // Limpiar datasets
+  scatterChart.data.datasets.forEach(ds => (ds.data = []));
+
+  const vistos = new Set(); // para evitar duplicados por municipio
 
   layerGroup.eachLayer(l => {
     const props = l.feature?.properties || {};
-    const municipio = props.nomgeo || "N/A";
+    const municipio = props.nomgeo?.trim() || "N/A";
+    const clave = municipio.toLowerCase();
 
-    scatterChart.data.datasets[0].data.push({ x: municipio, y: props["robo a neg"] || 0 });
-    scatterChart.data.datasets[1].data.push({ x: municipio, y: props["extorsión"] || 0 });
-    scatterChart.data.datasets[2].data.push({ x: municipio, y: props["narcomenud"] || 0 });
+    // Solo agregar si no se ha agregado ese municipio antes
+    if (!vistos.has(clave)) {
+      vistos.add(clave);
+
+      scatterChart.data.datasets[0].data.push({
+        x: municipio,
+        y: props["robo a neg"] || 0
+      });
+      scatterChart.data.datasets[1].data.push({
+        x: municipio,
+        y: props["extorsión"] || 0
+      });
+      scatterChart.data.datasets[2].data.push({
+        x: municipio,
+        y: props["narcomenud"] || 0
+      });
+    }
   });
 
   scatterChart.update();
 }
+
 
 // ================== FILTRO DE ENTIDAD ==================
 document.getElementById("filtroEstado").addEventListener("change", () => {
@@ -1395,6 +1415,7 @@ document.getElementById("filtroDelito").addEventListener("change", () => {
 </script>
 </body>
 </html>
+
 
 
 
