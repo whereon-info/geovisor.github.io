@@ -442,6 +442,7 @@
 		<div id="urbano" class="panel">
 		  <h3>🏙️ Resultado de las búsquedas personalizadas</h3>
 		  <div id="resultadosBusqueda"></div>
+		  <canvas id="gaugeChart"></canvas>
 		</div>
 
 		<div id="scatter" class="panel">
@@ -1409,12 +1410,49 @@ document.getElementById("filtroDelito").addEventListener("change", () => {
   scatterChart.update();
 });
 
+	const valorActual = 70;   // de 0 a 100
+const maxValor = 100;
+
+const gaugeData = {
+  datasets: [{
+    data: [valorActual, maxValor - valorActual],
+    backgroundColor: ["#00b050", "#444"],
+    borderWidth: 0
+  }]
+};
+
+const gaugeOptions = {
+  rotation: -90 * (Math.PI / 180),       // inicia en -90° (izquierda)
+  circumference: 180 * (Math.PI / 180),  // solo media circunferencia
+  cutout: "70%",                         // ancho del aro
+  plugins: {
+    tooltip: { enabled: false },
+    legend: { display: false },
+    beforeDraw: chart => {
+      const { ctx, chartArea: { width, height } } = chart;
+      ctx.save();
+      ctx.font = "28px Poppins";
+      ctx.fillStyle = "#fff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(valorActual + "%", width / 2, height / 1.2);
+    }
+  }
+};
+
+new Chart(document.getElementById("gaugeChart"), {
+  type: "doughnut",
+  data: gaugeData,
+  options: gaugeOptions
+});
+
 
 
 
 </script>
 </body>
 </html>
+
 
 
 
