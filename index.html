@@ -505,7 +505,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // ====== SPLIT SECUNDARIO (horizontal: controls / map / chart / otro / sidebar) ======
-  Split(['#controls', '#map', '#chart', '#otro', '#sidebar'], {
+  Split(['#controls', '#map', '#chart', '#sidebar', '#otro'], {
     sizes: [10, 30, 20, 20, 20],
     direction: 'horizontal',
     gutterSize: 3,
@@ -515,7 +515,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // ====== SPLIT VERTICAL INTERNO (urbano / scatter) ======
   Split(['#urbano', '#scatter'], {
-    sizes: [50, 50],
+    sizes: [30, 70],
     direction: 'vertical',
     gutterSize: 3,
     onDragEnd: () => { if (window.map) map.invalidateSize(); }
@@ -1415,6 +1415,7 @@ document.getElementById("filtroDelito").addEventListener("change", () => {
 </script>
 </body>
 </html>
+
 
 
 
