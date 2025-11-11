@@ -380,7 +380,7 @@
 		  <input type="number" id="mts" value="1000" /></p>
 		  <button id="btnBuscar">Buscar</button>
 			<hr>
-			<label for="filtroEstado">2️⃣ Filtrar por Entidad:</label>
+			<label for="filtroEstado">2️⃣ Entidad:</label>
 			<select id="filtroEstado">
 			  <option value="todos">Todos</option>
 				<option value="AGS">Aguascalientes</option>
@@ -441,7 +441,6 @@
 	<div id="otro" class="panel">	
 		<div id="urbano" class="panel">
 		  <h3>🏙️ Resultado de las búsquedas personalizadas</h3>
-		  <div id="resultadosBusqueda"></div>
 		  <canvas id="gaugeChart"></canvas>
 		</div>
 
@@ -456,6 +455,7 @@
 		<div id="sidebar" class="panel">
 		   <h3>📑 Ficha de información municipal</h3>
 		    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
+			<div id="resultadosBusqueda"></div>
 		</div>
 	</div>
 		
@@ -1452,6 +1452,7 @@ new Chart(document.getElementById("gaugeChart"), {
 </script>
 </body>
 </html>
+
 
 
 
