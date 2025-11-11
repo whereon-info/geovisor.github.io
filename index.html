@@ -361,6 +361,24 @@
 			  margin: 8px 0;
 			}
 
+			#gaugeChart {
+			  width: 100%;
+			  height: 100%;
+			  display: block;
+			}
+			
+			#urbano {
+			  padding: 5px;
+			  display: flex;
+			  flex-direction: column;
+			}
+			
+			#urbano canvas {
+			  flex: 1;
+			  min-height: 200px;
+			}
+
+
  
   </style>
 </head>
@@ -1339,7 +1357,6 @@ if (!document.getElementById("filtroDelito")) {
 }
 
 // ================== ACTUALIZAR GRÁFICA MULTIDELITO ==================
-// ================== ACTUALIZAR GRÁFICA MULTIDELITO (sin duplicados) ==================
 function actualizarScatterMultidelito(layerGroup) {
   // Limpiar datasets
   scatterChart.data.datasets.forEach(ds => (ds.data = []));
@@ -1410,41 +1427,52 @@ document.getElementById("filtroDelito").addEventListener("change", () => {
   scatterChart.update();
 });
 
-	const valorActual = 70;   // de 0 a 100
-const maxValor = 100;
+const gaugeText = {
+  id: "gaugeText",
+  afterDraw(chart) {
+    const { ctx, chartArea } = chart;
+    const valor = chart.config.data.datasets[0].data[0];
 
-const gaugeData = {
-  datasets: [{
-    data: [valorActual, maxValor - valorActual],
-    backgroundColor: ["#00b050", "#444"],
-    borderWidth: 0
-  }]
-};
+    ctx.save();
+    ctx.font = "26px Poppins";
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
 
-const gaugeOptions = {
-  rotation: -90 * (Math.PI / 180),       // inicia en -90° (izquierda)
-  circumference: 180 * (Math.PI / 180),  // solo media circunferencia
-  cutout: "70%",                         // ancho del aro
-  plugins: {
-    tooltip: { enabled: false },
-    legend: { display: false },
-    beforeDraw: chart => {
-      const { ctx, chartArea: { width, height } } = chart;
-      ctx.save();
-      ctx.font = "28px Poppins";
-      ctx.fillStyle = "#fff";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(valorActual + "%", width / 2, height / 1.2);
-    }
+    // ✅ centrado correcto
+    const x = chart.width / 2;
+    const y = chart.height * 0.75;
+
+    ctx.fillText(valor + "%", x, y);
   }
 };
 
+	const valorActual = 70;
+const maxValor = 100;
+
 new Chart(document.getElementById("gaugeChart"), {
   type: "doughnut",
-  data: gaugeData,
-  options: gaugeOptions
+  data: {
+    datasets: [{
+      data: [valorActual, maxValor - valorActual],
+      backgroundColor: ["#00b050", "#333"],
+      borderWidth: 0,
+      circumference: 180,
+      rotation: -90,
+      cutout: "70%"
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false }
+    }
+  },
+  plugins: [gaugeText]
 });
+
+	
 
 
 
@@ -1452,6 +1480,7 @@ new Chart(document.getElementById("gaugeChart"), {
 </script>
 </body>
 </html>
+
 
 
 
