@@ -470,9 +470,14 @@
 		
 	<!-- SIDEBAR -->
 			
-		<div id="sidebar" class="panel">
+	<div id="sidebar" class="panel">
 		   <h3>📑 Ficha de información municipal</h3>
 		    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
+		</div>
+	</div>
+
+	<div id="telaraña" class="panel">
+		   <h3>🕸️ Resumen</h3>
 			<div id="resultadosBusqueda"></div>
 		</div>
 	</div>
@@ -482,7 +487,7 @@
 <!-- LISTADO -->
 <div id="listado" class="panel">
   <div id="listado-header" style="display:flex;justify-content:space-between;align-items:center;">
-    <h3>📍 ¿Quién es tu competencia?</h3> <div id="resultadosBusqueda"></div>
+    <h3>📍 ¿Quién es tu competencia?</h3>
   </div>
   <table>
     <thead>
@@ -524,11 +529,11 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // ====== SPLIT SECUNDARIO (horizontal: controls / map / chart / otro / sidebar) ======
-  Split(['#controls', '#map', '#chart', '#sidebar', '#otro'], {
-    sizes: [10, 30, 20, 20, 20],
+  Split(['#controls', '#map', '#chart', '#sidebar', '#otro','#telaraña'], {
+    sizes: [15, 20, 15, 15, 15, 20],
     direction: 'horizontal',
     gutterSize: 3,
-    minSize: [100, 100, 100, 100, 100],
+    minSize: [100, 100, 100, 100, 100, 100],
     onDragEnd: () => { if (window.map) map.invalidateSize(); }
   });
 
@@ -1558,6 +1563,7 @@ layer.on("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
