@@ -177,11 +177,12 @@
 			  line-height: 1.5;
 			}
 			
-			#sidebar,
-			#chart,
-			#urbano,
-			#graph,
-	  		#telaraña{
+				#controls
+				#map
+				#chart
+				#otro
+				#sidebar
+				#telaraña{
 			  background: #2c2c2c;
 			  color: #ffffff;
 			  font-size: 13px;
@@ -483,7 +484,7 @@
 			
 		</div>
 	</div>
-	</div>	
+	
 	
 
 <!-- LISTADO -->
@@ -531,7 +532,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // ====== SPLIT SECUNDARIO (horizontal: controls / map / chart / otro / sidebar) ======
-  Split(['#controls', '#map', '#chart', '#sidebar', '#otro','#telaraña'], {
+  Split(['#controls', '#map', '#chart', '#otro', '#sidebar','#telaraña'], {
     sizes: [15, 20, 15, 15, 15, 20],
     direction: 'horizontal',
     gutterSize: 3,
@@ -1535,5 +1536,6 @@ function actualizarGauge(score) {
 </script>
 </body>
 </html>
+
 
 
