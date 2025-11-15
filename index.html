@@ -678,7 +678,8 @@ function getBootstrapIconFromActividad(actividad) {
 }
 
 // 🔹 Función principal para buscar en DENUE
-async function buscarDENUE(condi, lat, lon, mts) {
+	
+	async function buscarDENUE(condi, lat, lon, mts) {
   const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e"; // tu token DENUE
   const url = `https://www.inegi.org.mx/app/api/denue/v1/consulta/buscar/${encodeURIComponent(condi)}/${lat},${lon}/${mts}/${token}`;
 
@@ -808,7 +809,33 @@ function getEmojiCategoria(cat) {
   };
   return emojis[cat] || "📍";
 }
+//===========================================================
+function onEachFeature(feature, layer) {
+  layer.on("click", async () => {
 
+    const props = feature.properties || {};
+
+    // ==========================================
+    // 🔥 1. OBTENER CVE_ENT DEL HEXÁGONO
+    // ==========================================
+    const cveEnt =
+      props.CVE_ENT ||
+      props.cve_ent ||
+      props.ENTIDAD ||
+      props.entidad ||
+      null;
+
+    if (cveEnt) {
+      // ==========================================
+      // 🔥 2. CARGAR INDICADORES INEGI EN #telaraña
+      // ==========================================
+      cargarIndicadoresPorEstado(cveEnt);
+    } else {
+      console.warn("⚠ No se encontró CVE_ENT en este hexágono");
+      document.getElementById("telaraña").innerHTML =
+        "<p>No se encontró clave de entidad para este hexágono.</p>";
+    }
+	
 // ================== EVENTOS EN HEXAGONOS ==================
 function onEachFeature(feature, layer) {
   layer.on("click", async () => {
@@ -1525,6 +1552,55 @@ function actualizarGauge(score) {
 }
 
 
+	//=====================================https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/5300000101,6200240473/es/00/true/BISE/2.0/33602899-98fd-4db7-8ce9-41c0330f1d7e?type=json===
+async function cargarIndicadoresPorEstado(cveEnt) {
+    const token = "AQUI_TU_TOKEN";
+
+    // cveEnt = "09" → Ciudad de México
+    // cveEnt = "13" → Hidalgo
+    // etc.
+
+    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/5300000101,6200240473/es/${cveEnt}/true/BISE/2.0/${token}?type=json`;
+
+    try {
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error("Error en API de INEGI");
+
+        const data = await resp.json();
+        const series = data.Series || [];
+
+        let html = `
+            <h3>📊 Indicadores INEGI del estado ${cveEnt}</h3>
+            <ul>
+        `;
+
+        series.forEach(ind => {
+            const nombre = ind.Titulo || "Indicador";
+            const valor = ind.Datos?.[0]?.Dato || "N/D";
+            const fecha = ind.Datos?.[0]?.Fecha || "-";
+
+            html += `
+                <li>
+                    <strong>${nombre}:</strong> ${valor}
+                    <em>(${fecha})</em>
+                </li>`;
+        });
+
+        html += "</ul>";
+
+        document.getElementById("telaraña").innerHTML = html;
+
+    } catch (err) {
+        console.error("Error INEGI:", err);
+        document.getElementById("telaraña").innerHTML = `
+            <p style="color:#ff6b6b">❌ Error al obtener indicadores INEGI</p>
+        `;
+    }
+}
+
+
+cargarIndicadoresINEGI();
+
 
 
 
@@ -1536,6 +1612,7 @@ function actualizarGauge(score) {
 </script>
 </body>
 </html>
+
 
 
 
