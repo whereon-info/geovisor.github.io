@@ -809,32 +809,6 @@ function getEmojiCategoria(cat) {
   };
   return emojis[cat] || "📍";
 }
-//===========================================================
-function onEachFeature(feature, layer) {
-  layer.on("click", async () => {
-
-    const props = feature.properties || {};
-
-    // ==========================================
-    // 🔥 1. OBTENER CVE_ENT DEL HEXÁGONO
-    // ==========================================
-    const cveEnt =
-      props.CVE_ENT ||
-      props.cve_ent ||
-      props.ENTIDAD ||
-      props.entidad ||
-      null;
-
-    if (cveEnt) {
-      // ==========================================
-      // 🔥 2. CARGAR INDICADORES INEGI EN #telaraña
-      // ==========================================
-      cargarIndicadoresPorEstado(cveEnt);
-    } else {
-      console.warn("⚠ No se encontró CVE_ENT en este hexágono");
-      document.getElementById("telaraña").innerHTML =
-        "<p>No se encontró clave de entidad para este hexágono.</p>";
-    }
 	
 // ================== EVENTOS EN HEXAGONOS ==================
 function onEachFeature(feature, layer) {
@@ -1612,6 +1586,7 @@ cargarIndicadoresINEGI();
 </script>
 </body>
 </html>
+
 
 
 
