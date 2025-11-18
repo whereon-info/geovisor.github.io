@@ -1529,58 +1529,54 @@ function actualizarGauge(score) {
 
 //==https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/5300000101,6200240473/es/00/true/BISE/2.0/33602899-98fd-4db7-8ce9-41c0330f1d7e?type=json===
 
-async function cargarGastoComidaEstados() {
+async function cargarGastoFueraHogar() {
+
     const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/5300000101/es/00/true/BISE/2.0/${token}?type=json`;
+    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240473/es/00/true/BISE/2.0/${token}?type=json`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        let labels = [];
-        let valores = [];
-        let tablaHtml = `
-            <table border="1" style="width:100%; border-collapse: collapse;">
-                <tr>
-                    <th>Entidad</th>
-                    <th>Gasto promedio en comida fuera del hogar</th>
-                </tr>
-        `;
-
-        data.Series.forEach(ent => {
-            const nombre = ent.Nombre;
-            const valor = ent.Data[0]?.Dato || 0;
-
-            labels.push(nombre);
-            valores.push(Number(valor));
-
-            tablaHtml += `
-                <tr>
-                    <td>${nombre}</td>
-                    <td>$${valor}</td>
-                </tr>
-            `;
-        });
-
-        tablaHtml += "</table>";
-        document.getElementById("contenido-telarana").innerHTML = tablaHtml;
-
-        // ---- Crear gráfica de barras ----
-        const ctx = document.getElementById("graficaInegi").getContext("2d");
-
-        if (window.graficaEstados) {
-            window.graficaEstados.destroy(); // si ya existía, la borramos
+        if (!data.Series) {
+            console.error("Error: no existe Series en la API:", data);
+            return;
         }
 
-        window.graficaEstados = new Chart(ctx, {
+        let labels = [];
+        let valores = [];
+
+        data.Series.forEach(estado => {
+            const nombre = estado.Nombre;
+            const valor = Number(estado.Data?.[0]?.Dato || 0);
+
+            labels.push(nombre);
+            valores.push(valor);
+        });
+
+        const canvas = document.getElementById("graficaTelarana");
+        if (!canvas) {
+            console.error("No existe el canvas graficaTelarana en el DOM");
+            return;
+        }
+
+        const ctx = canvas.getContext("2d");
+
+        // Si ya existe, destruir
+        if (window.graficaTelarana) {
+            window.graficaTelarana.destroy();
+        }
+
+        // Crear la gráfica
+        window.graficaTelarana = new Chart(ctx, {
             type: "bar",
             data: {
                 labels: labels,
                 datasets: [{
-                    label: "Gasto promedio trimestral (MXN)",
+                    label: "Gasto trimestral fuera del hogar (MXN)",
                     data: valores,
-                    backgroundColor: "rgba(0, 122, 180, 0.7)",
-                    borderColor: "rgba(0, 122, 180, 1)",
+                    backgroundColor: "rgba(0, 180, 90, 0.7)",
+                    borderColor: "rgba(0, 180, 90, 1)",
                     borderWidth: 1
                 }]
             },
@@ -1599,22 +1595,17 @@ async function cargarGastoComidaEstados() {
                 plugins: {
                     legend: {
                         labels: { color: "#fff" }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: ctx => ` $${ctx.raw}`
-                        }
                     }
                 }
             }
         });
 
     } catch (err) {
-        console.error("Error cargando INEGI:", err);
-        document.getElementById("contenido-telarana").innerHTML =
-            "<p>Error al cargar datos del INEGI.</p>";
+        console.error("❌ Error al cargar INEGI:", err);
     }
 }
+
+
 
 // Ejecutar al cargar la página
 cargarGastoComidaEstados();
@@ -1630,6 +1621,7 @@ cargarGastoComidaEstados();
 </script>
 </body>
 </html>
+
 
 
 
