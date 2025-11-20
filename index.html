@@ -1533,7 +1533,7 @@ function actualizarGauge(score) {
 async function cargarGastoFueraHogar() {
 
     const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240473/es/09/true/BISE/2.0/${token}?type=json`;
+    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/5300000101,6200240473/es/00/true/BISE/2.0/33602899-98fd-4db7-8ce9-41c0330f1d7e?type=json`;
 
     try {
         const response = await fetch(url);
@@ -1616,6 +1616,7 @@ cargarGastoFueraHogar();
 </script>
 </body>
 </html>
+
 
 
 
