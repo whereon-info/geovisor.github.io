@@ -1530,13 +1530,11 @@ function actualizarGauge(score) {
 
 //==https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/5300000101,6200240473/es/00/true/BISE/2.0/33602899-98fd-4db7-8ce9-41c0330f1d7e?type=json===
 
-async function cargarGastoCDMX() {
+async function cargarGastoNacional() {
 
-    const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";   
-    const indicador = "6200240473"; 
-    const lenguaje = "es";
-    const area = "09";            
-    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/${indicador}/${lenguaje}/${area}/true/BISE/2.0/${token}?type=json`;
+    const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+    const indicador = "6200240473";
+    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/${indicador}/es/00/true/BISE/2.0/${token}?type=json`;
 
     try {
         const response = await fetch(url);
@@ -1545,7 +1543,7 @@ async function cargarGastoCDMX() {
         console.log("📦 Respuesta completa:", data);
 
         if (!data.Series || !data.Series[0]) {
-            console.error("❌ No se encontró información para CDMX");
+            console.error("❌ No se encontró información");
             return;
         }
 
@@ -1555,10 +1553,9 @@ async function cargarGastoCDMX() {
 
         console.log(`📍 ${nombre}: ${valor}`);
 
-        // Muestra el resultado en tu DIV #telaraña
-        const contenedor = document.getElementById("telaraña");
-        if (contenedor) {
-            contenedor.innerHTML += `
+        const cont = document.getElementById("telaraña");
+        if (cont) {
+            cont.innerHTML += `
                 <p><strong>${nombre}:</strong> ${valor}</p>
             `;
         }
@@ -1568,13 +1565,14 @@ async function cargarGastoCDMX() {
     }
 }
 
-cargarGastoCDMX();
+cargarGastoNacional();
 
 
 
 </script>
 </body>
 </html>
+
 
 
 
