@@ -1535,11 +1535,7 @@ async function cargarGastoFueraHogar() {
     const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
     const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240473/es/00/true/BISE/2.0/${token}?type=json`;
 
-  if (window.graficaTelarana && typeof window.graficaTelarana.destroy === 'function') {
-    window.graficaTelarana.destroy();
-  }
-	
-	try {
+    try {
         const response = await fetch(url);
         const data = await response.json();
 
@@ -1567,12 +1563,11 @@ async function cargarGastoFueraHogar() {
 
         const ctx = canvas.getContext("2d");
 
-        // Si ya existe, destruir
-        if (window.graficaTelarana) {
+        // Destruir gráfica previa si existe y es válida
+        if (window.graficaTelarana instanceof Chart) {
             window.graficaTelarana.destroy();
         }
 
-        // Crear la gráfica
         window.graficaTelarana = new Chart(ctx, {
             type: "bar",
             data: {
@@ -1589,18 +1584,11 @@ async function cargarGastoFueraHogar() {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: {
-                        ticks: { color: "#fff", font: { size: 10 } }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: "#fff" }
-                    }
+                    x: { ticks: { color: "#fff", font: { size: 10 } } },
+                    y: { beginAtZero: true, ticks: { color: "#fff" } }
                 },
                 plugins: {
-                    legend: {
-                        labels: { color: "#fff" }
-                    }
+                    legend: { labels: { color: "#fff" } }
                 }
             }
         });
@@ -1609,6 +1597,7 @@ async function cargarGastoFueraHogar() {
         console.error("❌ Error al cargar INEGI:", err);
     }
 }
+
 
 
 
@@ -1627,6 +1616,7 @@ cargarGastoFueraHogar();
 </script>
 </body>
 </html>
+
 
 
 
