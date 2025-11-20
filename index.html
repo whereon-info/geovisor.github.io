@@ -1533,14 +1533,16 @@ function actualizarGauge(score) {
 async function cargarGastoFueraHogar() {
 
     const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/5300000101,6200240473/es/00/true/BISE/2.0/33602899-98fd-4db7-8ce9-41c0330f1d7e?type=json`;
+
+    // Indicador de ENIGH: Gasto trimestral en comidas y bebidas FUERA del hogar POR ESTADO
+    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240401/es/00/true/BISE/2.0/${token}?type=json`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
         if (!data.Series) {
-            console.error("Error: no existe Series en la API:", data);
+            console.error("Error: la API no devolvió Series", data);
             return;
         }
 
@@ -1548,7 +1550,7 @@ async function cargarGastoFueraHogar() {
         let valores = [];
 
         data.Series.forEach(estado => {
-            const nombre = estado.Nombre;
+            const nombre = estado.Nombre;  
             const valor = Number(estado.Data?.[0]?.Dato || 0);
 
             labels.push(nombre);
@@ -1557,23 +1559,24 @@ async function cargarGastoFueraHogar() {
 
         const canvas = document.getElementById("graficaTelarana");
         if (!canvas) {
-            console.error("No existe el canvas graficaTelarana en el DOM");
+            console.error("❌ No existe el canvas #graficaTelarana");
             return;
         }
 
         const ctx = canvas.getContext("2d");
 
-        // Destruir gráfica previa si existe y es válida
+        // Si existe la gráfica previa, destruirla
         if (window.graficaTelarana instanceof Chart) {
             window.graficaTelarana.destroy();
         }
 
+        // Crear gráfica de barras
         window.graficaTelarana = new Chart(ctx, {
             type: "bar",
             data: {
                 labels: labels,
                 datasets: [{
-                    label: "Gasto trimestral fuera del hogar (MXN)",
+                    label: "Gasto trimestral en alimentos fuera del hogar (MXN)",
                     data: valores,
                     backgroundColor: "rgba(0, 180, 90, 0.7)",
                     borderColor: "rgba(0, 180, 90, 1)",
@@ -1601,6 +1604,7 @@ async function cargarGastoFueraHogar() {
 
 
 
+
 // Ejecutar al cargar la página
 cargarGastoFueraHogar();
 
@@ -1616,6 +1620,7 @@ cargarGastoFueraHogar();
 </script>
 </body>
 </html>
+
 
 
 
