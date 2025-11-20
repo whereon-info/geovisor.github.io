@@ -1532,74 +1532,38 @@ function actualizarGauge(score) {
 
 async function cargarGastoFueraHogar() {
 
-    const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
+        const baseUrl = "https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR";
+        const indicatorId = "6200240401"; // Check if this ID is correct and active
+        const lang = "es"; // Language
+        const geoLevel = "00"; // Geographic level
+        const includeHistorical = "true"; // Check if boolean 'true' is expected as string or '1'
+        const dataSource = "BISE"; // Check if this is a valid data source identifier
+        const version = "2.0"; // API version
+        // This part '33602899-98fd-4db7-8ce9-41c0330f1d7e' looks like a user token or API key.
+        // Ensure it is valid and in the correct position/format.
+        const userToken = "33602899-98fd-4db7-8ce9-41c0330f1d7e"; 
+        const format = "json"; // Expected response format
 
-    // Indicador de ENIGH: Gasto trimestral en comidas y bebidas FUERA del hogar POR ESTADO
-    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240401/es/00/true/BISE/2.0/${token}?type=json`;
+        const url = `${baseUrl}/${indicatorId}/${lang}/${geoLevel}/${includeHistorical}/${dataSource}/${version}/${userToken}?type=${format}`;
 
-    try {
+        // Ensure all parts of the URL conform to the API's requirements.
+        // For example, if 'true' needs to be '1':
+        // const includeHistorical = "1";
+
         const response = await fetch(url);
+        if (!response.ok) { // Check for HTTP errors like 400
+            const errorText = await response.text();
+            console.error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
+            // Depending on the API, the error details might be in the response body.
+            // console.error("Error response data:", await response.json());
+            return;
+        }
         const data = await response.json();
 
         if (!data.Series) {
             console.error("Error: la API no devolvió Series", data);
             return;
         }
-
-        let labels = [];
-        let valores = [];
-
-        data.Series.forEach(estado => {
-            const nombre = estado.Nombre;  
-            const valor = Number(estado.Data?.[0]?.Dato || 0);
-
-            labels.push(nombre);
-            valores.push(valor);
-        });
-
-        const canvas = document.getElementById("graficaTelarana");
-        if (!canvas) {
-            console.error("❌ No existe el canvas #graficaTelarana");
-            return;
-        }
-
-        const ctx = canvas.getContext("2d");
-
-        // Si existe la gráfica previa, destruirla
-        if (window.graficaTelarana instanceof Chart) {
-            window.graficaTelarana.destroy();
-        }
-
-        // Crear gráfica de barras
-        window.graficaTelarana = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: "Gasto trimestral en alimentos fuera del hogar (MXN)",
-                    data: valores,
-                    backgroundColor: "rgba(0, 180, 90, 0.7)",
-                    borderColor: "rgba(0, 180, 90, 1)",
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: "#fff", font: { size: 10 } } },
-                    y: { beginAtZero: true, ticks: { color: "#fff" } }
-                },
-                plugins: {
-                    legend: { labels: { color: "#fff" } }
-                }
-            }
-        });
-
-    } catch (err) {
-        console.error("❌ Error al cargar INEGI:", err);
-    }
-}
 
 
 
@@ -1620,6 +1584,7 @@ cargarGastoFueraHogar();
 </script>
 </body>
 </html>
+
 
 
 
