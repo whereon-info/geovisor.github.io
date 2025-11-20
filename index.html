@@ -163,13 +163,6 @@
 			}
 			
 			/* ====================== PANEL ESPECÍFICOS ====================== */
-			#controls {
-			  background: #2c2c2c;
-			  color: #ffffff;
-			  flex: 0 0 auto;
-			  font-size: 14px;
-			  line-height: 2;
-			}
 			
 			#listado {
 			  background: #2c2c2c;
@@ -180,19 +173,20 @@
   			  overflow-x: hidden;
 			}
 			
-				#controls,
-				#map,
-				#chart,
-				#otro,
-				#sidebar,
-				#telaraña{
+			#controls,
+			#map,
+			#chart,
+			#otro,
+			#sidebar,
+			#telaraña {
 			  background: #2c2c2c;
 			  color: #ffffff;
 			  font-size: 13px;
 			  line-height: 1.5;
 			  min-height: 0;
-              overflow: auto;
+			  overflow: auto;
 			}
+
 			
 			/* ====================== TABLAS ====================== */
 			table {
@@ -449,8 +443,8 @@
 				<button id="btnExportar">Exportar a PDF</button>
 			    <hr>
 			</div>
+		
 		<div id="map" class="panel"></div>
-	
 	
 
 <!-- ================== CHART PANEL ================== -->
@@ -507,7 +501,8 @@
     <tbody id="tablaResultados"></tbody>
   </table>
 </div>
-
+</div>
+</div>
 
 
 	<div id="welcomeBox">
@@ -521,7 +516,7 @@
 		<p>Renuncia de responsabilidad: Toda la información geoestadística aquí presentada es elaborada y por consiguiente propiedad de los institutos, organismos, asociaciones y/o secretarías respectivamente. Whereon sólo procesa y presenta los datos.</p>  
  	 </div>
 </div>
-</div>
+
 
 <!-- plugins local JS -->
 <script src="js/L.Control.Locate.min.js"></script>
@@ -1628,6 +1623,7 @@ cargarGastoFueraHogar();
 </script>
 </body>
 </html>
+
 
 
 
