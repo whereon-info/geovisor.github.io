@@ -1354,18 +1354,6 @@ const delitos = [
   { campo: "narcomenud", nombre: "Narcomenudeo", color: "#ffce56" }
 ];
 
-// Crear select de delitos si no existe
-if (!document.getElementById("filtroDelito")) {
-  const select = document.createElement("select");
-  select.id = "filtroDelito";
-  select.innerHTML = `
-    <option value="todos">Todos</option>
-    <option value="robo a neg">Robo a negocio</option>
-    <option value="extorsión">Extorsión</option>
-    <option value="narcomenud">Narcomenudeo</option>
-  `;
-  document.getElementById("controls").appendChild(select);
-}
 
 // ================== ACTUALIZAR GRÁFICA MULTIDELITO ==================
 function actualizarScatterMultidelito(layerGroup) {
@@ -1572,6 +1560,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
