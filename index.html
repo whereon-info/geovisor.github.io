@@ -1530,83 +1530,52 @@ function actualizarGauge(score) {
 
 //==https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/5300000101,6200240473/es/00/true/BISE/2.0/33602899-98fd-4db7-8ce9-41c0330f1d7e?type=json===
 
-async function cargarGastoFueraHogar() {
-  const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";
-  const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200240473/es/99/true/BISE/2.0/${token}?type=json`;
+async function cargarGastoCDMX() {
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+    const token = "33602899-98fd-4db7-8ce9-41c0330f1d7e";   
+    const indicador = "6200240473"; 
+    const lenguaje = "es";
+    const area = "09";            
+    const url = `https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/${indicador}/${lenguaje}/${area}/true/BISE/2.0/${token}?type=json`;
 
-    if (!data.Series || !Array.isArray(data.Series)) {
-      console.error("❌ La API no devolvió Series como arreglo:", data);
-      return;
-    }
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
 
-    const labels = [];
-    const valores = [];
+        console.log("📦 Respuesta completa:", data);
 
-    data.Series.forEach(estado => {
-      labels.push(estado.Nombre);
-      valores.push(Number(estado.Data?.[0]?.Dato || 0));
-    });
-
-    const canvas = document.getElementById("graficaTelarana");
-    const ctx = canvas.getContext("2d");
-
-    if (window.graficaTelarana instanceof Chart) {
-      window.graficaTelarana.destroy();
-    }
-
-    window.graficaTelarana = new Chart(ctx, {
-      type: "radar",
-      data: {
-        labels,
-        datasets: [{
-          label: "Gasto trimestral fuera del hogar (MXN)",
-          data: valores,
-          backgroundColor: "rgba(0,180,90,0.3)",
-          borderColor: "rgba(0,180,90,1)",
-          pointBackgroundColor: "#00b050",
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          r: {
-            angleLines: { color: "rgba(255,255,255,0.3)" },
-            grid: { color: "rgba(255,255,255,0.2)" },
-            pointLabels: {
-              color: "#fff",
-              font: { size: 10 }
-            },
-            ticks: {
-              color: "#fff",
-              backdropColor: "transparent"
-            }
-          }
-        },
-        plugins: {
-          legend: {
-            labels: { color: "#fff" }
-          }
+        if (!data.Series || !data.Series[0]) {
+            console.error("❌ No se encontró información para CDMX");
+            return;
         }
-      }
-    });
 
-  } catch (err) {
-    console.error("❌ Error al cargar INEGI:", err);
-  }
+        const serie = data.Series[0];
+        const nombre = serie.Nombre;
+        const valor = serie.Data[0].Dato;
+
+        console.log(`📍 ${nombre}: ${valor}`);
+
+        // Muestra el resultado en tu DIV #telaraña
+        const contenedor = document.getElementById("telaraña");
+        if (contenedor) {
+            contenedor.innerHTML += `
+                <p><strong>${nombre}:</strong> ${valor}</p>
+            `;
+        }
+
+    } catch (err) {
+        console.error("❌ Error consultando INEGI:", err);
+    }
 }
 
-cargarGastoFueraHogar();
+cargarGastoCDMX();
+
 
 
 </script>
 </body>
 </html>
+
 
 
 
