@@ -1028,26 +1028,6 @@ function onEachFeature(feature, layer) {
 
     procesarDENUE(resumen, extras);
 
-		// ================= CALCULAR SCORES =================
-	const scoreDelito = calcularScoreDelictivo(props);
-	const scoreFinanciero = calcularScoreFinanciero(props);
-	const scoreDemo = calcularScoreDemografico(props);
-	
-	// resumenDENUE ya debe existir aquí
-	const scoreComercial = calcularScoreComercial(resumen);
-	
-	// ================= ACTUALIZAR RADAR =================
-	radarEvaluacion.data.datasets[0].data = [
-	  scoreDelito,
-	  scoreFinanciero,
-	  scoreDemo,
-	  scoreComercial
-	];
-	
-	radarEvaluacion.update();
-  });
-}
-
 
   //======================= LOGO ================================
 	var logoControl = L.control({ position: "bottomleft" });
@@ -1721,6 +1701,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
