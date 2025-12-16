@@ -811,6 +811,149 @@ function getEmojiCategoria(cat) {
   };
   return emojis[cat] || "📍";
 }
+
+
+// ================= UTILIDADES =================
+function safeNumber(val) {
+  return isNaN(val) || val === null ? 0 : Number(val);
+}
+
+function normalizarMinMax(valor, min, max) {
+  if (max === min) return 50;
+  return Math.max(0, Math.min(100, ((valor - min) / (max - min)) * 100));
+}
+
+// ================= RANGOS GLOBALES =================
+// Ajustables después con datos reales
+const rangos = {
+  delitos: { min: 0, max: 3000 },
+  creditos: { min: 0, max: 8000 },
+  densidad: { min: 0, max: 500 },
+  comercial: { min: 0, max: 10 }
+};
+
+// ================= SCORE DELICTIVO (NEGATIVO) =================
+function calcularScoreDelictivo(props) {
+  const robo = safeNumber(props["robo a neg"]);
+  const ext = safeNumber(props["extorsión"]);
+  const narco = safeNumber(props["narcomenud"]);
+  const poblacion = safeNumber(props.POBTOT_sum);
+
+  if (poblacion === 0) return 50;
+
+  const tasa = ((robo + ext + narco) / poblacion) * 100000;
+
+  return (
+    100 -
+    normalizarMinMax(tasa, rangos.delitos.min, rangos.delitos.max)
+  ).toFixed(1);
+}
+
+// ================= SCORE FINANCIERO (POSITIVO) =================
+function calcularScoreFinanciero(props) {
+  const creditos =
+    safeNumber(props.CRED_PERS) +
+    safeNumber(props.CRED_NOMI) +
+    safeNumber(props.CRED_HIPOT) +
+    safeNumber(props.CRED_AUTOM);
+
+  const poblacion = safeNumber(props.POBTOT_sum);
+  if (poblacion === 0) return 50;
+
+  const tasa = (creditos / poblacion) * 10000;
+
+  return normalizarMinMax(
+    tasa,
+    rangos.creditos.min,
+    rangos.creditos.max
+  ).toFixed(1);
+}
+
+// ================= SCORE DEMOGRÁFICO =================
+function calcularScoreDemografico(props) {
+  const poblacion = safeNumber(props.POBTOT_sum);
+  const areaHex = 700;
+
+  const densidad = poblacion / areaHex;
+
+  return normalizarMinMax(
+    densidad,
+    rangos.densidad.min,
+    rangos.densidad.max
+  ).toFixed(1);
+}
+
+// ================= SCORE COMERCIAL =================
+function calcularScoreComercial(resumenDENUE) {
+  const ponderado =
+    (resumenDENUE.Bancos || 0) * 3 +
+    (resumenDENUE.Supermercados || 0) * 2 +
+    (resumenDENUE.Escuelas || 0) * 1.5 +
+    (resumenDENUE.Hoteles || 0) * 2 +
+    (resumenDENUE.Otros || 0) * 1;
+
+  const areaHex = 700;
+  const densidadComercial = ponderado / areaHex;
+
+  return normalizarMinMax(
+    densidadComercial,
+    rangos.comercial.min,
+    rangos.comercial.max
+  ).toFixed(1);
+}
+
+let radarEvaluacion;
+
+function inicializarRadar() {
+  const ctx = document.getElementById("radarEvaluacion").getContext("2d");
+
+  radarEvaluacion = new Chart(ctx, {
+    type: "radar",
+    data: {
+      labels: [
+        "Seguridad",
+        "Inclusión financiera",
+        "Densidad demográfica",
+        "Densidad comercial"
+      ],
+      datasets: [{
+        label: "Score de la plaza",
+        data: [50, 50, 50, 50],
+        backgroundColor: "rgba(0, 174, 77, 0.25)",
+        borderColor: "#00ae4d",
+        pointBackgroundColor: "#00ae4d",
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        r: {
+          min: 0,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+            color: "#ccc"
+          },
+          grid: { color: "#555" },
+          angleLines: { color: "#555" },
+          pointLabels: {
+            color: "#fff",
+            font: { size: 12 }
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: { color: "#fff" }
+        }
+      }
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", inicializarRadar);
+
 	
 // ================== EVENTOS EN HEXAGONOS ==================
 function onEachFeature(feature, layer) {
@@ -884,6 +1027,24 @@ function onEachFeature(feature, layer) {
     });
 
     procesarDENUE(resumen, extras);
+
+		// ================= CALCULAR SCORES =================
+	const scoreDelito = calcularScoreDelictivo(props);
+	const scoreFinanciero = calcularScoreFinanciero(props);
+	const scoreDemo = calcularScoreDemografico(props);
+	
+	// resumenDENUE ya debe existir aquí
+	const scoreComercial = calcularScoreComercial(resumen);
+	
+	// ================= ACTUALIZAR RADAR =================
+	radarEvaluacion.data.datasets[0].data = [
+	  scoreDelito,
+	  scoreFinanciero,
+	  scoreDemo,
+	  scoreComercial
+	];
+	
+	radarEvaluacion.update();
   });
 }
 
@@ -1560,6 +1721,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
