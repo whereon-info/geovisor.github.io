@@ -476,13 +476,18 @@
 		</div>
 	
 
-		<div id="telaraña" class="panel">
-		    <h3>💯 Evaluación general de la plaza</h3>
-		
-		    <div style="width:100%; height:300px;">
-		         <canvas id="graficaTelarana"></canvas>
-		    </div>
-		</div>
+			<div id="telaraña" class="panel">
+			  <h3>🕸️ Evaluación general de la plaza</h3>
+			
+			  <!-- Scores numéricos -->
+			  <div id="scores-plaza"></div>
+			
+			  <!-- Gráfica radar -->
+			  <div style="width:100%; height:280px;">
+			    <canvas id="radarEvaluacion"></canvas>
+			  </div>
+			</div>
+
 </div>
 
 	
@@ -1028,6 +1033,10 @@ function onEachFeature(feature, layer) {
 
     procesarDENUE(resumen, extras);
 
+
+	  
+    });
+}
 
   //======================= LOGO ================================
 	var logoControl = L.control({ position: "bottomleft" });
@@ -1701,6 +1710,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
