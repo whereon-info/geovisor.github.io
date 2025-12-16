@@ -848,7 +848,7 @@ function calcularScoreDelictivo(props) {
 
   const tasa = ((robo + ext + narco) / poblacion) * 100000;
 
-  return (
+  return Number(
     100 -
     normalizarMinMax(tasa, rangos.delitos.min, rangos.delitos.max)
   ).toFixed(1);
@@ -894,8 +894,7 @@ function calcularScoreComercial(resumenDENUE) {
     (resumenDENUE.Bancos || 0) * 3 +
     (resumenDENUE.Supermercados || 0) * 2 +
     (resumenDENUE.Escuelas || 0) * 1.5 +
-    (resumenDENUE.Hoteles || 0) * 2 +
-    (resumenDENUE.Otros || 0) * 1;
+    (resumenDENUE.Hoteles || 0) * 2;
 
   const areaHex = 700;
   const densidadComercial = ponderado / areaHex;
@@ -958,6 +957,21 @@ function inicializarRadar() {
 }
 
 document.addEventListener("DOMContentLoaded", inicializarRadar);
+
+function mostrarScoresEnTelarana(scores) {
+  const cont = document.getElementById("scores-plaza");
+  if (!cont) return;
+
+  cont.innerHTML = `
+    <div style="margin-bottom:8px;">
+      <p><b>🛡️ Seguridad:</b> ${scores.delito}</p>
+      <p><b>💳 Inclusión financiera:</b> ${scores.financiero}</p>
+      <p><b>👥 Densidad demográfica:</b> ${scores.demografico}</p>
+      <p><b>🏬 Densidad comercial:</b> ${scores.comercial}</p>
+    </div>
+    <hr>
+  `;
+}
 
 	
 // ================== EVENTOS EN HEXAGONOS ==================
@@ -1032,6 +1046,30 @@ function onEachFeature(feature, layer) {
     });
 
     procesarDENUE(resumen, extras);
+
+	// ================= CALCULAR SCORES =================
+	const scoreDelito = calcularScoreDelictivo(props);
+	const scoreFinanciero = calcularScoreFinanciero(props);
+	const scoreDemo = calcularScoreDemografico(props);
+	const scoreComercial = calcularScoreComercial(resumen);
+	
+	// ================= MOSTRAR EN TELARAÑA =================
+	mostrarScoresEnTelarana({
+	  delito: scoreDelito,
+	  financiero: scoreFinanciero,
+	  demografico: scoreDemo,
+	  comercial: scoreComercial
+	});
+	
+if (radarEvaluacion) {
+  radarEvaluacion.data.datasets[0].data = [
+    scoreDelito,
+    scoreFinanciero,
+    scoreDemo,
+    scoreComercial
+  ];
+  radarEvaluacion.update();
+}
 
 
 	  
@@ -1710,6 +1748,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
