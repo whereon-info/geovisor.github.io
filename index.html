@@ -98,6 +98,7 @@
 			/* fila superior con los paneles horizontales */
 			#top-row {
 			  display: flex;
+			  overflow: hidden;
 			   flex: 1 1 auto;
  				 min-width: 0;  
  				 min-height: 0;
@@ -111,12 +112,14 @@
 			
 			/* ====================== MAPA ====================== */
 			#map {
-			  flex: 1;
+			  flex: 1 1 auto;
 			  min-height: 0;
-			  width: 100%;
 			  height: 100%;
+			  width: 100%;
 			  background: #333;
+			  overflow: hidden !important;
 			}
+
 			
 			/* ====================== PANEL BASE ====================== */
 			.panel {
@@ -124,6 +127,7 @@
 			  box-sizing: border-box;
 			  background: #2c2c2c;
 			  color: #fff;
+			  overflow: auto;
 			}
 			
 			/* ====================== GUTTERS (Split.js) ====================== */
@@ -1758,6 +1762,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
