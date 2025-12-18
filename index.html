@@ -896,10 +896,10 @@ function calcularScoreDemografico(props) {
 // ================= SCORE COMERCIAL =================
 function calcularScoreComercial(resumenDENUE) {
   const ponderado =
-    (resumenDENUE.Bancos || 0) * 3 +
-    (resumenDENUE.Supermercados || 0) * 2 +
-    (resumenDENUE.Escuelas || 0) * 1.5 +
-    (resumenDENUE.Hoteles || 0) * 2;
+    (resumenDENUE.Bancos || 0) * 10 +
+    (resumenDENUE.Supermercados || 0) * 7 +
+    (resumenDENUE.Escuelas || 0) * 5 +
+    (resumenDENUE.Hoteles || 0) * 5;
 
   const areaHex = 700;
   const densidadComercial = ponderado / areaHex;
@@ -1755,6 +1755,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
