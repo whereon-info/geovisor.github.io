@@ -187,6 +187,11 @@
 			  overflow: auto;
 			}
 
+			#radarEvaluacion {
+			  flex: 1;
+			  width: 100% !important;
+			  height: 100% !important;
+			}
 			
 			/* ====================== TABLAS ====================== */
 			table {
@@ -483,7 +488,7 @@
 			  <div id="scores-plaza"></div>
 			
 			  <!-- Gráfica radar -->
-			  <div style="width:100%; height:280px;">
+			  <div style="width:100%; height:100%;">
 			    <canvas id="radarEvaluacion"></canvas>
 			  </div>
 			</div>
@@ -915,10 +920,10 @@ function inicializarRadar() {
     type: "radar",
     data: {
       labels: [
-        "Seguridad",
-        "Inclusión financiera",
-        "Densidad demográfica",
-        "Densidad comercial"
+        "Entorno social",
+        "Entorno económico",
+        "Entorno demográfico",
+        "Entorno urbano"
       ],
       datasets: [{
         label: "Score de la plaza",
@@ -966,10 +971,10 @@ function mostrarScoresEnTelarana(scores) {
 
   cont.innerHTML = `
     <div style="margin-bottom:8px;">
-      <p><b>🛡️ Seguridad:</b> ${scores.delito}</p>
-      <p><b>💳 Inclusión financiera:</b> ${scores.financiero}</p>
-      <p><b>👥 Densidad demográfica:</b> ${scores.demografico}</p>
-      <p><b>🏬 Densidad comercial:</b> ${scores.comercial}</p>
+      <p><b>🛡️ Entorno social:</b> ${scores.delito}</p>
+      <p><b>💳 Entorno económico:</b> ${scores.financiero}</p>
+      <p><b>👥 Entorno demográfico:</b> ${scores.demografico}</p>
+      <p><b>🏬 Entorno urbano:</b> ${scores.comercial}</p>
     </div>
     <hr>
   `;
@@ -1750,6 +1755,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
