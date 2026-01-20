@@ -183,6 +183,8 @@
 			#otro,
 			#sidebar,
 			#telaraña,
+	  		#urbano,
+	  		#scratter,
 	  		#scores-plaza,
 	  		#radarEvaluacion,
 	  		#speed {
@@ -491,7 +493,7 @@
 			  ></iframe>
 		</div>
 
-		<div id="scatter" class="panel">
+	<div id="scatter" class="panel">
 		  <h3>📉 ¿Como está la situación social?</h3>
 		  <canvas id="scatterChart"></canvas>
 		</div>
@@ -503,7 +505,7 @@
 		   <h3>📑 Ficha de información municipal</h3>
 		    <div id="sidebar-content">Hága clic en una zona para conocer su información</div>
 			<div id="resultadosBusqueda"></div>
-		</div>
+	</div>
 	
 
 	<div id="telaraña" class="panel">
@@ -590,7 +592,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // ====== SPLIT VERTICAL INTERNO (urbano / scatter) ======
-  Split(['#radarEvaluacion', '#scores-plaza','#speed'], {
+  Split(['#scores-plaza','#radarEvaluacion','#speed'], {
     sizes: [33, 33, 33],
     direction: 'vertical',
     gutterSize: 3,
@@ -654,10 +656,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		  document.getElementById("welcomeBox").style.display = "none";
 		});
 
-		// Cerrar haciendo clic en el mapa
-		map.on("click", () => {
-		  document.getElementById("ubica").style.display = "none";
-		});
+
 
 	
   // ========== VARIABLES COMPARTIDAS (evita ReferenceError) ==========
@@ -1841,6 +1840,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
