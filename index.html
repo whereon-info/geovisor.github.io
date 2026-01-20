@@ -1097,23 +1097,27 @@ function onEachFeature(feature, layer) {
 	const scoreDemo = calcularScoreDemografico(props);
 	const scoreComercial = calcularScoreComercial(resumen);
 	
-	// ================= MOSTRAR EN TELARAÑA =================
-	mostrarScoresEnTelarana({
+	// ================= SCORE GENERAL =================
+	const scoreGeneral = calcularScoreGeneral({
 	  delito: scoreDelito,
 	  financiero: scoreFinanciero,
 	  demografico: scoreDemo,
 	  comercial: scoreComercial
 	});
 	
-if (radarEvaluacion) {
-  radarEvaluacion.data.datasets[0].data = [
-    scoreDelito,
-    scoreFinanciero,
-    scoreDemo,
-    scoreComercial
-  ];
-  radarEvaluacion.update();
-}  
+	// ================= MOSTRAR EN SPEED =================
+	mostrarScoreGeneral(scoreGeneral);
+	
+	// ================= ACTUALIZAR RADAR =================
+	if (radarEvaluacion) {
+	  radarEvaluacion.data.datasets[0].data = [
+	    Number(scoreDelito),
+	    Number(scoreFinanciero),
+	    Number(scoreDemo),
+	    Number(scoreComercial)
+	  ];
+	  radarEvaluacion.update();
+	}
     });
 }
 
@@ -1158,17 +1162,7 @@ function mostrarScoreGeneral(score) {
   `;
 }
 
-// ================= MOSTRAR EN SPEED =================
-mostrarScoreGeneral(scoreGeneral);
 
-// ================= ACTUALIZAR RADAR =================
-radarEvaluacion.data.datasets[0].data = [
-  scoreDelito,
-  scoreFinanciero,
-  scoreDemo,
-  scoreComercial
-];
-radarEvaluacion.update();
 
 
 	
@@ -1844,6 +1838,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
