@@ -183,6 +183,8 @@
 			#otro,
 			#sidebar,
 			#telaraña,
+	  		#scores-plaza, 
+	  		#radarEvaluacion,
 	  		#speed {
 			  background: #2c2c2c;
 			  color: #ffffff;
@@ -580,7 +582,15 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // ====== SPLIT VERTICAL INTERNO (urbano / scatter) ======
-  Split(['#urbano', '#scatter','#speed'], {
+  Split(['#urbano', '#scatter'], {
+    sizes: [40, 60,],
+    direction: 'vertical',
+    gutterSize: 3,
+    onDragEnd: () => { if (window.map) map.invalidateSize(); }
+  });
+
+  // ====== SPLIT VERTICAL INTERNO (urbano / scatter) ======
+  Split(['#scores-plaza', '#radarEvaluacion','#speed'], {
     sizes: [30, 40, 30],
     direction: 'vertical',
     gutterSize: 3,
@@ -1834,6 +1844,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
