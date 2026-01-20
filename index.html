@@ -517,7 +517,6 @@
 			
 			<div id="speed" class="panel">
 		  <h3>📉 Resultado </h3>
-		  <canvas id="speedChart"></canvas>
 		</div>
 			</div>
 
@@ -581,8 +580,8 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // ====== SPLIT VERTICAL INTERNO (urbano / scatter) ======
-  Split(['#urbano', '#scatter'], {
-    sizes: [40, 60],
+  Split(['#urbano', '#scatter','#speed'], {
+    sizes: [30, 40, 30],
     direction: 'vertical',
     gutterSize: 3,
     onDragEnd: () => { if (window.map) map.invalidateSize(); }
@@ -1104,13 +1103,65 @@ if (radarEvaluacion) {
     scoreComercial
   ];
   radarEvaluacion.update();
-}
-
-
-	  
+}  
     });
 }
 
+
+  //======================= SCORE GENERAL ================================
+
+function calcularScoreGeneral(scores) {
+  const valores = [
+    Number(scores.delito),
+    Number(scores.financiero),
+    Number(scores.demografico),
+    Number(scores.comercial)
+  ];
+
+  const suma = valores.reduce((acc, v) => acc + v, 0);
+  return (suma / valores.length).toFixed(1);
+}
+
+function mostrarScoreGeneral(score) {
+  const cont = document.getElementById("speed");
+  if (!cont) return;
+
+  let color = "#00ae4d"; // verde
+  if (score < 30) color = "#d32f2f";       // rojo
+  else if (score < 50) color = "#f57c00";  // naranja
+  else if (score < 70) color = "#fbc02d";  // amarillo
+  else if (score < 85) color = "#1976d2";  // azul
+
+  cont.innerHTML = `
+    <h3>📍 Evaluación general de la plaza</h3>
+    <div style="
+      font-size:48px;
+      font-weight:bold;
+      color:${color};
+      text-align:center;
+      margin-top:10px;">
+      ${score}
+    </div>
+    <div style="text-align:center; font-size:13px; opacity:.8;">
+      Score promedio (0–100)
+    </div>
+  `;
+}
+
+// ================= MOSTRAR EN SPEED =================
+mostrarScoreGeneral(scoreGeneral);
+
+// ================= ACTUALIZAR RADAR =================
+radarEvaluacion.data.datasets[0].data = [
+  scoreDelito,
+  scoreFinanciero,
+  scoreDemo,
+  scoreComercial
+];
+radarEvaluacion.update();
+
+
+	
   //======================= LOGO ================================
 	var logoControl = L.control({ position: "bottomleft" });
 
@@ -1783,6 +1834,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
