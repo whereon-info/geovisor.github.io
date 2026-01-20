@@ -183,6 +183,8 @@
 			#otro,
 			#sidebar,
 			#telaraña,
+	  		#scores-plaza,
+	  		#radarEvaluacion,
 	  		#speed {
 			  background: #2c2c2c;
 			  color: #ffffff;
@@ -504,7 +506,7 @@
 		</div>
 	
 
-			<div id="telaraña" class="panel">
+	<div id="telaraña" class="panel">
 			  <h3>💯 Evaluación general de la plaza</h3>
 			
 			  <!-- Scores numéricos -->
@@ -518,7 +520,7 @@
 			<div id="speed" class="panel">
 		  <h3>📉 Resultado </h3>
 		</div>
-			</div>
+	</div>
 
 </div>
 
@@ -588,7 +590,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // ====== SPLIT VERTICAL INTERNO (urbano / scatter) ======
-  Split(['#telaraña', '#scores-plaza','#speed'], {
+  Split(['#radarEvaluacion', '#scores-plaza','#speed'], {
     sizes: [33, 33, 33],
     direction: 'vertical',
     gutterSize: 3,
@@ -1002,6 +1004,8 @@ document.addEventListener("DOMContentLoaded", inicializarRadar);
 
 function mostrarScoresEnTelarana(scores) {
   const cont = document.getElementById("scores-plaza");
+  console.log("scores-plaza:", cont, scores);
+
   if (!cont) return;
 
   cont.innerHTML = `
@@ -1014,6 +1018,7 @@ function mostrarScoresEnTelarana(scores) {
     <hr>
   `;
 }
+
 
 	
 // ================== EVENTOS EN HEXAGONOS ==================
@@ -1836,6 +1841,7 @@ cargarGastoNacional();
 </script>
 </body>
 </html>
+
 
 
 
